@@ -43,3 +43,23 @@ document.addEventListener('DOMContentLoaded', function() {
         submenuTesting.style.display = 'none';
     });
 });
+
+function showContent(id) {
+    // Hide all content
+    const contents = document.querySelectorAll('.content');
+    contents.forEach(content => {
+        content.style.display = 'none';
+    });
+
+    // Show selected content
+    const selectedContent = document.getElementById(id);
+    if (selectedContent) {
+        selectedContent.style.display = 'block';
+    }
+}
+
+// Show home content by default
+document.addEventListener('DOMContentLoaded', () => {
+    showContent('home');
+});
+
