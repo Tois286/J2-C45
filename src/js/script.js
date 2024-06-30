@@ -13,9 +13,11 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     var dataTraining = document.getElementById('data-training');
     var submenuTraining = document.getElementById('submenu-training');
+    
 
     // Tambahkan event listener untuk menampilkan submenu saat klik
     dataTraining.addEventListener('click', function(event) {
+        
         event.stopPropagation(); // Mencegah event click menyebar ke elemen lain
         if (submenuTraining.style.display === 'none' || submenuTraining.style.display === '') {
             submenuTraining.style.display = 'block';

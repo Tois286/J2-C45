@@ -12,13 +12,20 @@ body {
 }
 
 .navbar {
-    background-color: #04AA6D;
+    background-color: #219ebc;
     color: #fff;
     padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    /* Ubah bayangan agar tidak terlalu tebal */
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    /* Pastikan z-index lebih tinggi dari konten lainnya */
 }
 
 .navbar-brand {
@@ -50,10 +57,21 @@ body {
 }
 
 .sidebar {
-    background-color: #04AA6D;
+    background-color: #219ebc;
     width: 200px;
     padding: 1rem;
-    box-shadow: 6px 0px 16px 0px rgba(0, 0, 0, 0.3);
+    padding-top: 5rem;
+    /* Padding atas untuk memberikan ruang di atas konten */
+    box-shadow: 10px 0px 11px 0px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    top: 0;
+    /* Membuat sidebar tetap di bagian atas layar */
+    left: 0;
+    /* Membuat sidebar tetap di sisi kiri layar */
+    height: 100vh;
+    /* Tinggi sidebar setara dengan tinggi viewport */
+    overflow-y: auto;
+    /* Memunculkan scrollbar jika konten sidebar lebih panjang dari viewport */
 }
 
 .sidebar ul {
@@ -75,9 +93,9 @@ body {
 
 .sidebar a:hover {
     background-color: white;
-    color: #04AA6D;
+    color: #219ebc;
     width: 100%;
-    border: 1px solid #04AA6D;
+    border: 1px solid #219ebc;
     border-radius: 10px;
 }
 
@@ -85,7 +103,9 @@ body {
     display: none;
     flex-grow: 1;
     padding: 1.5rem;
-    color: #04AA6D;
+    padding-left: 14rem;
+    padding-top: 5rem;
+    color: #219ebc;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
@@ -143,36 +163,52 @@ body {
     background-color: white;    
     height: 80vh;
     right: 100%;
-    border-radius: 5px;
+    border-radius: 2px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    border: 2px solid #04AA6D;
 }
 
 .img{
     padding-top: 20px;
 }
+.upload{
+    border: none;
+    background-color: white;
+    padding: 20px;
+    display: flex;
+    background-color: #219ebc;
+    color: white;
+}
 
 .button {
     border: none;
+    border-radius: 5px;
     color: white;
-    padding: 16px 32px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 10px;
     transition-duration: 0.4s;
     cursor: pointer;
 }
 
+input[type="file"] {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    /* Atau gaya lain sesuai kebutuhan */
+}
 .button1 {
     background-color: white;
     color: black;
-    border: 2px solid #04AA6D;
+    border: 2px solid #219ebc;
 }
 
 .button1:hover {
-    background-color: #04AA6D;
+    background-color: #219ebc;
     color: white;
 }
 
@@ -185,4 +221,80 @@ body {
 .button2:hover {
     background-color: #008CBA;
     color: white;
+}
+
+.table-container {
+    width: 100%;
+    padding: 1rem;
+    padding-top: 0rem;
+    margin-top: 2rem;
+    color: black;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    /* border-radius: 8px; */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #219ebc;
+    color: white;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.table tbody tr:hover {
+    background-color: #ddd;
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        width: 100%;
+    }
+}
+.container-login{
+    display: block;
+    padding-top: 4rem;
+    /* text-align: center; */
+    /* margin: auto; */
+}
+.box-login{
+    margin: auto;
+    text-align: center;
+    width: 400px;
+    height: 400px;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border:2px solid #219ebc;
+    border-radius: 10px;
+}
+
+.login-form{
+    background-color: #219ebc;
+    padding: 1.5rem;
+    border-radius: 5px;
+    color: white;
+}
+
+.box-login input{
+    border: 2px #219ebc;
+    padding: 5px;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #219ebc;
+    color: #219ebc;
 }

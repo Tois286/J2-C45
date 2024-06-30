@@ -5,7 +5,7 @@
     <nav class="navbar">
         <div class="navbar-brand">My Dashboard</div>
         <ul class="navbar-nav">
-            <li><a href="#logout">Logout</a></li>
+            <li><a href="#login" onclick="showContent('login')">login</a></li>
         </ul>
     </nav>
     <!-- Main Content -->
@@ -30,6 +30,7 @@
                 </li>
                 <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
                 <li><a href="#export" onclick="showContent('export')">Cetak</a></li>
+
             </ul>
         </div>
 
@@ -63,6 +64,9 @@
 
         <div class="content" id="export" style="display: none;">
             <?php include 'view/print.php' ?>
+        </div>
+        <div class="content" id="login" style="display: none;">
+            <?php include 'public/login.php' ?>
         </div>
     </div>
 
