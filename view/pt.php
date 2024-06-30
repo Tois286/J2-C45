@@ -1,4 +1,13 @@
 <div>
-    <h1>Proses Testing</h1>
-    <p>Ini adalah konten untuk Proses Testing.</p>
+    <h1>Pohon Testing</h1>
+    <div class="card-home">
+        <div class="img">
+            <!-- <center>
+                <img src="asset/unipi.png" alt="image" style="width: 80%; height: auto; border-radius:20px;">
+            </center> -->
+        </div>
+    </div>
+</div>
+<div>
+    <?php include 'modul/footer.php' ?>
 </div>

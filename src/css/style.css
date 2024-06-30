@@ -8,11 +8,11 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #bbcf8d;
+    /* background-color: #bbcf8d; */
 }
 
 .navbar {
-    background-color: #485935;
+    background-color: #04AA6D;
     color: #fff;
     padding: 1rem;
     display: flex;
@@ -50,7 +50,7 @@ body {
 }
 
 .sidebar {
-    background-color: #93a267;
+    background-color: #04AA6D;
     width: 200px;
     padding: 1rem;
     box-shadow: 6px 0px 16px 0px rgba(0, 0, 0, 0.3);
@@ -75,9 +75,9 @@ body {
 
 .sidebar a:hover {
     background-color: white;
-    color: #485935;
+    color: #04AA6D;
     width: 100%;
-    border: 1px solid #485935;
+    border: 1px solid #04AA6D;
     border-radius: 10px;
 }
 
@@ -85,7 +85,7 @@ body {
     display: none;
     flex-grow: 1;
     padding: 1.5rem;
-    color: white;
+    color: #04AA6D;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
@@ -112,7 +112,7 @@ body {
 }
 
 .dropdown-content a {
-    color: #485935;
+    color: white;
     font-weight: bold;
     padding: 12px 16px;
     text-decoration: none;
@@ -139,13 +139,50 @@ body {
 }
 
 .card-home{
-    background-color: #93a267;
+    /* background-color: #93a267; */
+    background-color: white;    
     height: 80vh;
     right: 100%;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    border: 2px solid #04AA6D;
 }
 
 .img{
     padding-top: 20px;
+}
+
+.button {
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.button1 {
+    background-color: white;
+    color: black;
+    border: 2px solid #04AA6D;
+}
+
+.button1:hover {
+    background-color: #04AA6D;
+    color: white;
+}
+
+.button2 {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+}
+
+.button2:hover {
+    background-color: #008CBA;
+    color: white;
 }

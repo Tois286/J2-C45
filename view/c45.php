@@ -1,5 +1,13 @@
 <div>
     <h1>Proses C4.5</h1>
-    <p>Ini adalah konten untuk Proses C4.5.</p>
+    <div class="card-home">
+        <div class="img">
+            <!-- <center>
+                <img src="asset/unipi.png" alt="image" style="width: 80%; height: auto; border-radius:20px;">
+            </center> -->
+        </div>
+    </div>
 </div>
+<div>
+    <?php include 'modul/footer.php' ?>
 </div>
