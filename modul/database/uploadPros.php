@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["excelFile"])) {
             if (!empty($sanitizedColumnName)) {
                 $columns[] = $sanitizedColumnName;
             } else {
-                die("Error: Nama kolom dari file Excel tidak valid.");
+                die("Error: Nama kolom tidak valid.");
             }
         }
 
@@ -105,12 +105,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["excelFile"])) {
                 if (!empty($value)) {
                     $label = $columns[$columnCounter];
                     $id = "value" . $rowCounter; // Generate ID based on row number
-
                     echo "<div class='form-group'>";
                     echo "<label class='form-label'>{$label}</label>";
                     echo "<input type='text' class='form-input' name='{$label}[]' id='{$id}' value='{$value}'>";
                     echo "</div>";
-
                     $columnProcessed++;
                 }
 

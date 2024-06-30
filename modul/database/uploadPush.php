@@ -30,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tableName"]) && isset(
             die("Error inserting data: " . $e->getMessage());
         }
     }
-
     header("Location: ../..//index.php");
     exit;
 }
