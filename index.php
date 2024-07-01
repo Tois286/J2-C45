@@ -9,7 +9,7 @@
         </ul>
     </nav>
     <!-- Main Content -->
-    <div class="dashboard">
+    <div>
         <div class="sidebar">
             <ul>
                 <li><a href="#home" onclick="showContent('home')">Home</a></li>

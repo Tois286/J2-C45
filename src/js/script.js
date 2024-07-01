@@ -1,16 +1,6 @@
 // scripts.js
 
 document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('.navbar-nav a');
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(event) {
-            event.preventDefault();
-            alert(`Navigating to ${this.textContent}`);
-        });
-    });
-});
-document.addEventListener('DOMContentLoaded', function() {
     var dataTraining = document.getElementById('data-training');
     var submenuTraining = document.getElementById('submenu-training');
     

@@ -15,7 +15,7 @@
             <div class="box-login">
                 <div class="img">
                     <center>
-                        <img src="asset/unipi.png" alt="image" style="width: 50%; height: 50%; border-radius:100%;">
+                        <img src="asset/unipi.png" alt="image" style="width: 30%; height: auto;">
                     </center>
                 </div><br>
                 <form action="">
@@ -34,5 +34,6 @@
         </div>
     </div>
 </body>
+<?php include 'modul/footer.php' ?>
 
 </html>

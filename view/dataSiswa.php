@@ -146,7 +146,7 @@
 
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
-                                    echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a> | <a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
+                                    echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a> | <a href='edit.php?id=" . $row['id'] . "'>Kelola</a> | <a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
                                     foreach ($row as $value) {
                                         echo "<td>$value</td>";
                                     }
@@ -167,5 +167,6 @@
         </div>
     </div>
 </body>
+<?php include 'modul/footer.php' ?>
 
 </html>

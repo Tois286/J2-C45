@@ -8,6 +8,4 @@
         </div>
     </div>
 </div>
-<div>
-    <?php include 'modul/footer.php' ?>
-</div>
+<?php include 'modul/footer.php' ?>
