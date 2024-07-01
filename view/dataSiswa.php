@@ -3,66 +3,6 @@
 
 <head>
     <title>Kelola Data Siswa</title>
-    <style>
-        .card-home {
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-            max-width: 100%;
-            overflow: hidden;
-        }
-
-        .card-tabel {
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-            max-width: 100%;
-            overflow: hidden;
-            margin-top: 20px;
-            /* Tambahkan margin atas untuk memberi jarak dengan elemen di atasnya */
-        }
-
-        .table-container {
-            margin-top: 20px;
-            overflow-x: auto;
-            max-height: 400px;
-        }
-
-        #table-content {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        #table-content th,
-        #table-content td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        #table-content th {
-            background-color: #f2f2f2;
-        }
-
-        #table-content tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        #table-content tr:hover {
-            background-color: #ddd;
-        }
-
-        #table-content td a {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        #table-content td a:hover {
-            text-decoration: underline;
-        }
-    </style>
 
     <script>
         function loadTable(tableName) {
@@ -146,7 +86,7 @@
 
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
-                                    echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a> | <a href='edit.php?id=" . $row['id'] . "'>Kelola</a> | <a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
+                                    echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a> | <a href='../modul/database/c45pros.php?id=" . $row['id'] . "&table=$table_name'>Kelola</a> | <a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
                                     foreach ($row as $value) {
                                         echo "<td>$value</td>";
                                     }
@@ -167,6 +107,5 @@
         </div>
     </div>
 </body>
-<?php include 'modul/footer.php' ?>
 
 </html>

@@ -226,48 +226,73 @@ input[type="file"] {
     background-color: #008CBA;
     color: white;
 }
+.card-home {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    max-width: 100%;
+    overflow: hidden;
+    height: 80%;
+}
+
+.card-tabel {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 20px;
+    height: 80%;
+    /* Tambahkan margin atas untuk memberi jarak dengan elemen di atasnya */
+}
 
 .table-container {
-    width: 100%;
-    padding: 1rem;
-    padding-top: 0rem;
-    margin-top: 2rem;
-    color: black;
+    margin-top: 20px;
     overflow-x: auto;
+    max-height: 400px;
+    color: black;
 }
 
-.table {
+#table-content {
     width: 100%;
     border-collapse: collapse;
-    /* border-radius: 8px; */
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.table th, .table td {
-    padding: 12px 15px;
+#table-content th,
+#table-content td {
+    border: 1px solid #ddd;
+    padding: 8px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
 }
 
-.table th {
-    background-color: #219ebc;
-    color: white;
-}
-
-.table tbody tr:nth-child(even) {
+#table-content th {
     background-color: #f2f2f2;
 }
 
-.table tbody tr:hover {
+#table-content tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#table-content tr:hover {
     background-color: #ddd;
 }
 
+#table-content td a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+#table-content td a:hover {
+    text-decoration: underline;
+}
 @media (max-width: 768px) {
     .table-container {
         width: 100%;
     }
 }
+
 .container-login{
     display: block;
     padding-top: 4rem;
