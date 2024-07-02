@@ -14,6 +14,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tableName"]) && isset(
     }, $columns)) . ");";
 
     $stmt = $pdo->prepare($insertSql);
+    // Nama tabel yang ingin Anda tambahkan kolomnya
+    $tableName = $_POST["tableName"];
+
+    // Query untuk menambahkan kolom Keterangan ke tabel
+    $addColumnSql = "ALTER TABLE `$tableName` ADD `Keterangan` VARCHAR(255) NOT NULL DEFAULT '';";
+
+    try {
+        $pdo->exec($addColumnSql);
+    } catch (PDOException $e) {
+        die("Error adding column: " . $e->getMessage());
+    }
 
     // Loop through posted data and insert into database
     $rowCount = count($_POST[$columns[0]]); // Assuming all columns have the same number of rows

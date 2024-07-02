@@ -1,11 +1,12 @@
 <div>
     <h1>Pohon Keputusan</h1>
-    <div class="card-home">
-        <div class="img">
-            <!-- <center>
-                <img src="asset/unipi.png" alt="image" style="width: 80%; height: auto; border-radius:20px;">
-            </center> -->
+    <div class="card-tabel">
+        <div class="table-container">
+            <table id="table-content">
+
+            </table>
         </div>
     </div>
 </div>
-<?php include 'modul/footer.php' ?>
+</div>
+<!-- <?php include 'modul/footer.php' ?> -->

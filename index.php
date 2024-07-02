@@ -17,7 +17,7 @@
                 <li class="dropdown" id="data-training">
                     <a href="#">Data Training</a>
                     <div class="dropdown-content" id="submenu-training">
-                        <a href="#" onclick="showContent('prosesC45')">Proses C4.5</a>
+                        <a href="#" onclick="showContent('prosesC45')">Proses Training</a>
                         <a href="#" onclick="showContent('pohonKeputusan')">Pohon Keputusan</a>
                     </div>
                 </li>

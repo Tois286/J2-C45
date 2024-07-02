@@ -1,15 +1,58 @@
 <?php
 require '../../config/koneksi.php';
 
-if (isset($_GET['id']) && isset($_GET['table'])) {
-    $id = $_GET['id'];
+if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
 
     // Mengambil Data dari Database
     try {
-        $stmt = $pdo->prepare("SELECT ips1, ips2, ips3, ips4 FROM $table_name WHERE id = :id");
-        $stmt->execute(['id' => $id]);
+        $stmt = $pdo->prepare("SELECT id, ips1, ips2, ips3, ips4 FROM $table_name");
+        $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Debug: Periksa data yang diterima
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+
+        // Siapkan data untuk pohon keputusan
+        $values = [];
+        foreach ($data as $row) {
+            // Debug: Periksa setiap baris data yang diterima
+            echo "Processing row: ";
+            print_r($row);
+
+            // Pastikan semua kunci ada dalam array $row dan konversi nilai menjadi numerik
+            if (isset($row['ips1']) && isset($row['ips2']) && isset($row['ips3']) && isset($row['ips4'])) {
+                $ips1 = $row['ips1'];
+                $ips2 = $row['ips2'];
+                $ips3 = $row['ips3'];
+                $ips4 = $row['ips4'];
+
+                // Tentukan rata-rata berdasarkan kategori
+                $categories = ['KURANG' => 1, 'CUKUP' => 2, 'BAIK' => 3, 'SANGAT BAIK' => 4];
+                $average = ($categories[$ips1] + $categories[$ips2] + $categories[$ips3] + $categories[$ips4]) / 4;
+
+                // Debug: Periksa rata-rata
+                echo "Average for row ID {$row['id']}: $average\n";
+
+                $values[] = [
+                    'ips1' => $ips1,
+                    'ips2' => $ips2,
+                    'ips3' => $ips3,
+                    'ips4' => $ips4,
+                    'lulus' => $average >= 2.5 ? 'TEPAT WAKTU' : 'TERLAMBAT',  // Menggunakan 2.5 sebagai ambang batas rata-rata kategori
+                ];
+            } else {
+                echo "Missing IPS values in row: ";
+                print_r($row);
+            }
+        }
+
+        // Debug: Periksa nilai yang sudah diubah
+        echo "<pre>";
+        print_r($values);
+        echo "</pre>";
 
         // Tentukan fungsi untuk menghitung entropi
         function calculateEntropy($values)
@@ -71,32 +114,9 @@ if (isset($_GET['id']) && isset($_GET['table'])) {
             return $tree;
         }
 
-        // Siapkan data untuk pohon keputusan
-        $values = [];
-        foreach ($data as $row) {
-            $ips1 = $row['ips1'];
-            $ips2 = $row['ips2'];
-            $ips3 = $row['ips3'];
-            $ips4 = $row['ips4'];
-
-            // Tentukan rata-rata berdasarkan kategori
-            $categories = ['KURANG' => 1, 'CUKUP' => 2, 'BAIK' => 3, 'SANGAT BAIK' => 4];
-            $average = ($categories[$ips1] + $categories[$ips2] + $categories[$ips3] + $categories[$ips4]) / 4;
-
-            // Debug: Periksa rata-rata
-            echo "Average for row ID {$id}: $average\n";
-
-            $values[] = [
-                'ips1' => $ips1,
-                'ips2' => $ips2,
-                'ips3' => $ips3,
-                'ips4' => $ips4,
-                'lulus' => $average >= 2.5 ? 'TEPAT WAKTU' : 'TERLAMBAT',  // Menggunakan 2.5 sebagai ambang batas rata-rata kategori
-            ];
-        }
-
         // Membangun pohon keputusan
         $tree = buildDecisionTree($values, ['ips1', 'ips2', 'ips3', 'ips4']);
+        var_dump($tree);
 
         // Cetak pohon keputusan
         function printTree($tree, $indent = '')
@@ -129,19 +149,46 @@ if (isset($_GET['id']) && isset($_GET['table'])) {
             return predict($tree[$value], $values);
         }
 
-        // Tentukan output
-        $output = predict($tree, [
-            'ips1' => $data[0]['ips1'],
-            'ips2' => $data[0]['ips2'],
-            'ips3' => $data[0]['ips3'],
-            'ips4' => $data[0]['ips4'],
-        ]);
+        // Simpan hasil ke dalam database
+        foreach ($data as $row) {
+            // Pastikan semua kunci ada dalam array $row
+            if (isset($row['ips1']) && isset($row['ips2']) && isset($row['ips3']) && isset($row['ips4'])) {
+                $output = predict($tree, [
+                    'ips1' => $row['ips1'],
+                    'ips2' => $row['ips2'],
+                    'ips3' => $row['ips3'],
+                    'ips4' => $row['ips4'],
+                ]);
 
-        echo "Output: " . $output;
+                // Pastikan kunci 'id' ada dalam array $row
+                if (isset($row['id'])) {
+                    $user_id = $row['id'];
 
-        // Siapkan nilai untuk kolom keterangan
-        $keterangan = $output;
+                    // Debug: Periksa nilai yang akan diupdate
+                    echo "Updating ID $user_id with keterangan: $output\n";
+
+                    // Lakukan update kolom keterangan untuk setiap user id
+                    $stmt_update = $pdo->prepare("UPDATE $table_name SET keterangan = :keterangan WHERE id = :id");
+                    $stmt_update->execute(['keterangan' => $output, 'id' => $user_id]);
+
+                    // Debug: Periksa hasil eksekusi
+                    if ($stmt_update->rowCount() > 0) {
+                        echo "Update successful for ID $user_id\n";
+                    } else {
+                        echo "Update failed for ID $user_id\n";
+                    }
+                } else {
+                    echo "Missing ID in row: ";
+                    print_r($row);
+                }
+            } else {
+                echo "Missing IPS values in row: ";
+                print_r($row);
+            }
+        }
     } catch (PDOException $e) {
         die("Error retrieving data: " . $e->getMessage());
     }
+    // header("Location: ../..//index.php");
+    // exit;
 }
