@@ -1,15 +1,12 @@
 <body>
-    <div>
-        <h1>Proses Data Training</h1>
-        <div class="card-home">
-            <div class="upload">
-                <form action="modul/database/uploadPros.php" method="post" enctype="multipart/form-data">
-                    <input type="file" name="excelFile" accept=".xlsx, .xls">
-                    <button type="submit" class="button button1">Upload</button>
-                </form>
-                <div class=" dropdown dropdown-left">
-                    <button class="button button1" style="left: 50%;">Pilih Tabel</button>
-                    <div class="dropdown-content">
+    <h1>Proses data Training</h1>
+    <div class="card-home">
+        <div class="upload">
+            <div class="dropdown">
+                <button class="button button1" style="left: 50%;">Pilih Tabel</button>
+
+                <div class=" dropdown-content">
+                    <form method="GET" action="">
                         <?php
                         $servername = "localhost";
                         $username = "root";
@@ -26,65 +23,72 @@
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                echo "<a href='javascript:void(0);' onclick='loadTable(\"" . $row["Tables_in_" . $dbname] . "\")'>" . $row["Tables_in_" . $dbname] . "</a><br>";
+                                $table_name = $row["Tables_in_" . $dbname];
+                                echo "<button type='submit' name='table' class='button-mining' value='$table_name'>$table_name</button><br>";
                             }
                         } else {
                             echo "<span>Tidak ada tabel</span>";
                         }
+
                         $conn->close();
                         ?>
-                    </div>
-                </div>
-            </div>
-            <div class="card-tabel">
-                <div class="table-container">
-                    <table id="table-content">
-                        <?php
-                        if (isset($_GET['table'])) {
-                            $table_name = $_GET['table'];
-
-                            $koneksi = mysqli_connect($servername, $username, $password, $dbname);
-                            if (!$koneksi) {
-                                die("Connection failed: " . mysqli_connect_error());
-                            }
-
-                            $query = "SELECT * FROM $table_name";
-                            $result = mysqli_query($koneksi, $query);
-
-                            if (mysqli_num_rows($result) > 0) {
-                                echo "<div class='mining'>";
-                                echo "<a href='../modul/database/Mining.php?table=$table_name'>Proses Mining</a>";
-                                echo "</div>";
-                                echo "<tr>";
-                                echo "<th>Action</th>";
-                                $fields = mysqli_fetch_fields($result);
-                                foreach ($fields as $field) {
-                                    echo "<th>" . $field->name . "</th>";
-                                }
-                                echo "</tr>";
-
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<tr>";
-                                    echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a> | <a href='../modul/database/c45pros.php?id=" . $row['id'] . "&table=$table_name'>Kelola</a> | <a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
-                                    foreach ($row as $value) {
-                                        echo "<td>$value</td>";
-                                    }
-                                    echo "</tr>";
-                                }
-                                echo "<tr><td colspan='" . (count($fields) + 1) . "'><div class='mining'><a href='../modul/database/Mining.php?table=$table_name' class='button-mining button1'>Proses Mining</a></div></td></tr>";
-                            } else {
-                                echo "<tr><td colspan='" . (count($fields) + 1) . "'>Tidak ada data dalam tabel '$table_name'</td></tr>";
-                            }
-
-                            mysqli_close($koneksi);
-                        } else {
-                            echo "<tr><td colspan='2'>Silakan pilih tabel dari dropdown di atas.</td></tr>";
-                        }
-
-                        ?>
-                    </table>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    <div class="card-tree">
+        <div class="table-container">
+            <div class="card-table">
+                <?php
+                if (isset($_GET['table'])) {
+                    $table_name = $_GET['table'];
+
+                    $conn = new mysqli($servername, $username, $password, $dbname);
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    $query = "SELECT * FROM $table_name";
+                    $result = $conn->query($query);
+
+                    if ($result->num_rows > 0) {
+
+                        echo "<table id='table-content'>";
+                        echo "<tr>";
+                        echo "<th>Action</th>";
+                        $fields = $result->fetch_fields();
+                        foreach ($fields as $field) {
+                            echo "<th>" . $field->name . "</th>";
+                        }
+                        echo "</tr>";
+
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a> | <a href='../c45/c45pros.php?id=" . $row['id'] . "&table=$table_name'>Kelola</a> | <a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
+                            foreach ($row as $value) {
+                                echo "<td>$value</td>";
+                            }
+                            echo "</tr>";
+                        }
+                        echo "</table>";
+
+                        // Tambahkan tombol Mining di luar loop while
+                        echo "<br class='mining'>";
+                        echo "<a href='../c45/mining.php?table=" . $table_name . "' class='button-mining'>Mining</a>";
+                        echo "<br>";
+                    } else {
+                        echo "<p>No data found</p>";
+                    }
+                    $conn->close();
+                } else {
+                    echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                }
+                ?>
+            </div>
+        </div>
+    </div>
 </body>
+<?php include 'modul/footer.php' ?>
+
+</html>

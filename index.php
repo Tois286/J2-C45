@@ -1,4 +1,4 @@
-<?php include 'modul/header.php' ?>
+<link rel="stylesheet" href="src/css/style.css">
 
 <body>
     <!-- Navbar -->

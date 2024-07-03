@@ -4,6 +4,7 @@ $dbname = 'dbmining';
 $username = 'root';
 $password = '';
 
+$koneksi = mysqli_connect($host, $username, $password, $dbname);
 $koneksi = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
 try {
