@@ -1,20 +1,176 @@
 <?php
 include '../config/koneksi.php';
+
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
 
-    // Mengambil Data dari Database
     try {
-        $stmt = $pdo->prepare("SELECT id, ips1, ips2, ips3, ips4 FROM $table_name");
+        $stmt = $pdo->prepare("SELECT id, jenis_kelamin, ips1, ips2, ips3, ips4, keterangan FROM $table_name");
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Debug: Periksa data yang diterima
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
+        // Hitung jumlah data pada tabel
+        $total_data = $stmt->rowCount();
 
-        // Siapkan data untuk pohon keputusan
+        // Inisialisasi variabel untuk menghitung jumlah 'TERLAMBAT' dan 'TEPAT WAKTU'
+        $count_terlambat = 0;
+        $count_tepat_waktu = 0;
+
+        // Iterasi data untuk menghitung jumlahnya
+        foreach ($data as $row) {
+            if ($row['keterangan'] == 'TERLAMBAT') {
+                $count_terlambat++;
+            } elseif ($row['keterangan'] == 'TEPAT WAKTU') {
+                $count_tepat_waktu++;
+            }
+        }
+
+        // Mapping nilai IPS
+        function mapIPS($ips)
+        {
+            if ($ips < 2.5) {
+                return 'KURANG';
+            } elseif ($ips >= 2.5 && $ips < 3.0) {
+                return 'CUKUP';
+            } elseif ($ips >= 3.0 && $ips < 3.5) {
+                return 'BAIK';
+            } elseif ($ips >= 3.5) {
+                return 'SANGAT BAIK';
+            } else {
+                return 'Undefined'; // Handle nilai IPS yang tidak terdefinisi
+            }
+        }
+
+        // Hitung entropy dari sebuah set data
+        function calculateEntropy($values)
+        {
+            $total = count($values);
+            $entropy = 0;
+            foreach (array_count_values($values) as $count) {
+                $probability = $count / $total;
+                $entropy -= $probability * log($probability, 2);
+            }
+            return $entropy;
+        }
+
+        // Hitung gain untuk setiap atribut
+        function calculateInformationGain($data, $attribute)
+        {
+            $total_data = count($data);
+            $attribute_values = array_unique(array_column($data, $attribute));
+            $attribute_entropy = 0;
+
+            foreach ($attribute_values as $value) {
+                $subset = array_filter($data, function ($row) use ($attribute, $value) {
+                    if ($attribute == 'jenis_kelamin') {
+                        return $row[$attribute] == $value;
+                    } elseif (strpos($attribute, 'ips') === 0) {
+                        $ips_value = floatval($row[$attribute]);
+                        $mapped_ips = mapIPS($ips_value);
+                        return $mapped_ips == $value;
+                    }
+                    return false;
+                });
+
+                $subset_count = count($subset);
+                if ($subset_count > 0) {
+                    $subset_entropy = calculateEntropy(array_column($subset, 'keterangan'));
+                    $attribute_entropy += ($subset_count / $total_data) * $subset_entropy;
+                }
+            }
+
+            $entropy_all = calculateEntropy(array_column($data, 'keterangan'));
+            $information_gain = $entropy_all - $attribute_entropy;
+
+            return $information_gain;
+        }
+
+        // Array of attributes to build decision tree
+        $attributes = ['jenis_kelamin', 'ips1', 'ips2', 'ips3', 'ips4'];
+
+        // Tampilkan hasil perhitungan
+        echo "Total data in table $table_name: $total_data<br>";
+        echo "Jumlah data TERLAMBAT: $count_terlambat<br>";
+        echo "Jumlah data TEPAT WAKTU: $count_tepat_waktu<br>";
+
+        // Hitung entropy keseluruhan
+        $entropy_total = calculateEntropy(array_column($data, 'keterangan'));
+        echo "Entropy keseluruhan: " . $entropy_total . "<br>";
+
+        // Fungsi untuk membangun pohon keputusan
+        function buildDecisionTree($data, $attributes)
+        {
+            $keterangan_values = array_column($data, 'keterangan');
+            $unique_keterangan_values = array_unique($keterangan_values);
+
+            // Jika semua baris memiliki nilai yang sama untuk 'keterangan', maka return label
+            if (count($unique_keterangan_values) == 1) {
+                return ['label' => $unique_keterangan_values[0]];
+            }
+
+            // Jika tidak ada atribut yang tersisa, return label mayoritas
+            if (empty($attributes)) {
+                $counts = array_count_values($keterangan_values);
+                arsort($counts);
+                return ['label' => key($counts)];
+            }
+
+            $bestAttribute = null;
+            $bestGain = -1; // Inisialisasi gain terbaik dengan nilai negatif
+
+            foreach ($attributes as $attribute) {
+                $gain = calculateInformationGain($data, $attribute);
+                if ($gain > $bestGain) {
+                    $bestGain = $gain;
+                    $bestAttribute = $attribute;
+                }
+            }
+
+            $tree = ['attribute' => $bestAttribute];
+            $attribute_values = array_unique(array_column($data, $bestAttribute));
+
+            foreach ($attribute_values as $value) {
+                $subset = array_filter($data, function ($row) use ($bestAttribute, $value) {
+                    if ($bestAttribute == 'jenis_kelamin') {
+                        return $row[$bestAttribute] == $value;
+                    } elseif (strpos($bestAttribute, 'ips') === 0) {
+                        $ips_value = floatval($row[$bestAttribute]);
+                        $mapped_ips = mapIPS($ips_value);
+                        return $mapped_ips == $value;
+                    }
+                    return false;
+                });
+
+                $tree[$value] = buildDecisionTree($subset, array_diff($attributes, [$bestAttribute]));
+            }
+
+            return $tree;
+        }
+
+        // Membangun pohon keputusan
+        $decision_tree = buildDecisionTree($data, $attributes);
+
+        // Fungsi untuk mencetak pohon keputusan dengan indentasi
+        function printTree($tree, $indent = '')
+        {
+            if (isset($tree['label'])) {
+                echo $indent . $tree['label'] . "<br>";
+            } else {
+                echo $indent . $tree['attribute'] . "<br>";
+                foreach ($tree as $value => $child) {
+                    if ($value != 'attribute') {
+                        echo $indent . "  " . $value . "<br>";
+                        printTree($child, $indent . "    ");
+                    }
+                }
+            }
+        }
+
+        // Cetak pohon keputusan dengan indentasi
+        echo "<br><b>Decision Tree:</b><br>";
+        printTree($decision_tree);
+
+        // Debug: Periksa setiap baris data yang diterima
         $values = [];
         foreach ($data as $row) {
             // Debug: Periksa setiap baris data yang diterima
@@ -23,10 +179,10 @@ if (isset($_GET['table'])) {
 
             // Pastikan semua kunci ada dalam array $row dan konversi nilai menjadi numerik
             if (isset($row['ips1']) && isset($row['ips2']) && isset($row['ips3']) && isset($row['ips4'])) {
-                $ips1 = $row['ips1'];
-                $ips2 = $row['ips2'];
-                $ips3 = $row['ips3'];
-                $ips4 = $row['ips4'];
+                $ips1 = mapIPS(floatval($row['ips1']));
+                $ips2 = mapIPS(floatval($row['ips2']));
+                $ips3 = mapIPS(floatval($row['ips3']));
+                $ips4 = mapIPS(floatval($row['ips4']));
 
                 // Tentukan rata-rata berdasarkan kategori
                 $categories = ['KURANG' => 1, 'CUKUP' => 2, 'BAIK' => 3, 'SANGAT BAIK' => 4];
@@ -36,6 +192,7 @@ if (isset($_GET['table'])) {
                 echo "Average for row ID {$row['id']}: $average\n";
 
                 $values[] = [
+                    'id' => $row['id'],
                     'ips1' => $ips1,
                     'ips2' => $ips2,
                     'ips3' => $ips3,
@@ -52,142 +209,7 @@ if (isset($_GET['table'])) {
         echo "<pre>";
         print_r($values);
         echo "</pre>";
-
-        // Tentukan fungsi untuk menghitung entropi
-        function calculateEntropy($values)
-        {
-            $total = count($values);
-            $entropy = 0;
-            foreach ($values as $value) {
-                $probability = count(array_filter($values, function ($v) use ($value) {
-                    return $v == $value;
-                })) / $total;
-                $entropy -= $probability * log($probability, 2);
-            }
-            return $entropy;
-        }
-
-        // Tentukan fungsi untuk menghitung perolehan informasi
-        function calculateInformationGain($values, $attribute)
-        {
-            $entropyTotal = calculateEntropy($values);
-            $gain = $entropyTotal;
-            $attributeValues = array_column($values, $attribute);
-            foreach (array_unique($attributeValues) as $value) {
-                $subset = array_filter($values, function ($v) use ($value, $attribute) {
-                    return $v[$attribute] == $value;
-                });
-                $gain -= (count($subset) / count($values)) * calculateEntropy($subset);
-            }
-            return $gain;
-        }
-
-        // Tentukan fungsi untuk membangun pohon keputusan
-        function buildDecisionTree($values, $attributes)
-        {
-            $lulus_values = array_column($values, 'lulus');
-            $unique_lulus_values = array_unique($lulus_values);
-
-            // Jika semua baris memiliki nilai yang sama untuk 'lulus', maka return label
-            if (count($unique_lulus_values) == 1) {
-                return array('label' => $unique_lulus_values[0]);
-            }
-
-            $bestAttribute = null;
-            $bestGain = 0;
-            foreach ($attributes as $attribute) {
-                $gain = calculateInformationGain($values, $attribute);
-                if ($gain > $bestGain) {
-                    $bestGain = $gain;
-                    $bestAttribute = $attribute;
-                }
-            }
-
-            $tree = array('attribute' => $bestAttribute);
-            foreach (array_unique(array_column($values, $bestAttribute)) as $value) {
-                $subset = array_filter($values, function ($v) use ($value, $bestAttribute) {
-                    return $v[$bestAttribute] == $value;
-                });
-                $tree[$value] = buildDecisionTree($subset, array_diff($attributes, [$bestAttribute]));
-            }
-            return $tree;
-        }
-
-        // Membangun pohon keputusan
-        $tree = buildDecisionTree($values, ['ips1', 'ips2', 'ips3', 'ips4']);
-        var_dump($tree);
-
-        // Cetak pohon keputusan
-        function printTree($tree, $indent = '')
-        {
-            if (isset($tree['label'])) {
-                echo $indent . $tree['label'] . "<br>";
-            } else {
-                echo $indent . $tree['attribute'] . "<br>";
-                foreach ($tree as $value => $child) {
-                    if ($value != 'attribute') {
-                        echo $indent . "  " . $value . "<br>";
-                        printTree($child, $indent . "  ");
-                    }
-                }
-            }
-        }
-        printTree($tree);
-
-        // Gunakan pohon keputusan untuk menentukan output
-        function predict($tree, $values)
-        {
-            if (isset($tree['label'])) {
-                return $tree['label'];
-            }
-
-            $attribute = $tree['attribute'];
-            $value = $values[$attribute];
-            unset($values[$attribute]);
-
-            return predict($tree[$value], $values);
-        }
-
-        // Simpan hasil ke dalam database
-        foreach ($data as $row) {
-            // Pastikan semua kunci ada dalam array $row
-            if (isset($row['ips1']) && isset($row['ips2']) && isset($row['ips3']) && isset($row['ips4'])) {
-                $output = predict($tree, [
-                    'ips1' => $row['ips1'],
-                    'ips2' => $row['ips2'],
-                    'ips3' => $row['ips3'],
-                    'ips4' => $row['ips4'],
-                ]);
-
-                // Pastikan kunci 'id' ada dalam array $row
-                if (isset($row['id'])) {
-                    $user_id = $row['id'];
-
-                    // Debug: Periksa nilai yang akan diupdate
-                    echo "Updating ID $user_id with keterangan: $output\n";
-
-                    // Lakukan update kolom keterangan untuk setiap user id
-                    $stmt_update = $pdo->prepare("UPDATE $table_name SET keterangan = :keterangan WHERE id = :id");
-                    $stmt_update->execute(['keterangan' => $output, 'id' => $user_id]);
-
-                    // Debug: Periksa hasil eksekusi
-                    if ($stmt_update->rowCount() > 0) {
-                        echo "Update successful for ID $user_id\n";
-                    } else {
-                        echo "Update failed for ID $user_id\n";
-                    }
-                } else {
-                    echo "Missing ID in row: ";
-                    print_r($row);
-                }
-            } else {
-                echo "Missing IPS values in row: ";
-                print_r($row);
-            }
-        }
     } catch (PDOException $e) {
         die("Error retrieving data: " . $e->getMessage());
     }
-    header("Location: index.php");
-    exit;
 }

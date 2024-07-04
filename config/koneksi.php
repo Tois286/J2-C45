@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'dbmining';
+$dbname = 'dbmining-base';
 $username = 'root';
 $password = '';
 

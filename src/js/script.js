@@ -1,6 +1,4 @@
 // // scripts.js
-
-
 document.addEventListener('DOMContentLoaded', function() {
     var dataTraining = document.getElementById('data-training');
     var submenuTraining = document.getElementById('submenu-training');
@@ -51,12 +49,12 @@ function showContent(id) {
 
 // Show home content by default
 document.addEventListener('DOMContentLoaded', () => {
-    showContent('Home');
+    showContent('home');
 });
 
 function loadTable(tableName) {
     var tableContainer = document.getElementById("table-content");
-    // tableContainer.innerHTML = '';
+    tableContainer.innerHTML = '';
 
     var xhttp = new XMLHttpRequest();
     

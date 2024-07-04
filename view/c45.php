@@ -4,14 +4,13 @@
         <div class="upload">
             <div class="dropdown">
                 <button class="button button1" style="left: 50%;">Pilih Tabel</button>
-
                 <div class=" dropdown-content">
                     <form method="GET" action="">
                         <?php
                         $servername = "localhost";
                         $username = "root";
                         $password = "";
-                        $dbname = "dbmining";
+                        $dbname = "dbmining-base";
 
                         $conn = new mysqli($servername, $username, $password, $dbname);
                         if ($conn->connect_error) {
@@ -35,6 +34,7 @@
                     </form>
                 </div>
             </div>
+            <button class="button button1" style="left: 50%; background-color:red; border-radius:8px; color: white; width: 100%; ">Format wajib .xlsx atau excel</button>
         </div>
     </div>
     <div class="card-tree">
@@ -75,7 +75,9 @@
 
                         // Tambahkan tombol Mining di luar loop while
                         echo "<br class='mining'>";
-                        echo "<a href='../c45/mining.php?table=" . $table_name . "' class='button-mining'>Mining</a>";
+                        echo "<a href='./c45/prediksi.php?table=" . $table_name . "' class='button-mining'>Prediksi</a>";
+                        echo "<a href='./c45/mining.php?table=" . $table_name . "' class='button-mining'>Mining</a>";
+                        echo "<a href='' class='button-mining' style='background-color:red; border:none;color:white;'>Prediksi Hanya dapat Dilakukan satu kali saja</a>";
                         echo "<br>";
                     } else {
                         echo "<p>No data found</p>";
