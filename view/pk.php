@@ -207,22 +207,6 @@
                                     // Bangun pohon keputusan
                                     $decision_tree = build_decision_tree($data, $target_attribute, $attributes);
 
-                                    // Tampilkan hasil entropi dan gain
-                                    echo "Entropi untuk jenis kelamin: " . $entropy_gender . "<br>";
-                                    echo "Entropi untuk keterangan: " . $entropy_keterangan . "<br>";
-                                    echo "Entropi untuk ips1: " . $entropy_ips1 . "<br>";
-                                    echo "Entropi untuk ips2: " . $entropy_ips2 . "<br>";
-                                    echo "Entropi untuk ips3: " . $entropy_ips3 . "<br>";
-                                    echo "Entropi untuk ips4: " . $entropy_ips4 . "<br>";
-                                    echo "Total Entropi: " . $total_entropy . "<br><br>";
-
-                                    echo "Gain untuk jenis kelamin: " . $gain_gender . "<br>";
-                                    echo "Gain untuk ips1: " . $gain_ips1 . "<br>";
-                                    echo "Gain untuk ips2: " . $gain_ips2 . "<br>";
-                                    echo "Gain untuk ips3: " . $gain_ips3 . "<br>";
-                                    echo "Gain untuk ips4: " . $gain_ips4 . "<br>";
-                                    echo "Total Gain: " . $total_gain . "<br><br>";
-
                                     // Tampilkan pohon keputusan
                                     echo "<pre>";
                                     print_r($decision_tree);
@@ -240,9 +224,7 @@
                     <div class="card-home" style="color:black;">
                         <p>Ini adalah konten untuk Step Tree.</p>
                         <?php
-                        echo "<pre>";
-                        print_r($decision_tree);
-                        echo "</pre>";
+
                         ?>
                     </div>
                 </div>
