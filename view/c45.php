@@ -47,6 +47,8 @@
     </div>
     <div class="card-tree">
         <div class="table-container">
+            <a href="c45/Prediksi.php?table=<?php echo $table_name; ?>" id="loading" onclick="startLoading(event)" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
+            <a href="c45/mining.php?table=<?php echo $table_name; ?>" id="loading" onclick="startLoading(event)" class="button-mining" value="<?php echo $table_name; ?>">mining</a>
             <div class="card-table">
                 <div id="table-content-container"></div>
             </div>
@@ -56,47 +58,7 @@
     <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- Your custom script -->
-    <script>
-        function chooseTable(tableName) {
-            $.ajax({
-                url: 'view/load_table.php', // Sesuaikan dengan file yang sesuai di proyek Anda
-                type: 'GET',
-                data: {
-                    table: tableName
-                },
-                dataType: 'json',
-                success: function(data) {
-                    var tableHtml = '<table id="table-content">';
-                    if (data.fields.length > 0) {
-                        // Create table header
-                        tableHtml += '<tr><th>Action</th>';
-                        data.fields.forEach(function(field) {
-                            tableHtml += '<th>' + field + '</th>';
-                        });
-                        tableHtml += '</tr>';
-
-                        // Create table rows
-                        data.rows.forEach(function(row) {
-                            tableHtml += '<tr><td><a href="edit.php?id=' + row.id + '">Edit</a> | <a href="delete.php?id=' + row.id + '">Delete</a></td>';
-                            for (var field in row) {
-                                tableHtml += '<td>' + row[field] + '</td>';
-                            }
-                            tableHtml += '</tr>';
-                        });
-                    } else {
-                        tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
-                    }
-                    tableHtml += '</table>';
-
-                    $('#table-content-container').html(tableHtml);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error loading data:', textStatus, errorThrown); // Log the error details
-                    $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
-                }
-            });
-        }
-    </script>
+    <!-- <script src="../src/js/script.js"></script> -->
 </body>
 
 </html>

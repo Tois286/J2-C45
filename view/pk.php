@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,11 +13,11 @@
     <div>
         <h1>Pohon Keputusan</h1>
         <div class="card-home">
-            <div class="card-tree" id="table-content">
+            <div class="card-tree">
                 <a href='#miningTree' onclick="showContent('miningTree')" class='button-mining'>Proses Training</a>
                 <a href='#stepTree' onclick="showContent('stepTree')" class='button-mining'>Step Tree</a>
                 <div class="table-container">
-                    <div class="card-home" id="content">
+                    <div class="card-home">
                         <?php
                         include 'config/koneksi.php';
 
@@ -31,25 +28,54 @@
                             if ($conn->connect_error) {
                                 die("Connection failed: " . $conn->connect_error);
                             }
+                            $lulus = 'TEPAT WAKTU';
+                            // Hitung jumlah total baris pada tabel
+                            $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name WHERE Keterangan='$lulus'");
+                            $row = $result->fetch_assoc();
+                            $total_rows = $row['total_rows'];
 
-                            $query = "SELECT * FROM $table_name";
+                            // Hitung jumlah baris yang ingin ditampilkan (70% dari total baris)
+                            $limit = ceil(0.7 * $total_rows);
+
+                            // Query untuk mengambil 70% data terbaru
+                            $query = "SELECT * FROM $table_name  WHERE Keterangan='$lulus' ORDER BY id DESC LIMIT $limit";
                             $result = $conn->query($query);
 
                             if ($result->num_rows > 0) {
                                 echo "<table id='table-content'>";
                                 echo "<tr>";
 
+                                // Tambahkan kolom NO sebagai header pertama
+                                echo "<th>NO</th>";
+
                                 $fields = $result->fetch_fields();
+                                $headerColumns = [];
+
                                 foreach ($fields as $field) {
-                                    echo "<th>" . $field->name . "</th>";
+                                    // Tambahkan kondisi untuk mengecualikan kolom 'id' dan 'NO'
+                                    if ($field->name != 'id' && $field->name != 'NO') {
+                                        $headerColumns[] = $field->name;
+                                        echo "<th>" . $field->name . "</th>";
+                                    }
                                 }
                                 echo "</tr>";
+
+                                $counter = 1; // Counter untuk nomor urut
 
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
 
-                                    foreach ($row as $value) {
-                                        echo "<td>$value</td>";
+                                    // Tampilkan nomor urut (NO) di bagian pertama
+                                    echo "<td>" . $counter . "</td>";
+                                    $counter++; // Increment counter untuk nomor urut
+
+                                    foreach ($row as $key => $value) {
+                                        // Tambahkan kondisi untuk mengecualikan kolom 'id' dan 'NO'
+                                        if (
+                                            $key != 'id' && $key != 'NO'
+                                        ) {
+                                            echo "<td>$value</td>";
+                                        }
                                     }
                                     echo "</tr>";
                                 }
@@ -61,7 +87,7 @@
                             }
                             $conn->close();
                         } else {
-                            echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                            echo "<p>Silakan pilih tabel dari dropdown di atas1.</p>";
                         }
                         ?>
                     </div>
@@ -71,9 +97,8 @@
                 <div class="card-home">
                     <div class="table-container">
                         <div class="card-table" style="background-color:black; padding:40px; color:white; ">
-                            <?php
-                            require_once 'c45/mining.php';
-                            ?>
+                            <div id="table-content-container"></div>
+                            <?php include 'c45/prediksi.php' ?>
                         </div>
                     </div>
                 </div>
@@ -160,5 +185,3 @@
     </div>
 
 </body>
-
-</html>

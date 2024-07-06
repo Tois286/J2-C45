@@ -73,61 +73,85 @@ function loadTable(tableName) {
     xhttp.send();
 }
 
-// function startLoading(event) {
-//     event.preventDefault(); // Mencegah pengalihan default
-//     // Tampilkan konfirmasi kepada pengguna
-//     var proceed = confirm("Apakah Anda ingin melanjutkan proses mining?");
-//     if (proceed) {
-//         var button = event.target;
-//         // Ubah teks tombol menjadi "Loading..."
-//         button.innerHTML = "Loading...";
-//         // Simulasikan proses mining
-//         setTimeout(function() {
-//             // Setelah selesai, arahkan halaman ke pk.php
-//             window.location.href = button.href;
-//         }, 2000); // Contoh waktu tunggu 2 detik (2000 milidetik)
-//     } else {
-//         alert("Proses mining dibatalkan.");
-//     }
-// }
+function saveToLocalStorage(key, value) {
+    if (localStorage.getItem(key) === null) {
+        // Jika kunci belum ada, tambahkan nilai baru
+        localStorage.setItem(key, value);
+    } else {
+        // Jika kunci sudah ada, update nilai
+        localStorage.setItem(key, value);
+    }
+}
 
-// function chooseTable(tableName) {
-//     $.ajax({
-//         url: 'load_table.php',
-//         type: 'GET',
-//         data: { table: tableName },
-//         dataType: 'json',
-//         success: function(data) {
-//             if (data.error) {
-//                 $('#table-content-container').html('<p>Error: ' + data.error + '</p>');
-//                 return;
-//             }
-//             var tableHtml = '<table id="table-content">';
-//             if (data.fields.length > 0) {
-//                 // Create table header
-//                 tableHtml += '<tr><th>Action</th>';
-//                 data.fields.forEach(function(field) {
-//                     tableHtml += '<th>' + field + '</th>';
-//                 });
-//                 tableHtml += '</tr>';
+function chooseTable(tableName) {
+    // Menyimpan tableName ke localStorage
+    localStorage.setItem("chooseTableTrainingProcess", tableName);
 
-//                 // Create table rows
-//                 data.rows.forEach(function(row) {
-//                     tableHtml += '<tr><td><a href="edit.php?id=' + row.id + '">Edit</a> | <a href="delete.php?id=' + row.id + '">Delete</a></td>';
-//                     for (var field in row) {
-//                         tableHtml += '<td>' + row[field] + '</td>';
-//                     }
-//                     tableHtml += '</tr>';
-//                 });
-//             } else {
-//                 tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
-//             }
-//             tableHtml += '</table>';
-//             $('#table-content-container').html(tableHtml);
-//         },
-//         error: function(jqXHR, textStatus, errorThrown) {
-//             console.error('Error loading data:', textStatus, errorThrown); // Log the error details
-//             $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
-//         }
-//     });
-// }
+    // Mengecek apakah sudah ada parameter di URL
+    let currentUrl = new URL(window.location.href);
+    let params = new URLSearchParams(currentUrl.search);
+
+    // Menambahkan atau mengganti nilai parameter 'table'
+    params.set('table', tableName);
+
+    // Memperbarui URL tanpa reload halaman
+    currentUrl.search = params.toString();
+    window.history.replaceState({}, '', currentUrl);
+
+    $.ajax({
+        url: 'view/load_table.php', // Sesuaikan dengan file yang sesuai di proyek Anda
+        type: 'GET',
+        data: {
+            table: tableName
+        },
+        dataType: 'json',
+        success: function(data) {
+    var tableHtml = '<table id="table-content">';
+    if (data.fields.length > 0) {
+        // Create table header
+        tableHtml += '<tr>';
+        data.fields.forEach(function(field) {
+            tableHtml += '<th>' + field + '</th>';
+        });
+        tableHtml += '<th>Action</th></tr>';
+
+        // Create table rows
+        data.rows.forEach(function(row) {
+            tableHtml += '<tr>';
+            for (var field in row) {
+                tableHtml += '<td>' + row[field] + '</td>';
+            }
+            tableHtml += '<td><a href="edit.php?id=' + row.id + '">Edit</a> | <a href="delete.php?id=' + row.id + '">Delete</a></td></tr>';
+        });
+    } else {
+        tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
+    }
+    tableHtml += '</table>';
+
+    $('#table-content-container').html(tableHtml);
+    },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error loading data:', textStatus, errorThrown); // Log the error details
+            $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
+        }
+    });
+}
+
+function startLoading(event) {
+    event.preventDefault(); // Mencegah pengalihan default
+    // Tampilkan konfirmasi kepada pengguna
+    var proceed = confirm("Apakah Anda ingin melanjutkan proses mining?");
+    if (proceed) {
+        var button = event.target;
+        // Ubah teks tombol menjadi "Loading..."
+        button.innerHTML = "Loading...";
+        // Simulasikan proses mining
+        setTimeout(function() {
+            // Setelah selesai, arahkan halaman ke pk.php
+            window.location.href = button.href;
+        }, 2000); // Contoh waktu tunggu 2 detik (2000 milidetik)
+        window.location.href = "index.php";
+    } else {
+        alert("Proses mining dibatalkan.");
+    }
+}

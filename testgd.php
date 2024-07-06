@@ -1,7 +1,7 @@
 <?php
-// Cek apakah GD sudah terinstall
-if (extension_loaded('gd')) {
-    echo 'GD installed!';
-} else {
-    echo 'GD not installed :(';
-}
+require 'vendor/autoload.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
+$spreadsheet = new Spreadsheet();
+echo "PHPSpreadsheet berhasil diinisialisasi";
