@@ -72,3 +72,4 @@ function loadTable(tableName) {
     
     xhttp.send();
 }
+

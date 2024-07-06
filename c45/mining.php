@@ -1,6 +1,5 @@
 <?php
 include '../config/koneksi.php';
-
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
     // Mengambil Data dari Database
@@ -200,7 +199,7 @@ if (isset($_GET['table'])) {
         $ips4_s_baik_tepat_waktu = 0;
         $ips4_s_baik_terlambat = 0;
 
-        // Menghitung jumlah tepat waktu dan terlambat berdasarkan jenis kelamin
+        // Menghitung jumlah tepat waktu dan terlambat berdasarkan jenis kelamin dan ips
         foreach ($data as $row) {
             if ($row['jenis_kelamin'] == 'LAKI-LAKI') {
                 switch ($row['keterangan']) {
@@ -530,192 +529,9 @@ if (isset($_GET['table'])) {
         echo "Jumlah PEREMPUAN TERLAMBAT: " . $perempuan_terlambat . "<br>";
         $entropy_pr = ((-$prob_pr_tepat * log($prob_pr_tepat, 2)) + (-$prob_pr_lambat * log($prob_pr_lambat, 2)));
         echo "Entropy PEREMPUAN : " . $entropy_pr . "<br>";
-
-        // Hitung jumlah tepat waktu dan terlambat
-        $tepat_waktu_count = 0;
-        $terlambat_count = 0;
-        foreach ($data as $row) {
-            if ($row['keterangan'] == 'TEPAT WAKTU') {
-                $tepat_waktu_count++;
-            } else if ($row['keterangan'] == 'TERLAMBAT') {
-                $terlambat_count++;
-            }
-        }
-
-        // Hitung entropy total
-        $prob_tepat_waktu = $tepat_waktu_count / $total_count;
-        $prob_terlambat = $terlambat_count / $total_count;
-        $entropy_total = - ($prob_tepat_waktu * log($prob_tepat_waktu, 2)) - ($prob_terlambat * log($prob_terlambat, 2));
-
-        // Fungsi untuk menghitung entropy
-        function hitung_entropy($count_tepat, $count_terlambat)
-        {
-            $total = $count_tepat + $count_terlambat;
-            if ($total == 0) return 0;
-            $prob_tepat = $count_tepat / $total;
-            $prob_terlambat = $count_terlambat / $total;
-            $entropy = 0;
-            if ($prob_tepat > 0) {
-                $entropy -= $prob_tepat * log($prob_tepat, 2);
-            }
-            if ($prob_terlambat > 0) {
-                $entropy -= $prob_terlambat * log($prob_terlambat, 2);
-            }
-            return $entropy;
-        }
-
-        // Hitung Gain untuk IPS1
-        $ips1_values = ['KURANG', 'CUKUP', 'BAIK', 'SANGAT BAIK'];
-        $entropy_ips1 = 0;
-        foreach ($ips1_values as $value) {
-            $count_tepat = 0;
-            $count_terlambat = 0;
-            foreach ($data as $row) {
-                if ($row['ips1'] == $value) {
-                    if ($row['keterangan'] == 'TEPAT WAKTU') {
-                        $count_tepat++;
-                    } else if ($row['keterangan'] == 'TERLAMBAT') {
-                        $count_terlambat++;
-                    }
-                }
-            }
-            $entropy_value = hitung_entropy($count_tepat, $count_terlambat);
-            $total_value_count = $count_tepat + $count_terlambat;
-            $entropy_ips1 += ($total_value_count / $total_count) * $entropy_value;
-        }
-        $gain_ips1 = $entropy_total - $entropy_ips1;
-        echo "Gain IPS1: " . $gain_ips1 . "<br>";
-
-        // Hitung Gain untuk IPS2
-        $entropy_ips2 = 0;
-        foreach ($ips1_values as $value) {
-            $count_tepat = 0;
-            $count_terlambat = 0;
-            foreach ($data as $row) {
-                if ($row['ips2'] == $value) {
-                    if ($row['keterangan'] == 'TEPAT WAKTU') {
-                        $count_tepat++;
-                    } else if ($row['keterangan'] == 'TERLAMBAT') {
-                        $count_terlambat++;
-                    }
-                }
-            }
-            $entropy_value = hitung_entropy($count_tepat, $count_terlambat);
-            $total_value_count = $count_tepat + $count_terlambat;
-            $entropy_ips2 += ($total_value_count / $total_count) * $entropy_value;
-        }
-        $gain_ips2 = $entropy_total - $entropy_ips2;
-        echo "Gain IPS2: " . $gain_ips2 . "<br>";
-
-        // Hitung Gain untuk IPS3
-        $entropy_ips3 = 0;
-        foreach ($ips1_values as $value) {
-            $count_tepat = 0;
-            $count_terlambat = 0;
-            foreach ($data as $row) {
-                if ($row['ips3'] == $value) {
-                    if ($row['keterangan'] == 'TEPAT WAKTU') {
-                        $count_tepat++;
-                    } else if ($row['keterangan'] == 'TERLAMBAT') {
-                        $count_terlambat++;
-                    }
-                }
-            }
-            $entropy_value = hitung_entropy($count_tepat, $count_terlambat);
-            $total_value_count = $count_tepat + $count_terlambat;
-            $entropy_ips3 += ($total_value_count / $total_count) * $entropy_value;
-        }
-        $gain_ips3 = $entropy_total - $entropy_ips3;
-        echo "Gain IPS3: " . $gain_ips3 . "<br>";
-
-        // Hitung Gain untuk IPS4
-        $entropy_ips4 = 0;
-        foreach ($ips1_values as $value) {
-            $count_tepat = 0;
-            $count_terlambat = 0;
-            foreach ($data as $row) {
-                if ($row['ips4'] == $value) {
-                    if ($row['keterangan'] == 'TEPAT WAKTU') {
-                        $count_tepat++;
-                    } else if ($row['keterangan'] == 'TERLAMBAT') {
-                        $count_terlambat++;
-                    }
-                }
-            }
-            $entropy_value = hitung_entropy($count_tepat, $count_terlambat);
-            $total_value_count = $count_tepat + $count_terlambat;
-            $entropy_ips4 += ($total_value_count / $total_count) * $entropy_value;
-        }
-        $gain_ips4 = $entropy_total - $entropy_ips4;
-        echo "Gain IPS4: " . $gain_ips4 . "<br>";
-        $total_count = count($data);
-
-        // Hitung jumlah tepat waktu dan terlambat
-        $tepat_waktu_count = 0;
-        $terlambat_count = 0;
-        foreach ($data as $row) {
-            if ($row['keterangan'] == 'TEPAT WAKTU') {
-                $tepat_waktu_count++;
-            } elseif ($row['keterangan'] == 'TERLAMBAT') {
-                $terlambat_count++;
-            }
-        }
-
-        // Hitung entropi awal
-        $prob_tepat_waktu = $tepat_waktu_count / $total_count;
-        $prob_terlambat = $terlambat_count / $total_count;
-        $entropy_awal = - ($prob_tepat_waktu * log($prob_tepat_waktu, 2)) - ($prob_terlambat * log($prob_terlambat, 2));
-
-        // Hitung jumlah laki-laki dan perempuan
-        $laki_laki_count = 0;
-        $perempuan_count = 0;
-        $laki_laki_tepat_waktu = 0;
-        $laki_laki_terlambat = 0;
-        $perempuan_tepat_waktu = 0;
-        $perempuan_terlambat = 0;
-
-        foreach ($data as $row) {
-            if ($row['jenis_kelamin'] == 'LAKI-LAKI') {
-                $laki_laki_count++;
-                if ($row['keterangan'] == 'TEPAT WAKTU') {
-                    $laki_laki_tepat_waktu++;
-                } else {
-                    $laki_laki_terlambat++;
-                }
-            } elseif ($row['jenis_kelamin'] == 'PEREMPUAN') {
-                $perempuan_count++;
-                if ($row['keterangan'] == 'TEPAT WAKTU') {
-                    $perempuan_tepat_waktu++;
-                } else {
-                    $perempuan_terlambat++;
-                }
-            }
-        }
-
-        // Hitung entropi setelah membagi berdasarkan jenis kelamin
-        $prob_laki_laki_tepat_waktu = $laki_laki_tepat_waktu / $laki_laki_count;
-        $prob_laki_laki_terlambat = $laki_laki_terlambat / $laki_laki_count;
-        $entropy_laki_laki = - ($prob_laki_laki_tepat_waktu * log($prob_laki_laki_tepat_waktu, 2)) - ($prob_laki_laki_terlambat * log($prob_laki_laki_terlambat, 2));
-
-        $prob_perempuan_tepat_waktu = $perempuan_tepat_waktu / $perempuan_count;
-        $prob_perempuan_terlambat = $perempuan_terlambat / $perempuan_count;
-        $entropy_perempuan = - ($prob_perempuan_tepat_waktu * log($prob_perempuan_tepat_waktu, 2)) - ($prob_perempuan_terlambat * log($prob_perempuan_terlambat, 2));
-
-        // Hitung rata-rata entropi setelah membagi
-        $entropy_setelah_membagi = ($laki_laki_count / $total_count) * $entropy_laki_laki + ($perempuan_count / $total_count) * $entropy_perempuan;
-
-        // Hitung informasi gain
-        $information_gain = $entropy_awal - $entropy_setelah_membagi;
-
-        // Output hasil
-        echo "Entropy Awal: " . $entropy_awal . "<br>";
-        echo "Entropy Laki-Laki: " . $entropy_laki_laki . "<br>";
-        echo "Entropy Perempuan: " . $entropy_perempuan . "<br>";
-        echo "Entropy Setelah Membagi: " . $entropy_setelah_membagi . "<br>";
-        echo "Information Gain untuk Jenis Kelamin: " . $information_gain . "<br>";
-        // Menampilkan pohon keputusan
-
     } catch (PDOException $e) {
         die("Error retrieving data: " . $e->getMessage());
     }
+    include 'tree.php';
+    include 'prediksi.php';
 }

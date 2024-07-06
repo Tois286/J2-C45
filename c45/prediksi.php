@@ -1,5 +1,6 @@
 <?php
 include '../config/koneksi.php';
+// include 'mining.php';
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
 

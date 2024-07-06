@@ -51,9 +51,12 @@
 
                     $query = "SELECT * FROM $table_name";
                     $result = $conn->query($query);
-
+                    echo "<br class='mining'>";
+                    echo "<a href='./c45/prediksi.php?table=" . $table_name . "' onclick='startLoading(event)' class='button-mining'>Prediksi</a>";
+                    echo '<a href="index.php#prosesTesting?table=' . $table_name . '"  class="button-mining" onclick="startLoading(event)">Mining</a>';
+                    echo "<a href='' class='button-mining' style='background-color:red; border:none;color:white;'>Prediksi Hanya dapat Dilakukan satu kali saja</a>";
+                    echo "<br>";
                     if ($result->num_rows > 0) {
-
                         echo "<table id='table-content'>";
                         echo "<tr>";
                         echo "<th>Action</th>";
@@ -65,7 +68,7 @@
 
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr>";
-                            echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a> | <a href='../c45/c45pros.php?id=" . $row['id'] . "&table=$table_name'>Kelola</a> | <a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
+                            echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a>| <a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
                             foreach ($row as $value) {
                                 echo "<td>$value</td>";
                             }
@@ -74,11 +77,7 @@
                         echo "</table>";
 
                         // Tambahkan tombol Mining di luar loop while
-                        echo "<br class='mining'>";
-                        echo "<a href='./c45/prediksi.php?table=" . $table_name . "' class='button-mining'>Prediksi</a>";
-                        echo "<a href='./c45/mining.php?table=" . $table_name . "' class='button-mining'>Mining</a>";
-                        echo "<a href='' class='button-mining' style='background-color:red; border:none;color:white;'>Prediksi Hanya dapat Dilakukan satu kali saja</a>";
-                        echo "<br>";
+
                     } else {
                         echo "<p>No data found</p>";
                     }
@@ -94,3 +93,22 @@
 <?php include 'modul/footer.php' ?>
 
 </html>
+<script>
+    function startLoading(event) {
+        event.preventDefault(); // Mencegah pengalihan default
+        // Tampilkan konfirmasi kepada pengguna
+        var proceed = confirm("Apakah Anda ingin melanjutkan proses mining?");
+        if (proceed) {
+            var button = event.target;
+            // Ubah teks tombol menjadi "Loading..."
+            button.innerHTML = "Loading...";
+            // Simulasikan proses mining
+            setTimeout(function() {
+                // Setelah selesai, arahkan halaman ke pk.php
+                window.location.href = button.href;
+            }, 2000); // Contoh waktu tunggu 2 detik (2000 milidetik)
+        } else {
+            alert("Proses mining dibatalkan.");
+        }
+    }
+</script>

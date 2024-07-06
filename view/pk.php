@@ -16,9 +16,11 @@
     <div>
         <h1>Pohon Keputusan</h1>
         <div class="card-home">
-            <div class="card-tree">
+            <div class="card-tree" id="table-content">
+                <a href='#miningTree' onclick="showContent('miningTree')" class='button-mining'>Proses Training</a>
+                <a href='#stepTree' onclick="showContent('stepTree')" class='button-mining'>Step Tree</a>
                 <div class="table-container">
-                    <div class="card-table">
+                    <div class="card-home" id="content">
                         <?php
                         include 'config/koneksi.php';
 
@@ -34,7 +36,6 @@
                             $result = $conn->query($query);
 
                             if ($result->num_rows > 0) {
-                                echo "<rev>$table_name</rev>";
                                 echo "<table id='table-content'>";
                                 echo "<tr>";
 
@@ -55,10 +56,6 @@
                                 echo "</table>";
 
                                 // Tambahkan tombol Mining di luar loop while
-                                echo "<br class='mining'>";
-                                echo "<a href='#miningTree' onclick=\"showContent('miningTree')\" class='button-mining'>Proses Training</a>";
-                                echo "<a href='#stepTree' onclick=\"showContent('stepTree')\" class='button-mining'>Step Tree</a>";
-                                echo "<br>";
                             } else {
                                 echo "<p>No data found</p>";
                             }
@@ -69,166 +66,95 @@
                         ?>
                     </div>
                 </div>
-                <!-- Elemen untuk menampilkan pohon keputusan -->
-                <div id="miningTree" class="hidden">
-                    <div class="card-home">
-                        <div class="table-container">
-                            <div class="card-table" style="background-color:black; padding:40px; color:white; ">
-                                <?php
-                                function calculate_entropy($data, $attribute)
-                                {
-                                    // Hitung frekuensi tiap kategori
-                                    $frequency = array_count_values(array_column($data, $attribute));
-
-                                    // Hitung total jumlah data
-                                    $total = count($data);
-
-                                    // Hitung entropi
-                                    $entropy = 0;
-                                    foreach ($frequency as $count) {
-                                        $probability = $count / $total;
-                                        if ($probability > 0) { // Menghindari log(0)
-                                            $entropy -= $probability * log($probability, 2);
-                                        }
-                                    }
-
-                                    return $entropy;
-                                }
-
-                                function calculate_gain($data, $target_attribute, $split_attribute)
-                                {
-                                    $total_entropy = calculate_entropy($data, $target_attribute);
-
-                                    // Hitung frekuensi nilai pada atribut pembagi
-                                    $values_frequency = array_count_values(array_column($data, $split_attribute));
-                                    $total_instances = count($data);
-
-                                    // Hitung entropi tertimbang untuk setiap subset data
-                                    $weighted_entropy = 0;
-                                    foreach ($values_frequency as $value => $count) {
-                                        // Ambil subset data untuk nilai tertentu
-                                        $subset = array_filter($data, function ($row) use ($split_attribute, $value) {
-                                            return $row[$split_attribute] == $value;
-                                        });
-                                        $subset_entropy = calculate_entropy($subset, $target_attribute);
-                                        $weighted_entropy += ($count / $total_instances) * $subset_entropy;
-                                    }
-
-                                    // Hitung gain
-                                    $gain = $total_entropy - $weighted_entropy;
-                                    return $gain;
-                                }
-
-                                function build_decision_tree($data, $target_attribute, $attributes)
-                                {
-                                    // Jika semua data dalam subset adalah sama untuk target attribute, return node leaf dengan nilai tersebut
-                                    $unique_values = array_unique(array_column($data, $target_attribute));
-                                    if (count($unique_values) == 1) {
-                                        return $unique_values[0];
-                                    }
-
-                                    // Jika tidak ada atribut lagi untuk dipilih, return nilai mayoritas dari target attribute
-                                    if (empty($attributes)) {
-                                        $counts = array_count_values(array_column($data, $target_attribute));
-                                        arsort($counts);
-                                        return key($counts);
-                                    }
-
-                                    // Pilih atribut dengan gain tertinggi
-                                    $best_attribute = null;
-                                    $max_gain = -1;
-                                    foreach ($attributes as $attribute) {
-                                        $gain = calculate_gain($data, $target_attribute, $attribute);
-                                        if ($gain > $max_gain) {
-                                            $max_gain = $gain;
-                                            $best_attribute = $attribute;
-                                        }
-                                    }
-
-                                    // Buat node baru untuk atribut terbaik
-                                    $tree = array();
-                                    $tree[$best_attribute] = array();
-
-                                    // Ambil nilai unik untuk atribut terbaik
-                                    $attribute_values = array_unique(array_column($data, $best_attribute));
-
-                                    // Hapus atribut terbaik dari daftar atribut
-                                    $attributes = array_diff($attributes, array($best_attribute));
-
-                                    // Rekursif membangun pohon untuk setiap nilai atribut terbaik
-                                    foreach ($attribute_values as $value) {
-                                        // Ambil subset data untuk nilai tertentu pada atribut terbaik
-                                        $subset = array_filter($data, function ($row) use ($best_attribute, $value) {
-                                            return $row[$best_attribute] == $value;
-                                        });
-
-                                        // Rekursif membangun pohon untuk subset
-                                        $subtree = build_decision_tree($subset, $target_attribute, $attributes);
-
-                                        // Tambahkan subtree ke node saat ini
-                                        $tree[$best_attribute][$value] = $subtree;
-                                    }
-
-                                    return $tree;
-                                }
-
-
-                                try {
-                                    $table_name = $_GET['table'];
-                                    $stmt = $pdo->prepare("SELECT id, jenis_kelamin, ips1, ips2, ips3, ips4, keterangan FROM $table_name");
-                                    $stmt->execute();
-                                    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                    // Tentukan atribut target dan atribut lainnya
-                                    $target_attribute = 'keterangan';
-                                    $attributes = array('jenis_kelamin', 'ips1', 'ips2', 'ips3', 'ips4');
-
-                                    // Hitung entropi untuk setiap atribut
-                                    $entropy_gender = calculate_entropy($data, 'jenis_kelamin');
-                                    $entropy_keterangan = calculate_entropy($data, 'keterangan');
-                                    $entropy_ips1 = calculate_entropy($data, 'ips1');
-                                    $entropy_ips2 = calculate_entropy($data, 'ips2');
-                                    $entropy_ips3 = calculate_entropy($data, 'ips3');
-                                    $entropy_ips4 = calculate_entropy($data, 'ips4');
-
-                                    // Hitung total entropi
-                                    $total_entropy = $entropy_gender + $entropy_keterangan + $entropy_ips1 + $entropy_ips2 + $entropy_ips3 + $entropy_ips4;
-
-                                    // Hitung gain untuk setiap atribut
-                                    $gain_gender = calculate_gain($data, 'keterangan', 'jenis_kelamin');
-                                    $gain_ips1 = calculate_gain($data, 'keterangan', 'ips1');
-                                    $gain_ips2 = calculate_gain($data, 'keterangan', 'ips2');
-                                    $gain_ips3 = calculate_gain($data, 'keterangan', 'ips3');
-                                    $gain_ips4 = calculate_gain($data, 'keterangan', 'ips4');
-
-                                    // Hitung total gain
-                                    $total_gain = $gain_gender + $gain_ips1 + $gain_ips2 + $gain_ips3 + $gain_ips4;
-
-                                    // Bangun pohon keputusan
-                                    $decision_tree = build_decision_tree($data, $target_attribute, $attributes);
-
-                                    // Tampilkan pohon keputusan
-                                    echo "<pre>";
-                                    print_r($decision_tree);
-                                    echo "</pre>";
-                                } catch (PDOException $e) {
-                                    echo 'Connection failed: ' . $e->getMessage();
-                                }
-
-                                ?>
-                            </div>
+            </div>
+            <div id="miningTree" class="hidden">
+                <div class="card-home">
+                    <div class="table-container">
+                        <div class="card-table" style="background-color:black; padding:40px; color:white; ">
+                            <?php
+                            require_once 'c45/mining.php';
+                            ?>
                         </div>
                     </div>
                 </div>
-                <div id="stepTree" class="hidden">
-                    <div class="card-home" style="color:black;">
-                        <p>Ini adalah konten untuk Step Tree.</p>
-                        <?php
+            </div>
+            <div id="stepTree" class="hidden">
+                <div class="card-home" style="color:black;">
+                    <p>Ini adalah konten untuk Step Tree.</p>
 
-                        ?>
-                    </div>
+                    <?php
+                    // Contoh data $data
+
+                    $values = [];
+                    foreach ($data as $row) {
+                        // Pastikan semua kunci ada dalam array $row dan konversi nilai menjadi numerik
+                        if (isset($row['ips1'], $row['ips2'], $row['ips3'], $row['ips4'])) {
+                            // Tentukan rata-rata berdasarkan kategori
+                            $categories = ['KURANG' => 1, 'CUKUP' => 2, 'BAIK' => 3, 'SANGAT BAIK' => 4];
+                            $average = ($categories[$row['ips1']] + $categories[$row['ips2']] + $categories[$row['ips3']] + $categories[$row['ips4']]) / 4;
+
+                            $values[] = [
+                                'id' => $row['id'],
+                                'ips1' => $row['ips1'],
+                                'ips2' => $row['ips2'],
+                                'ips3' => $row['ips3'],
+                                'ips4' => $row['ips4'],
+                                'lulus' => $average >= 2.5 ? 'TEPAT WAKTU' : 'TERLAMBAT',
+                            ];
+                        }
+                    }
+                    ?>
+
+                    <style>
+                        /* CSS untuk gaya tabel */
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 10px;
+                            font-family: Arial, sans-serif;
+                        }
+
+                        th,
+                        td {
+                            border: 1px solid #ddd;
+                            padding: 10px;
+                            text-align: left;
+                        }
+
+                        th {
+                            background-color: #f2f2f2;
+                        }
+
+                        tbody tr:nth-child(even) {
+                            background-color: #f9f9f9;
+                        }
+                    </style>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Steps</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($values as $value) : ?>
+                                <tr>
+                                    <td><?php echo $value['id']; ?></td>
+                                    <td>
+                                        IPS 1:(<?php echo $value['ips1']; ?>,) =>
+                                        IPS 2: (<?php echo $value['ips2']; ?>,) =>
+                                        IPS 3: (<?php echo $value['ips3']; ?>,) =>
+                                        IPS 4: (<?php echo $value['ips4']; ?>,) =>
+                                        Status: (<?php echo $value['lulus']; ?>)
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
         </div>
     </div>
     </div>
