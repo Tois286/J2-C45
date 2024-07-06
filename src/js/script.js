@@ -73,3 +73,61 @@ function loadTable(tableName) {
     xhttp.send();
 }
 
+// function startLoading(event) {
+//     event.preventDefault(); // Mencegah pengalihan default
+//     // Tampilkan konfirmasi kepada pengguna
+//     var proceed = confirm("Apakah Anda ingin melanjutkan proses mining?");
+//     if (proceed) {
+//         var button = event.target;
+//         // Ubah teks tombol menjadi "Loading..."
+//         button.innerHTML = "Loading...";
+//         // Simulasikan proses mining
+//         setTimeout(function() {
+//             // Setelah selesai, arahkan halaman ke pk.php
+//             window.location.href = button.href;
+//         }, 2000); // Contoh waktu tunggu 2 detik (2000 milidetik)
+//     } else {
+//         alert("Proses mining dibatalkan.");
+//     }
+// }
+
+// function chooseTable(tableName) {
+//     $.ajax({
+//         url: 'load_table.php',
+//         type: 'GET',
+//         data: { table: tableName },
+//         dataType: 'json',
+//         success: function(data) {
+//             if (data.error) {
+//                 $('#table-content-container').html('<p>Error: ' + data.error + '</p>');
+//                 return;
+//             }
+//             var tableHtml = '<table id="table-content">';
+//             if (data.fields.length > 0) {
+//                 // Create table header
+//                 tableHtml += '<tr><th>Action</th>';
+//                 data.fields.forEach(function(field) {
+//                     tableHtml += '<th>' + field + '</th>';
+//                 });
+//                 tableHtml += '</tr>';
+
+//                 // Create table rows
+//                 data.rows.forEach(function(row) {
+//                     tableHtml += '<tr><td><a href="edit.php?id=' + row.id + '">Edit</a> | <a href="delete.php?id=' + row.id + '">Delete</a></td>';
+//                     for (var field in row) {
+//                         tableHtml += '<td>' + row[field] + '</td>';
+//                     }
+//                     tableHtml += '</tr>';
+//                 });
+//             } else {
+//                 tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
+//             }
+//             tableHtml += '</table>';
+//             $('#table-content-container').html(tableHtml);
+//         },
+//         error: function(jqXHR, textStatus, errorThrown) {
+//             console.error('Error loading data:', textStatus, errorThrown); // Log the error details
+//             $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
+//         }
+//     });
+// }
