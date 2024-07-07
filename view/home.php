@@ -1,5 +1,4 @@
 <div>
-
     <div class="card-home">
         <center>
             <div class="h1-custom">PREDIKSI KELULUSAN MAHASISWA JURUSAN SISTEM</div>
@@ -11,7 +10,6 @@
                 <img src="asset/unipi.png" alt="image" style="width: 20%; height: auto; border-radius: 20px;">
             </center>
         </div>
-
         <center>
             <p class="h4-custom">Aplikasi ini akan menghasilkan informasi prediksi kelulusan mahasiswa jurusan Sistem</p>
             <p class="h4-custom">Informasi Universitas Insan Pembangunan Indonesia. Data yang digunakan adalah </p>
@@ -20,11 +18,6 @@
             <p class="h4-custom"><br>Hasil Analisa Prediksi Kelulusan dikelompokkan menjadi dua yaitu</p>
             <p class="h4-custom"><b>Terlambat</b> atau <b>Tepat Waktu</b></p>
         </center>
-
     </div>
-    <style>
-
-    </style>
-
+    <?php include 'modul/footer.php' ?>
 </div>
-<?php include 'modul/footer.php' ?>
