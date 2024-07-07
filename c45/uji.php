@@ -97,6 +97,7 @@ if (isset($_GET['table'])) {
         echo "\nTesting Set:\n";
         print_r($testSet);
         echo "</pre>";
+
         class Node
         {
             public $isLeaf = false;
@@ -177,6 +178,8 @@ if (isset($_GET['table'])) {
         echo "<pre>Predictions:\n";
         print_r($predictions);
         echo "</pre>";
+
+        // Fungsi untuk menghitung akurasi
         function calculateAccuracy($testSet, $predictions)
         {
             $correct = 0;
@@ -190,9 +193,42 @@ if (isset($_GET['table'])) {
             return $correct / count($testSet) * 100.0;
         }
 
-        // Contoh: Evaluasi akurasi dari prediksi
-        $accuracy = calculateAccuracy($testSet, $predictions);
-        echo "<p>Accuracy: " . $accuracy . "%</p>";
+        // Fungsi untuk menghitung sensitivitas, spesifisitas, dan akurasi
+        function calculateMetrics($testSet, $predictions)
+        {
+            $TP = $TN = $FP = $FN = 0;
+
+            for ($i = 0; $i < count($testSet); $i++) {
+                $actualLabel = end($testSet[$i]);
+                $predictedLabel = $predictions[$i];
+
+                if ($actualLabel == 'LULUS' && $predictedLabel == 'LULUS') {
+                    $TP++;
+                } elseif ($actualLabel == 'LULUS' && $predictedLabel != 'LULUS') {
+                    $FN++;
+                } elseif ($actualLabel != 'LULUS' && $predictedLabel != 'LULUS') {
+                    $TN++;
+                } elseif ($actualLabel != 'LULUS' && $predictedLabel == 'LULUS') {
+                    $FP++;
+                }
+            }
+
+            $accuracy = ($TP + $TN) / ($TP + $TN + $FP + $FN) * 100.0;
+            $sensitivity = ($TP + $FN) > 0 ? ($TP / ($TP + $FN) * 100.0) : 0;
+            $specificity = ($TN + $FP) > 0 ? ($TN / ($TN + $FP) * 100.0) : 0;
+
+            return [
+                'accuracy' => $accuracy,
+                'sensitivity' => $sensitivity,
+                'specificity' => $specificity
+            ];
+        }
+
+        // Hitung metrik dari prediksi
+        $metrics = calculateMetrics($testSet, $predictions);
+        echo "<p>Accuracy: " . $metrics['accuracy'] . "%</p>";
+        echo "<p>Sensitivity: " . $metrics['sensitivity'] . "%</p>";
+        echo "<p>Specificity: " . $metrics['specificity'] . "%</p>";
     } else {
         echo "<p>No data found</p>";
     }
