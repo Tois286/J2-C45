@@ -1,3 +1,14 @@
+<?php
+include("config/koneksi.php");
+
+session_start();
+if (!isset($_SESSION['username'])) {
+    
+    header("Location: index.php");
+}
+
+$result = mysqli_query($koneksi, "SELECT * FROM users");
+?>
 <link rel="stylesheet" href="src/css/style.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
