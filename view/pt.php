@@ -13,6 +13,12 @@
     <div>
         <h1>Pohon Testing</h1>
         <div class="card-home">
+            <div class="upload">
+                <form action="modul/database/uploadPros.php" method="post" enctype="multipart/form-data">
+                    <input type="file" name="excelFile" accept=".xlsx, .xls">
+                    <button type="submit" class="button button1">Upload</button>
+                </form>
+            </div>
             <div class="card-tree" id="table-content">
                 <div class="table-container">
                     <a href="c45/uji.php?table=<?php echo $table_name; ?>" id="loading" onclick="startLoading(event)" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>

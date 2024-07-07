@@ -91,45 +91,92 @@ if (isset($_GET['table'])) {
 
         list($trainSet, $testSet) = splitData($data, 0.7);
 
-        // Langkah 4: Implementasi Algoritma C4.5 untuk membangun model
-        // Anda perlu melengkapi algoritma C4.5 sesuai dengan spesifikasi Anda
+        // Debug: Tampilkan isi dari training dan testing set
+        echo "<pre>Training Set:\n";
+        print_r($trainSet);
+        echo "\nTesting Set:\n";
+        print_r($testSet);
+        echo "</pre>";
+        class Node
+        {
+            public $isLeaf = false;
+            public $label;
+            public $attribute;
+            public $children = [];
+            public $defaultValue;
 
-        // Langkah 5: Prediksi
+            public function __construct($isLeaf = false, $label = null)
+            {
+                $this->isLeaf = $isLeaf;
+                $this->label = $label;
+            }
+
+            public function isLeaf()
+            {
+                return $this->isLeaf;
+            }
+
+            public function getLabel()
+            {
+                return $this->label;
+            }
+
+            public function getAttribute()
+            {
+                return $this->attribute;
+            }
+
+            public function getChildren()
+            {
+                return $this->children;
+            }
+
+            public function getDefaultValue()
+            {
+                return $this->defaultValue;
+            }
+        }
+
+        // Dummy model untuk demonstrasi
+        $dummyModel = new Node(true, 'LULUS'); // Ganti ini dengan model C4.5 yang sebenarnya
+
         function predict($model, $instance)
         {
-            // Implementasikan fungsi prediksi menggunakan model C4.5
-            // Misalnya, gunakan model yang telah dibangun sebelumnya
-            $prediction = classifyInstance($model, $instance);
-            return $prediction;
+            return classifyInstance($model, $instance);
         }
 
         function classifyInstance($model, $instance)
         {
-            // Traverse the decision tree model to classify the instance
+            if ($model == null) {
+                throw new Exception("Model is null");
+            }
+
             while (true) {
-                // Jika model adalah sebuah leaf node, kembalikan label dari leaf node tersebut
                 if ($model->isLeaf()) {
                     return $model->getLabel();
                 }
 
-                // Ambil atribut yang digunakan untuk split pada node saat ini
                 $attribute = $model->getAttribute();
-
-                // Ambil nilai atribut instance yang sedang diperiksa
                 $instanceValue = $instance[$attribute];
 
-                // Traverse sesuai dengan nilai atribut instance
                 if (isset($model->getChildren()[$instanceValue])) {
                     $model = $model->getChildren()[$instanceValue];
                 } else {
-                    // Jika nilai atribut instance tidak ada dalam model, kembalikan nilai default atau nilai mayoritas
-                    return $model->getDefaultValue(); // Atau sesuaikan dengan logika penanganan nilai yang tidak ada
+                    return $model->getDefaultValue();
                 }
             }
         }
 
+        // Membuat prediksi untuk setiap instance dalam $testSet
+        $predictions = [];
+        foreach ($testSet as $instance) {
+            $predictions[] = predict($dummyModel, $instance);
+        }
 
-        // Langkah 6: Evaluasi Akurasi
+        // Debug: Tampilkan prediksi yang dihasilkan
+        echo "<pre>Predictions:\n";
+        print_r($predictions);
+        echo "</pre>";
         function calculateAccuracy($testSet, $predictions)
         {
             $correct = 0;
@@ -144,7 +191,6 @@ if (isset($_GET['table'])) {
         }
 
         // Contoh: Evaluasi akurasi dari prediksi
-        $predictions = []; // Inisialisasi variabel $predictions sebelum digunakan
         $accuracy = calculateAccuracy($testSet, $predictions);
         echo "<p>Accuracy: " . $accuracy . "%</p>";
     } else {
