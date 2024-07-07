@@ -13,6 +13,7 @@
     <div>
         <h1>Pohon Keputusan</h1>
         <div class="card-home">
+
             <div class="card-tree">
                 <a href='#miningTree' onclick="showContent('miningTree')" class='button-mining'>Proses Training</a>
                 <a href='#stepTree' onclick="showContent('stepTree')" class='button-mining'>Step Tree</a>
@@ -87,7 +88,7 @@
                             }
                             $conn->close();
                         } else {
-                            echo "<p>Silakan pilih tabel dari dropdown di atas1.</p>";
+                            echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
                         }
                         ?>
                     </div>
