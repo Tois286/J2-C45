@@ -8,7 +8,7 @@
                         <img src="asset/unipi.png" alt="image" style="width: 30%; height: auto;">
                     </center>
                 </div><br>
-                <form action="">
+                <form action="modul/database/loginPros.php" method="POST">
                     <div class="login-form">
                         <label for="username">Username :</label>
                         <input type="text" name="username" id="username" required placeholder="Username"> <br><br>
