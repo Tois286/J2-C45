@@ -3,12 +3,17 @@ include("config/koneksi.php");
 
 session_start();
 if (!isset($_SESSION['username'])) {
-    
-    header("Location: index.php");
+    echo "<p>Anda belum login. <a href='index.php'>Klik di sini untuk login</a>.</p>";
+} else {
+    // Bagian ini hanya dijalankan jika pengguna telah login
+    $result = mysqli_query($koneksi, "SELECT * FROM users");
+    // Proses hasil query dan tampilkan data jika diperlukan
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<p>User: " . $row['username'] . "</p>";
+    }
 }
-
-$result = mysqli_query($koneksi, "SELECT * FROM users");
 ?>
+
 <link rel="stylesheet" href="src/css/style.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
