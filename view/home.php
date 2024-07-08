@@ -19,5 +19,5 @@
             <p class="h4-custom"><b>Terlambat</b> atau <b>Tepat Waktu</b></p>
         </center>
     </div>
-    <?php include 'modul/footer.php' ?>
 </div>
+<?php include 'modul/footer.php' ?>

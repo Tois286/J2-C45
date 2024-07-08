@@ -1,64 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+<h1>Proses data Training</h1>
+<div class="card-home">
+    <div class="upload">
+        <div class="dropdown">
+            <button class="button button1" id="chooseTable" style="left: 50%;">Pilih Tabel</button>
+            <div class="dropdown-content">
+                <?php
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $dbname = "dbmining-base";
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Training Process</title>
-    <!-- Include Bootstrap CSS or your custom CSS here -->
-</head>
+                $conn = new mysqli($servername, $username, $password, $dbname);
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
 
-<body>
-    <h1>Proses data Training</h1>
-    <div class="card-home">
-        <div class="upload">
-            <div class="dropdown">
-                <button class="button button1" id="chooseTable" style="left: 50%;">Pilih Tabel</button>
-                <div class="dropdown-content">
-                    <?php
-                    $servername = "localhost";
-                    $username = "root";
-                    $password = "";
-                    $dbname = "dbmining-base";
+                $sql = "SHOW TABLES";
+                $result = $conn->query($sql);
 
-                    $conn = new mysqli($servername, $username, $password, $dbname);
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $table_name = $row["Tables_in_" . $dbname];
 
-                    $sql = "SHOW TABLES";
-                    $result = $conn->query($sql);
+                        // Debugging var_dump
+                        // var_dump($table_name);
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $table_name = $row["Tables_in_" . $dbname];
-                            echo "<button name='table' class='button-mining' onclick='chooseTable(\"$table_name\")' value='$table_name'>$table_name</button><br>";
+                        // Check if table_name is "users"
+                        if ($table_name == "users") {
+                            // Check if user is logged in (you need to implement this check)
+                            $isLoggedIn = false; // Example: Replace with your actual login check
+
+                            if (!$isLoggedIn) {
+                                continue; // Skip displaying this table if user is not logged in
+                            }
                         }
-                    } else {
-                        echo "<span>Tidak ada tabel</span>";
+
+                        // Display the table button
+                        echo "<button name='table' class='button-mining' onclick='chooseTable(\"$table_name\")' value='$table_name'>$table_name</button><br>";
                     }
+                } else {
+                    echo "<span>Tidak ada tabel</span>";
+                }
 
-                    $conn->close();
-                    ?>
-                </div>
-            </div>
-            <button class="button button1" style="left: 50%; background-color:red; border-radius:8px; color: white; width: 100%; ">Format wajib .xlsx atau excel</button>
-        </div>
-    </div>
-    <div class="card-tree">
-        <div class="table-container">
-            <a href="c45/Prediksi.php?table=<?php echo $table_name; ?>" id="loading" onclick="startLoading(event)" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
-            <a href="c45/mining.php?table=<?php echo $table_name; ?>" id="loading" onclick="startLoading(event)" class="button-mining" value="<?php echo $table_name; ?>">mining</a>
-            <div class="card-table">
-                <div id="table-content-container"></div>
+                $conn->close();
+                ?>
             </div>
         </div>
+        <button class="button button1" style="left: 50%; background-color:red; border-radius:8px; color: white; width: 100%; ">Format wajib .xlsx atau excel</button>
     </div>
+</div>
+<div class="card-tree">
+    <div class="table-container">
+        <a href="c45/Prediksi.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
+        <a href="c45/mining.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">mining</a>
+        <!-- id="loading" onclick="startLoading(event)" -->
+        <div class="card-table">
+            <?php echo $table_name; ?>
+            <div id="table-content-container"></div>
+        </div>
+    </div>
+</div>
 
-    <!-- Include jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!-- Your custom script -->
-    <!-- <script src="../src/js/script.js"></script> -->
-</body>
-
-</html>
+<!-- Include jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Your custom script -->
+<!-- <script src="../src/js/script.js"></script> -->
