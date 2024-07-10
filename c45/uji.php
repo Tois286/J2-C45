@@ -16,7 +16,7 @@ if (isset($_GET['table'])) {
     }
 
     // Query untuk menghitung jumlah total baris pada tabel dengan Keterangan 'LULUS' dan 'TIDAK LULUS'
-    $count_query = "SELECT COUNT(*) AS total_rows FROM $table_name WHERE Keterangan='$lulus' OR Keterangan='$tidak_lulus'";
+    $count_query = "SELECT COUNT(*) AS total_rows FROM $table_name WHERE KETERANGAN='$lulus' OR KETERANGAN='$tidak_lulus'";
     $result_count = $koneksi1->query($count_query);
     if (!$result_count) {
         die("Query failed: " . $koneksi1->error);
@@ -25,10 +25,10 @@ if (isset($_GET['table'])) {
     $total_rows = $row_count['total_rows'];
 
     // Hitung jumlah baris yang ingin ditampilkan (70% dari total baris)
-    $limit = ceil(0.7 * $total_rows);
+    $limit = ceil(0.3 * $total_rows);
 
-    // Query untuk mengambil data terbaru sejumlah $limit dengan Keterangan 'LULUS' atau 'TIDAK LULUS'
-    $query = "SELECT * FROM $table_name WHERE Keterangan='$lulus' OR Keterangan='$tidak_lulus' ORDER BY id DESC LIMIT $limit";
+    // Query untuk mengambil data terbaru sejumlah $limit dengan KETERANGAN 'LULUS' atau 'TIDAK LULUS'
+    $query = "SELECT * FROM $table_name WHERE KETERANGAN='$lulus' OR KETERANGAN='$tidak_lulus' ORDER BY id DESC LIMIT $limit";
     $result = $koneksi1->query($query);
 
     if ($result->num_rows > 0) {
@@ -59,7 +59,7 @@ if (isset($_GET['table'])) {
             foreach ($row as $key => $value) {
                 if ($key != 'id' && $key != 'NO') {
                     echo "<td>$value</td>";
-                    $rowData[] = $value;
+                    $rowData[$key] = $value;
                 }
             }
             $data[] = $rowData;
@@ -170,7 +170,7 @@ if (isset($_GET['table'])) {
             $TP = $TN = $FP = $FN = 0;
 
             for ($i = 0; $i < count($testSet); $i++) {
-                $actualLabel = end($testSet[$i]);
+                $actualLabel = $testSet[$i]['KETERANGAN'];
                 $predictedLabel = $predictions[$i];
 
                 if ($actualLabel == 'TEPAT WAKTU' && $predictedLabel == 'TEPAT WAKTU') {
@@ -191,7 +191,10 @@ if (isset($_GET['table'])) {
             return [
                 'accuracy' => $accuracy,
                 'sensitivity' => $sensitivity,
-                'specificity' => $specificity
+                'specificity' => $specificity,
+                'TP' => $TP,
+                'FN' => $FN,
+                'FP' => $FP
             ];
         }
 
@@ -200,6 +203,9 @@ if (isset($_GET['table'])) {
         echo "<p>Accuracy: " . $metrics['accuracy'] . "%</p>";
         echo "<p>Sensitivity: " . $metrics['sensitivity'] . "%</p>";
         echo "<p>Specificity: " . $metrics['specificity'] . "%</p>";
+        echo "<p>TP: " . $metrics['TP'] . "</p>";
+        echo "<p>FN: " . $metrics['FN'] . "</p>";
+        echo "<p>FP: " . $metrics['FP'] . "</p>";
     } else {
         echo "Tidak ada data yang ditemukan.";
     }

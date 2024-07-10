@@ -2,6 +2,7 @@
 include '../config/koneksi.php';
 // include 'tree.php';
 
+
 if (!function_exists('calculateEntropyGender')) {
     function calculateEntropyGender($laki_counts, $perempuan_counts)
     {
@@ -75,17 +76,6 @@ if (isset($_GET['table'])) {
         // Inisialisasi variabel jumlah untuk jenis kelamin dan nilai IPS
         $laki_laki_count = 0;
         $perempuan_count = 0;
-        // Inisialisasi jumlah data TEPAT WAKTU dan TERLAMBAT
-        $tepat_waktu_count = 0;
-        $terlambat_count = 0;
-
-        foreach ($data as $row) {
-            if ($row['KETERANGAN'] == 'TEPAT WAKTU') {
-                $tepat_waktu_count++;
-            } elseif ($row['KETERANGAN'] == 'TERLAMBAT') {
-                $terlambat_count++;
-            }
-        }
 
         $ips1_counts = array('KURANG' => 0, 'CUKUP' => 0, 'BAIK' => 0, 'SANGAT BAIK' => 0);
         $ips2_counts = array('KURANG' => 0, 'CUKUP' => 0, 'BAIK' => 0, 'SANGAT BAIK' => 0);
@@ -96,7 +86,6 @@ if (isset($_GET['table'])) {
             'LAKI-LAKI' => array('TEPAT WAKTU' => 0, 'TERLAMBAT' => 0),
             'PEREMPUAN' => array('TEPAT WAKTU' => 0, 'TERLAMBAT' => 0)
         );
-
 
         // Hitung jumlah berdasarkan jenis kelamin dan nilai IPS
         foreach ($data as $row) {
@@ -114,17 +103,6 @@ if (isset($_GET['table'])) {
             $keterangan_counts[$row['jenis_kelamin']][$row['KETERANGAN']]++;
         }
 
-        function calculateEntropyTotal($total_count, $tepat_waktu_count, $terlambat_count)
-        {
-            // Menghitung probabilitas untuk setiap kategori
-            $prob_tepat_waktu = $tepat_waktu_count / $total_count;
-            $prob_terlambat = $terlambat_count / $total_count;
-
-            // Menghitung entropy total
-            $entropy_total = (-$prob_tepat_waktu * log($prob_tepat_waktu, 2)) - ($prob_terlambat * log($prob_terlambat, 2));
-
-            return $entropy_total;
-        }
         // Menghitung entropi untuk setiap atribut IPS
         function calculateEntropy($count_good, $count_total)
         {
@@ -172,8 +150,6 @@ if (isset($_GET['table'])) {
         echo "Jumlah total data: " . $total_count . "<br>";
         echo "Jumlah LAKI-LAKI: " . $laki_laki_count . "<br>";
         echo "Jumlah PEREMPUAN: " . $perempuan_count . "<br>";
-        echo "Jumlah data TEPAT WAKTU: " . $tepat_waktu_count . "<br>";
-        echo "Jumlah data TERLAMBAT: " . $terlambat_count . "<br>";
         // Output informasi yang diminta
         echo "<h3>TEPAT WAKTU</h3>";
         foreach ($tepat_waktu_counts_ips1 as $grade => $count) {
@@ -265,94 +241,33 @@ if (isset($_GET['table'])) {
             array($keterangan_counts['PEREMPUAN']['TEPAT WAKTU'], $keterangan_counts['PEREMPUAN']['TERLAMBAT'])
         );
 
-        echo "<h3>Entropy Total Data</h3>";
-        $entropy_total = calculateEntropyTotal($total_count, $tepat_waktu_count, $terlambat_count);
-        echo "Entropy Total: " . $entropy_total;
-
-        echo "<h3>Entropy Jenis Kelamin</h3>";
         // Output entropi untuk masing-masing jenis kelamin
         echo "Entropy LAKI-LAKI: " . $entropy_gender['LAKI-LAKI'] . "<br>";
         echo "Entropy PEREMPUAN: " . $entropy_gender['PEREMPUAN'] . "<br>";
         echo "<br>";
+        // Hitung entropi untuk setiap atribut IPS
+        $entropy_ips1 = calculateEntropy($ips1_counts['SANGAT BAIK'], $ips1_counts['BAIK']);
+        echo "Entropy IPS1 BAIK: " . $entropy_ips1 . "<br>";
+        echo "<br>";
+
+        $entropy_ips2 = calculateEntropy($ips2_counts['SANGAT BAIK'], $ips2_counts['BAIK']);
+        echo "Entropy IPS2 BAIK: " . $entropy_ips2 . "<br>";
+        echo "<br>";
+
+        $entropy_ips3 = calculateEntropy($ips3_counts['SANGAT BAIK'], $ips3_counts['BAIK']);
+        echo "Entropy IPS3 BAIK: " . $entropy_ips3 . "<br>";
+        echo "<br>";
+
+        $entropy_ips4 = calculateEntropy($ips4_counts['SANGAT BAIK'], $ips4_counts['BAIK']);
+        echo "Entropy IPS4 BAIK: " . $entropy_ips4 . "<br>";
+        echo "<br>";
 
         // Menghitung entropy untuk keseluruhan data
-        function calculateGainGender($entropy_total, $entropy_gender, $total_count)
-        {
-            $entropy_laki = $entropy_gender['LAKI-LAKI']; // Entropi untuk LAKI-LAKI
-            $entropy_perempuan = $entropy_gender['PEREMPUAN']; // Entropi untuk PEREMPUAN
+        $entropy_total = calculateEntropy(
+            $keterangan_counts['LAKI-LAKI']['TEPAT WAKTU'] + $keterangan_counts['PEREMPUAN']['TEPAT WAKTU'],
+            $total_count
+        );
 
-            // Hitung gain untuk jenis kelamin
-            $gender_gain = $entropy_total - (($entropy_laki / $total_count) * $entropy_laki + ($entropy_perempuan / $total_count) * $entropy_perempuan);
-
-            return $gender_gain;
-        }
-        // Hitung gain untuk jenis kelamin
-        $gender_gain = calculateGainGender($entropy_total, $entropy_gender, $total_count);
-        echo "Gain untuk Jenis Kelamin: " . $gender_gain;
-
-        // Menghitung entropi untuk setiap atribut IPS
-        function calculateEntropyIPS($counts)
-        {
-            $total = array_sum($counts);
-            $entropy = 0;
-
-            if ($total > 0) {
-                foreach ($counts as $count) {
-                    if ($count > 0) {
-                        $prob = $count / $total;
-                        $entropy -= $prob * log($prob, 2);
-                    }
-                }
-            }
-
-            return $entropy;
-        }
-
-        // Menghitung entropy untuk setiap kategori pada IPS1
-        $entropy_ips1 = array();
-        foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
-            $counts_ips1 = array(
-                $tepat_waktu_counts_ips1[$kategori],
-                $terlambat_counts_ips1[$kategori]
-            );
-            $entropy_ips1[$kategori] = calculateEntropyIPS($counts_ips1);
-        }
-
-        $entropy_ips2 = array();
-        foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
-            $counts_ips2 = array(
-                $tepat_waktu_counts_ips2[$kategori],
-                $terlambat_counts_ips2[$kategori]
-            );
-            $entropy_ips2[$kategori] = calculateEntropyIPS($counts_ips2);
-        }
-
-        $entropy_ips3 = array();
-        foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
-            $counts_ips3 = array(
-                $tepat_waktu_counts_ips3[$kategori],
-                $terlambat_counts_ips3[$kategori]
-            );
-            $entropy_ips3[$kategori] = calculateEntropyIPS($counts_ips3);
-        }
-
-        $entropy_ips4 = array();
-        foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
-            $counts_ips4 = array(
-                $tepat_waktu_counts_ips4[$kategori],
-                $terlambat_counts_ips4[$kategori]
-            );
-            $entropy_ips4[$kategori] = calculateEntropyIPS($counts_ips4);
-        }
-        // Melanjutkan perhitungan entropi untuk setiap kategori pada IPS2, IPS3, dan IPS4
-        // Disesuaikan dengan pola yang sama seperti yang dilakukan untuk IPS1
-        // Output entropi untuk setiap kategori pada setiap IPS
-        echo "<h3>Entropy untuk kategori SANGAT BAIK, BAIK, CUKUP, dan KURANG pada setiap IPS</h3>";
-        foreach (array('IPS1', 'IPS2', 'IPS3', 'IPS4') as $ips) {
-            foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
-                echo "Entropy $ips $kategori: " . ${"entropy_" . strtolower($ips)}[$kategori] . "<br>";
-            }
-        }
         // Menghitung gain untuk setiap atribut
         function calculateGain($total_entropy, $counts, $total_count)
         {
@@ -369,8 +284,6 @@ if (isset($_GET['table'])) {
         $gain_ips2 = calculateGain($entropy_total, $ips2_counts, $total_count);
         $gain_ips3 = calculateGain($entropy_total, $ips3_counts, $total_count);
         $gain_ips4 = calculateGain($entropy_total, $ips4_counts, $total_count);
-        echo "<br>";
-        echo "<h3>Gain untuk setiap IPS</h3>";
         echo "Gain IPS1: " . $gain_ips1 . "<br>";
         echo "Gain IPS2: " . $gain_ips2 . "<br>";
         echo "Gain IPS3: " . $gain_ips3 . "<br>";

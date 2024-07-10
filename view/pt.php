@@ -5,13 +5,14 @@
 </style>
 
 <div>
-    <h1>Pohon Testing</h1>
+    <h1>Proses Testing</h1>
     <div class="card-home">
         <div class="card-tree" id="table-content">
+            <a href="c45/uji.php?table=<?php echo $table_name; ?>" id="loading" onclick="startLoading(event)" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
+            <!-- onclick="startLoading(event)" -->
+            <a href='#proji' onclick="showContent('proji')" class='button-mining'>Proses Uji</a>
+            <a href='#lihas' onclick="showContent('lihas')" class='button-mining'>Lihat Hasil Uji</a>
             <div class="table-container">
-                <a href="c45/uji.php?table=<?php echo $table_name; ?>" id="loading" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>// onclick="startLoading(event)"
-                <a href='#proji' onclick="showContent('proji')" class='button-mining'>Proses Uji</a>
-                <a href='#lihas' onclick="showContent('lihas')" class='button-mining'>Lihat Hasil Uji</a>
                 <div class="card-home" id="content">
                     <?php
                     include 'config/koneksi.php';
@@ -25,7 +26,7 @@
                         }
 
                         // Hitung jumlah total baris pada tabel
-                        $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name WHERE Keterangan='$lulus'");
+                        $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name WHERE KETERANGAN='$lulus'");
                         $row = $result->fetch_assoc();
                         $total_rows = $row['total_rows'];
 
@@ -33,7 +34,7 @@
                         $limit = ceil(0.3 * $total_rows);
 
                         // Query untuk mengambil 70% data terbaru
-                        $query = "SELECT * FROM $table_name  WHERE Keterangan='$lulus' ORDER BY id DESC LIMIT $limit";
+                        $query = "SELECT * FROM $table_name  WHERE KETERANGAN='$lulus' ORDER BY id DESC LIMIT $limit";
                         $result = $conn->query($query);
 
                         if ($result->num_rows > 0) {
@@ -87,13 +88,15 @@
                     ?>
                 </div>
             </div>
-            <div class="hidden">
+            <div id="proji" class="hidden">
                 <div class="card-home">
+                    <p>proses Testing</p>
+                    <?php include 'c45/uji.php' ?>
                 </div>
             </div>
-            <div class="card-home">
-                <div id="lihas">
-                    lihas
+            <div id="lihas" class="hidden">
+                <div id="card-home">
+                    <p>Hasil Proses</p>
                 </div>
             </div>
         </div>

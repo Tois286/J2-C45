@@ -1,5 +1,5 @@
 <?php
-// include '../config/koneksi.php';
+include '../config/koneksi.php';
 // Fungsi untuk menghitung entropy
 function hitung_entropy($count_tepat, $count_terlambat)
 {

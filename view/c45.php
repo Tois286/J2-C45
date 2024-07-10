@@ -51,11 +51,10 @@
 </div>
 <div class="card-tree">
     <div class="table-container">
-        <a href="c45/Prediksi.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
+        <!-- <a href="c45/Prediksi.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
         <a href="c45/mining.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">mining</a>
-        <!-- id="loading" onclick="startLoading(event)" -->
+        id="loading" onclick="startLoading(event)" -->
         <div class="card-table">
-            <?php echo $table_name; ?>
             <div id="table-content-container"></div>
         </div>
     </div>

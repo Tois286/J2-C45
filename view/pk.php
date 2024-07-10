@@ -7,7 +7,6 @@
 <div>
     <h1>Pohon Keputusan</h1>
     <div class="card-home">
-
         <div class="card-tree">
             <a href='#miningTree' onclick="showContent('miningTree')" class='button-mining'>Proses Training</a>
             <a href='#stepTree' onclick="showContent('stepTree')" class='button-mining'>Step Tree</a>
@@ -25,7 +24,7 @@
                         }
                         $lulus = 'TEPAT WAKTU';
                         // Hitung jumlah total baris pada tabel
-                        $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name WHERE Keterangan='$lulus'");
+                        $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name WHERE KETERANGAN='$lulus'");
                         $row = $result->fetch_assoc();
                         $total_rows = $row['total_rows'];
 
@@ -33,13 +32,12 @@
                         $limit = ceil(0.7 * $total_rows);
 
                         // Query untuk mengambil 70% data terbaru
-                        $query = "SELECT * FROM $table_name  WHERE Keterangan='$lulus' ORDER BY id DESC LIMIT $limit";
+                        $query = "SELECT * FROM $table_name  WHERE KETERANGAN='$lulus' ORDER BY id DESC LIMIT $limit";
                         $result = $conn->query($query);
 
                         if ($result->num_rows > 0) {
                             echo "<table id='table-content'>";
                             echo "<tr>";
-
                             // Tambahkan kolom NO sebagai header pertama
                             echo "<th>NO</th>";
 

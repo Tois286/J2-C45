@@ -14,16 +14,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tableName"]) && isset(
     }, $columns)) . ");";
 
     $stmt = $pdo->prepare($insertSql);
-    // Nama tabel yang ingin Anda tambahkan kolomnya
-    $tableName = $_POST["tableName"];
 
-    // Query untuk menambahkan kolom Keterangan ke tabel
-    $addColumnSql = "ALTER TABLE `$tableName` ADD `Keterangan` VARCHAR(255) NOT NULL DEFAULT '';";
+    // Cek apakah kolom 'KETERANGAN' ada di tabel
+    $checkColumnSql = "SHOW COLUMNS FROM `$tableName` LIKE 'KETERANGAN';";
+    $columnExists = $pdo->query($checkColumnSql)->fetch();
 
-    try {
-        $pdo->exec($addColumnSql);
-    } catch (PDOException $e) {
-        die("Error adding column: " . $e->getMessage());
+    if (!$columnExists) {
+        // Jika kolom 'KETERANGAN' tidak ada, tambahkan kolom 'Prediksi'
+        $addColumnSql = "ALTER TABLE `$tableName` ADD `PREDIKSI` TEXT NOT NULL DEFAULT '';";
+        try {
+            $pdo->exec($addColumnSql);
+        } catch (PDOException $e) {
+            die("Error adding column: " . $e->getMessage());
+        }
     }
 
     // Loop through posted data and insert into database

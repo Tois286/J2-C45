@@ -165,11 +165,11 @@ if (isset($_GET['table'])) {
                     $user_id = $row['id'];
 
                     // Debug: Periksa nilai yang akan diupdate
-                    echo "Updating ID $user_id with keterangan: $output\n";
+                    echo "Updating ID $user_id with PREDIKSI: $output\n";
 
-                    // Lakukan update kolom keterangan untuk setiap user id
-                    $stmt_update = $pdo->prepare("UPDATE $table_name SET keterangan = :keterangan WHERE id = :id");
-                    $stmt_update->execute(['keterangan' => $output, 'id' => $user_id]);
+                    // Lakukan update kolom Keterangan untuk setiap user id
+                    $stmt_update = $pdo->prepare("UPDATE $table_name SET PREDIKSI = :PREDIKSI WHERE id = :id");
+                    $stmt_update->execute(['PREDIKSI' => $output, 'id' => $user_id]);
 
                     // Debug: Periksa hasil eksekusi
                     if ($stmt_update->rowCount() > 0) {

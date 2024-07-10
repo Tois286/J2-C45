@@ -107,6 +107,11 @@ function chooseTable(tableName) {
         dataType: 'json',
         success: function(data) {
     var tableHtml = '<table id="table-content">';
+     tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
+    // Add mining button
+    tableHtml += '<a href="c45/mining.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">mining</a>';
+    // Add Prediksi button
+   
     if (data.fields.length > 0) {
         // Create table header
         tableHtml += '<tr>';
@@ -121,7 +126,13 @@ function chooseTable(tableName) {
             for (var field in row) {
                 tableHtml += '<td>' + row[field] + '</td>';
             }
-            tableHtml += '<td><a href="edit.php?id=' + row.id + '">Edit</a> | <a href="delete.php?id=' + row.id + '">Delete</a></td></tr>';
+
+            // Add action buttons
+            tableHtml += '<td>';
+            tableHtml += '<a href="edit.php?id=' + row.id + '">Edit</a> | ';
+            tableHtml += '<a href="delete.php?id=' + row.id + '">Delete</a> | ';
+
+            tableHtml += '</td></tr>';
         });
     } else {
         tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
@@ -129,7 +140,8 @@ function chooseTable(tableName) {
     tableHtml += '</table>';
 
     $('#table-content-container').html(tableHtml);
-    },
+},
+
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error loading data:', textStatus, errorThrown); // Log the error details
             $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
