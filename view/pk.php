@@ -91,7 +91,7 @@
                 <div class="table-container">
                     <div class="card-table" style="background-color:black; padding:40px; color:white; ">
                         <div id="table-content-container"></div>
-                        <?php include 'c45/mining.php' ?>
+                        <?php include 'c45/tree.php' ?>
                     </div>
                 </div>
             </div>

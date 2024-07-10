@@ -1,127 +1,83 @@
 <?php
-// include '../config/koneksi.php';
-// Fungsi untuk menghitung entropy
-function hitung_entropy($count_tepat, $count_terlambat)
-{
-    $total = $count_tepat + $count_terlambat;
-    if ($total == 0) return 0;
-    $prob_tepat = $count_tepat / $total;
-    $prob_terlambat = $count_terlambat / $total;
-    $entropy = 0;
-    if ($prob_tepat > 0) {
-        $entropy -= $prob_tepat * log($prob_tepat, 2);
-    }
-    if ($prob_terlambat > 0) {
-        $entropy -= $prob_terlambat * log($prob_terlambat, 2);
-    }
 
-    // Handle NaN case
-    if (is_nan($entropy)) {
-        return 0;
-    }
-
-    return $entropy;
-}
-
-// Fungsi untuk menghitung entropy dari seluruh dataset
-function calculate_entropy($data)
+// Fungsi untuk membuat pohon keputusan
+function buildDecisionTree($data, $attributes)
 {
     $total_count = count($data);
-    if ($total_count == 0) {
-        return 0;
+
+    // Jika semua data dalam subset memiliki klasifikasi yang sama, kembalikan label klasifikasi tersebut
+    $tepat_waktu_count = array_reduce($data, function ($count, $row) {
+        return $count + ($row['KETERANGAN'] == 'TEPAT WAKTU' ? 1 : 0);
+    }, 0);
+    $terlambat_count = $total_count - $tepat_waktu_count;
+
+    if ($tepat_waktu_count == 0) {
+        return 'TERLAMBAT';
+    }
+    if ($terlambat_count == 0) {
+        return 'TEPAT WAKTU';
     }
 
-    $counts = array_count_values(array_column($data, 'KETERANGAN'));
-    $entropy = 0;
-    foreach ($counts as $count) {
-        $probability = $count / $total_count;
-        $entropy -= $probability * log($probability, 2);
+    // Jika tidak ada atribut yang tersisa, kembalikan label klasifikasi mayoritas
+    if (empty($attributes)) {
+        return $tepat_waktu_count > $terlambat_count ? 'TEPAT WAKTU' : 'TERLAMBAT';
     }
 
-    // Handle NaN case
-    if (is_nan($entropy)) {
-        return 0;
+    // Hitung entropi total
+    $entropy_total = calculateEntropyTotal($total_count, $tepat_waktu_count, $terlambat_count);
+
+    // Hitung gain untuk setiap atribut
+    $gains = [];
+    foreach ($attributes as $attribute) {
+        $counts = array_count_values(array_column($data, $attribute));
+        $gains[$attribute] = calculateGain($entropy_total, $counts, $total_count);
     }
 
-    return $entropy;
-}
+    // Pilih atribut dengan gain tertinggi
+    $best_attribute = array_keys($gains, max($gains))[0];
 
-// Fungsi untuk menghitung information gain dari suatu atribut
-function calculate_information_gain($data, $attribute)
-{
-    $total_entropy = calculate_entropy($data);
-    $values = array_unique(array_column($data, $attribute));
-    $weighted_entropy = 0;
-    foreach ($values as $value) {
-        $subset = array_filter($data, function ($row) use ($attribute, $value) {
-            return isset($row[$attribute]) && $row[$attribute] == $value;
-        });
-        $subset_entropy = calculate_entropy($subset);
-        $weighted_entropy += (count($subset) / count($data)) * $subset_entropy;
-    }
-    return $total_entropy - $weighted_entropy;
-}
+    // Buat node pohon dengan atribut terbaik
+    $tree = [
+        'attribute' => $best_attribute,
+        'branches' => []
+    ];
 
-// Fungsi untuk membangun pohon keputusan
-function build_tree($data, $depth = 0, $max_depth = PHP_INT_MAX)
-{
-    $indent = str_repeat("&nbsp;", $depth * 4);
+    // Hapus atribut terbaik dari daftar atribut
+    $new_attributes = array_diff($attributes, [$best_attribute]);
 
-    if (empty($data) || count(array_unique(array_column($data, 'KETERANGAN'))) == 1 || $depth >= $max_depth) {
-        if (empty($data)) {
-            echo $indent . "Tidak memiliki gain tertinggi";
-        } else {
-            if (isset($data[0]['keterangan'])) {
-                echo "<br>";
-                echo $indent . "Keputusan: " . $data[0]['KETERANGAN'];
-                echo "<br>";
-                echo $indent . "Entropy: " . calculate_entropy($data);
-                echo "<br>";
-            } else {
-                echo "<br>";
-                echo $indent . "Tidak memiliki gain tertinggi";
-                echo "<br>";
-            }
-        }
-        return;
-    }
-
-    // Hitung informasi gain untuk setiap atribut
-    $attributes = ['jenis_kelamin', 'ips1', 'ips2', 'ips3', 'ips4'];
-    $best_gain = 0;
-    $best_attr = null;
-    foreach ($attributes as $attr) {
-        $gain = calculate_information_gain($data, $attr);
-        if ($gain > $best_gain) {
-            $best_gain = $gain;
-            $best_attr = $attr;
-        }
-    }
-
-    // Jika entropi bernilai 0, kembalikan keputusan berdasarkan mayoritas
-    if ($best_gain == 0) {
-        $most_common_keterangan = array_count_values(array_column($data, 'KETERANGAN'));
-        arsort($most_common_keterangan);
-        $keterangan = array_key_first($most_common_keterangan);
-        echo $indent . "Keputusan: " . $keterangan . "<br>";
-        return;
-    }
-
-    // Pisahkan data berdasarkan atribut terbaik
-    $values = array_unique(array_column($data, $best_attr));
-    foreach ($values as $value) {
-        echo $indent . $best_attr . " = " . $value . "<br>";
-        $subset = array_filter($data, function ($row) use ($best_attr, $value) {
-            return isset($row[$best_attr]) && $row[$best_attr] == $value;
+    // Buat cabang untuk setiap nilai dari atribut terbaik
+    $attribute_values = array_unique(array_column($data, $best_attribute));
+    foreach ($attribute_values as $value) {
+        // Filter subset data untuk nilai atribut ini
+        $subset = array_filter($data, function ($row) use ($best_attribute, $value) {
+            return $row[$best_attribute] == $value;
         });
 
-        if (empty($subset)) {
-            $most_common_keterangan = array_count_values(array_column($data, 'KETERANGAN'));
-            arsort($most_common_keterangan);
-            $keterangan = array_key_first($most_common_keterangan);
-            echo $indent . "Keputusan: " . $keterangan . "<br>";
-        } else {
-            build_tree($subset, $depth + 1, $max_depth);
-        }
+        // Rekursif membangun pohon untuk subset data
+        $tree['branches'][$value] = buildDecisionTree($subset, $new_attributes);
+    }
+
+    return $tree;
+}
+
+if (isset($_GET['table'])) {
+    $table_name = $_GET['table'];
+
+    try {
+        $stmt = $pdo->prepare("SELECT id, jenis_kelamin, ips1, ips2, ips3, ips4, KETERANGAN FROM $table_name");
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $attributes = ['jenis_kelamin', 'ips1', 'ips2', 'ips3', 'ips4'];
+
+        // Bangun pohon keputusan
+        $decision_tree = buildDecisionTree($data, $attributes);
+
+        echo "<h3>Pohon Keputusan</h3>";
+        echo "<pre>";
+        print_r($decision_tree);
+        echo "</pre>";
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
     }
 }
