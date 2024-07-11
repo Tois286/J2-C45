@@ -7,7 +7,7 @@
 <div>
     <h1>Pohon Keputusan</h1>
     <div class="card-home">
-        <div class="card-tree">
+        <div>
             <a href='#miningTree' onclick="showContent('miningTree')" class='button-mining'>Proses Training</a>
             <a href='#stepTree' onclick="showContent('stepTree')" class='button-mining'>Step Tree</a>
             <div class="table-container">
@@ -91,87 +91,85 @@
                 <div class="table-container">
                     <div class="card-table" style="background-color:black; padding:40px; color:white; ">
                         <div id="table-content-container"></div>
-                        <?php include 'c45/tree.php' ?>
+                        <?php
+                        // Sekarang Anda bisa menggunakan pohon keputusan dari sesi
+                        // session_start();
+                        if (isset($_SESSION['decision_tree'])) {
+                            $decision_tree = $_SESSION['decision_tree'];
+                            echo "<h3>Pohon Keputusan</h3>";
+                            echo "<pre>";
+                            print_r($decision_tree);
+                            echo "</pre>";
+                        } else {
+                            echo "Tidak ada pohon keputusan yang ditemukan di sesi.";
+                        }
+                        ?>
+
                     </div>
                 </div>
             </div>
         </div>
         <div id="stepTree" class="hidden">
-            <div class="card-home" style="color:black;">
+            <div class="card-home" style="color: black;">
                 <p>Ini adalah konten untuk Step Tree.</p>
-
                 <?php
-                // Contoh data $data
+                // Fungsi rekursif untuk mendapatkan aturan per cabang
+                function getRules($tree, $currentRule = [])
+                {
+                    $rules = [];
 
-                $values = [];
-                foreach ($data as $row) {
-                    // Pastikan semua kunci ada dalam array $row dan konversi nilai menjadi numerik
-                    if (isset($row['ips1'], $row['ips2'], $row['ips3'], $row['ips4'])) {
-                        // Tentukan rata-rata berdasarkan kategori
-                        $categories = ['KURANG' => 1, 'CUKUP' => 2, 'BAIK' => 3, 'SANGAT BAIK' => 4];
-                        $average = ($categories[$row['ips1']] + $categories[$row['ips2']] + $categories[$row['ips3']] + $categories[$row['ips4']]) / 4;
+                    if (is_array($tree) && isset($tree['attribute'], $tree['branches'])) {
+                        foreach ($tree['branches'] as $key => $value) {
+                            $newRule = $currentRule;
+                            $newRule[$tree['attribute']] = $key;
 
-                        $values[] = [
-                            'id' => $row['id'],
-                            'ips1' => $row['ips1'],
-                            'ips2' => $row['ips2'],
-                            'ips3' => $row['ips3'],
-                            'ips4' => $row['ips4'],
-                            'lulus' => $average >= 2.5 ? 'TEPAT WAKTU' : 'TERLAMBAT',
-                        ];
+                            if (is_array($value)) {
+                                $rules = array_merge($rules, getRules($value, $newRule));
+                            } else {
+                                $newRule['Status Lulus'] = $value;
+                                $rules[] = $newRule;
+                            }
+                        }
                     }
+
+                    return $rules;
                 }
+
+                // Memperoleh aturan-aturan dari decision tree
+                $rules = getRules($decision_tree);
+
+                // Menampilkan aturan-aturan dalam tabel HTML
                 ?>
-
-                <style>
-                    /* CSS untuk gaya tabel */
-                    table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-top: 10px;
-                        font-family: Arial, sans-serif;
-                    }
-
-                    th,
-                    td {
-                        border: 1px solid #ddd;
-                        padding: 10px;
-                        text-align: left;
-                    }
-
-                    th {
-                        background-color: #f2f2f2;
-                    }
-
-                    tbody tr:nth-child(even) {
-                        background-color: #f9f9f9;
-                    }
-                </style>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Steps</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($values as $value) : ?>
+                <div class="table-container">
+                    <table class="styled-table">
+                        <thead>
                             <tr>
-                                <td><?php echo $value['id']; ?></td>
-                                <td>
-                                    IPS 1:(<?php echo $value['ips1']; ?>,) =>
-                                    IPS 2: (<?php echo $value['ips2']; ?>,) =>
-                                    IPS 3: (<?php echo $value['ips3']; ?>,) =>
-                                    IPS 4: (<?php echo $value['ips4']; ?>,) =>
-                                    Status: (<?php echo $value['lulus']; ?>)
-                                </td>
+                                <th>No</th>
+                                <th>Rule</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($rules as $index => $rule) : ?>
+                                <tr>
+                                    <td><?php echo $index + 1; ?></td>
+                                    <td>
+                                        <?php
+                                        $ruleStr = [];
+                                        foreach ($rule as $key => $value) {
+                                            if ($key !== 'Status Lulus') {
+                                                $ruleStr[] = "$key = $value";
+                                            }
+                                        }
+                                        echo implode(', ', $ruleStr);
+                                        echo $rule['Status Lulus'];
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-
     </div>
 </div>

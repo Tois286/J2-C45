@@ -1,8 +1,6 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "dbmining-base";
+
+include 'config/koneksi.php'; // Sesuaikan dengan path koneksi Anda
 
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
@@ -15,20 +13,8 @@ if (isset($_GET['table'])) {
         die("Connection failed: " . $koneksi1->connect_error);
     }
 
-    // Query untuk menghitung jumlah total baris pada tabel dengan Keterangan 'LULUS' dan 'TIDAK LULUS'
-    $count_query = "SELECT COUNT(*) AS total_rows FROM $table_name WHERE KETERANGAN='$lulus' OR KETERANGAN='$tidak_lulus'";
-    $result_count = $koneksi1->query($count_query);
-    if (!$result_count) {
-        die("Query failed: " . $koneksi1->error);
-    }
-    $row_count = $result_count->fetch_assoc();
-    $total_rows = $row_count['total_rows'];
-
-    // Hitung jumlah baris yang ingin ditampilkan (70% dari total baris)
-    $limit = ceil(0.3 * $total_rows);
-
-    // Query untuk mengambil data terbaru sejumlah $limit dengan KETERANGAN 'LULUS' atau 'TIDAK LULUS'
-    $query = "SELECT * FROM $table_name WHERE KETERANGAN='$lulus' OR KETERANGAN='$tidak_lulus' ORDER BY id DESC LIMIT $limit";
+    // Query untuk mengambil data dari tabel
+    $query = "SELECT * FROM $table_name";
     $result = $koneksi1->query($query);
 
     if ($result->num_rows > 0) {
@@ -76,15 +62,9 @@ if (isset($_GET['table'])) {
             return [$trainSet, $testSet];
         }
 
-        list($trainSet, $testSet) = splitData($data, 0.7);
+        list($trainSet, $testSet) = splitData($data, 0.3);
 
-        echo "<pre>Training Set:\n";
-        print_r($trainSet);
-        echo "\nTesting Set:\n";
-        print_r($testSet);
-        echo "</pre>";
-
-        // Implementasi Decision Tree C4.5
+        // Implementasi Decision Tree C4.5 (dummy untuk demonstrasi)
         class Node
         {
             public $isLeaf = false;
@@ -126,7 +106,7 @@ if (isset($_GET['table'])) {
         }
 
         // Dummy model untuk demonstrasi
-        $tree = new Node(true, 'TEPAT WAKTU'); // Ganti ini dengan model C4.5 yang sebenarnya
+        $tree = new Node(true, 'TEPAT WAKTU');
 
         function predict($model, $instance)
         {
@@ -155,38 +135,38 @@ if (isset($_GET['table'])) {
             }
         }
 
+        // Prediksi untuk setiap instance di test set
         $predictions = [];
         foreach ($testSet as $instance) {
             $predictions[] = predict($tree, $instance);
         }
 
-        echo "<pre>Predictions:\n";
-        print_r($predictions);
-        echo "</pre>";
-
         // Fungsi untuk menghitung metrik akurasi, sensitivitas, dan spesifisitas
-        function calculateMetrics($testSet, $predictions)
+        function calculateMetrics($data)
         {
             $TP = $TN = $FP = $FN = 0;
 
-            for ($i = 0; $i < count($testSet); $i++) {
-                $actualLabel = $testSet[$i]['KETERANGAN'];
-                $predictedLabel = $predictions[$i];
+            foreach ($data as $row) {
+                $actualLabel = $row['KETERANGAN'];
+                $predictedLabel = $row['PREDIKSI'];
 
                 if ($actualLabel == 'TEPAT WAKTU' && $predictedLabel == 'TEPAT WAKTU') {
                     $TP++;
-                } elseif ($actualLabel == 'TEPAT WAKTU' && $predictedLabel != 'TEPAT WAKTU') {
-                    $FN++;
-                } elseif ($actualLabel != 'TEPAT WAKTU' && $predictedLabel != 'TEPAT WAKTU') {
-                    $TN++;
-                } elseif ($actualLabel != 'TEPAT WAKTU' && $predictedLabel == 'TEPAT WAKTU') {
+                } elseif ($actualLabel == 'TERLAMBAT' && $predictedLabel == 'TEPAT WAKTU') {
                     $FP++;
+                } elseif ($actualLabel == 'TEPAT WAKTU' && $predictedLabel == 'TERLAMBAT') {
+                    $FN++;
+                } elseif ($actualLabel == 'TERLAMBAT' && $predictedLabel == 'TERLAMBAT') {
+                    $TN++;
                 }
             }
 
+            // Hitung spesifisitas
+            $specificity = ($TN + $FP) > 0 ? ($TN / ($TN + $FP) * 100.0) : 0;
+
+            // Hitung akurasi, sensitivitas, dan kembalikan semua metrik
             $accuracy = ($TP + $TN) / ($TP + $TN + $FP + $FN) * 100.0;
             $sensitivity = ($TP + $FN) > 0 ? ($TP / ($TP + $FN) * 100.0) : 0;
-            $specificity = ($TN + $FP) > 0 ? ($TN / ($TN + $FP) * 100.0) : 0;
 
             return [
                 'accuracy' => $accuracy,
@@ -199,7 +179,7 @@ if (isset($_GET['table'])) {
         }
 
         // Hitung dan tampilkan metrik
-        $metrics = calculateMetrics($testSet, $predictions);
+        $metrics = calculateMetrics($testSet);
         echo "<p>Accuracy: " . $metrics['accuracy'] . "%</p>";
         echo "<p>Sensitivity: " . $metrics['sensitivity'] . "%</p>";
         echo "<p>Specificity: " . $metrics['specificity'] . "%</p>";

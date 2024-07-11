@@ -46,7 +46,8 @@
                 ?>
             </div>
         </div>
-        <button class="button button1" style="left: 50%; background-color:red; border-radius:8px; color: white; width: 100%; ">Format wajib .xlsx atau excel. Lakukan mining Terlebih dahulu untuk membuka semua fitur</button>
+        <button class="button button1" style="left: 50%; background-color:red; border-radius:8px; color: white; width: 100%; ">
+            Format wajib .xlsx atau excel.</button>
     </div>
 </div>
 <div class="card-tree">

@@ -1,7 +1,7 @@
 <div>
     <h1>Hasil Testing</h1>
     <div class="card-home">
-        <div class="card-tree" id="table-content">
+        <div id="table-content">
             <div class="table-container">
                 <a href='#miningTree' onclick="showContent('miningTree')" class='button-mining'>Lihat Hasil Uji</a>
                 <div class="card-home" id="content">
@@ -78,6 +78,9 @@
                     }
                     ?>
                 </div>
+            </div>
+            <div id="table-content-container">
+                <!-- Tempat untuk memuat tabel -->
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (submenuTraining.style.display === 'none' || submenuTraining.style.display === '') {
             submenuTraining.style.display = 'block';
         } else {
-            submenuTraining.style.display = 'none';
+            submenuTraining.style.display = '';
         }
     });
 
@@ -22,14 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (submenuTesting.style.display === 'none' || submenuTesting.style.display === '') {
             submenuTesting.style.display = 'block';
         } else {
-            submenuTesting.style.display = 'none';
+            submenuTesting.style.display = 'block';
         }
     });
 
     // Menutup submenu saat klik di luar elemen dropdown
     document.addEventListener('click', function() {
-        submenuTraining.style.display = 'none';
-        submenuTesting.style.display = 'none';
+        submenuTraining.style.display = 'block';
+        submenuTesting.style.display = 'block';
     });
 });
 
@@ -47,9 +47,9 @@ function showContent(id) {
     }
 }
 
-// Show home content by default
+// // Show home content by default
 document.addEventListener('DOMContentLoaded', () => {
-    showContent('home');
+    showContent('index.php?');
 });
 
 function loadTable(tableName) {
@@ -106,6 +106,7 @@ function chooseTable(tableName) {
         },
         dataType: 'json',
         success: function(data) {
+            console.log('Server Response:', data); // Tambahkan ini
     var tableHtml = '<table id="table-content">';
      tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
     // Add mining button
@@ -162,7 +163,7 @@ function startLoading(event) {
             // Setelah selesai, arahkan halaman ke pk.php
             window.location.href = button.href;
         }, 2000); // Contoh waktu tunggu 2 detik (2000 milidetik)
-        window.location.href = "index.php";
+        window.location.href = "home";
     } else {
         alert("Proses mining dibatalkan.");
     }

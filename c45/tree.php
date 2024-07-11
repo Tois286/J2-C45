@@ -1,5 +1,6 @@
 <?php
-
+session_start(); // Mulai sesi PHP
+// include '../config/koneksi.php';
 // Fungsi untuk membuat pohon keputusan
 function buildDecisionTree($data, $attributes)
 {
@@ -67,16 +68,23 @@ if (isset($_GET['table'])) {
         $stmt = $pdo->prepare("SELECT id, jenis_kelamin, ips1, ips2, ips3, ips4, KETERANGAN FROM $table_name");
         $stmt->execute();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        echo "<pre>";
+        print_r($data);
+        echo "</pre>";
         $attributes = ['jenis_kelamin', 'ips1', 'ips2', 'ips3', 'ips4'];
 
         // Bangun pohon keputusan
         $decision_tree = buildDecisionTree($data, $attributes);
+        // Simpan decision tree ke dalam sesi
+        $_SESSION['decision_tree'] = $decision_tree;
 
-        echo "<h3>Pohon Keputusan</h3>";
         echo "<pre>";
         print_r($decision_tree);
         echo "</pre>";
+        // Redirect ke pk.php
+        header("Location: ./view/pk.php");
+        echo "<h3>Pohon Keputusan</h3>";
+        exit;
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

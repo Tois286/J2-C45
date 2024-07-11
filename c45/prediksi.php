@@ -13,7 +13,7 @@
             $stmt = $pdo->prepare("SELECT id, ips1, ips2, ips3, ips4 FROM $table_name");
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo "<a class='button button-mining' type='button' href='../index.php'>Back</a>";
+            echo "<a class='button button1' type='button' href='../index.php'>Back</a>";
 
             // Debug: Periksa data yang diterima
             echo "<pre>";
@@ -169,10 +169,22 @@
                     if (isset($row['id'])) {
                         $user_id = $row['id'];
 
-                        // Debug: Periksa nilai yang akan diupdate
-                        echo "Updating ID $user_id with PREDIKSI: $output\n";
+                        // Periksa apakah kolom 'PREDIKSI' sudah ada di tabel
+                        $stmt_check_column = $pdo->query("SHOW COLUMNS FROM $table_name LIKE 'PREDIKSI'");
+                        $column_exists = $stmt_check_column->rowCount() > 0;
 
-                        // Lakukan update kolom Keterangan untuk setiap user id
+                        if (!$column_exists) {
+                            // Jika kolom 'PREDIKSI' belum ada, tambahkan kolom
+                            $stmt_add_column = $pdo->query("ALTER TABLE $table_name ADD COLUMN PREDIKSI VARCHAR(255)");
+
+                            if ($stmt_add_column) {
+                                echo "Added column PREDIKSI to table $table_name\n";
+                            } else {
+                                echo "Failed to add column PREDIKSI to table $table_name\n";
+                            }
+                        }
+
+                        // Lakukan update kolom PREDIKSI untuk setiap user id
                         $stmt_update = $pdo->prepare("UPDATE $table_name SET PREDIKSI = :PREDIKSI WHERE id = :id");
                         $stmt_update->execute(['PREDIKSI' => $output, 'id' => $user_id]);
 

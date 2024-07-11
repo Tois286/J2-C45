@@ -1,3 +1,7 @@
+<head>
+    <link rel="stylesheet" href="../src/css/style.css">
+</head>
+<a href="../index.php" value="' . $table_name . '" class="button-mining">Back</a>
 <?php
 include '../config/koneksi.php';
 // include 'tree.php';
@@ -35,6 +39,7 @@ if (!function_exists('calculateEntropyGender')) {
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
     // Mengambil Data dari Database
+
     try {
         $stmt = $pdo->prepare("SELECT id, jenis_kelamin, ips1, ips2, ips3, ips4, KETERANGAN FROM $table_name");
         $stmt->execute();
@@ -166,6 +171,10 @@ if (isset($_GET['table'])) {
                 $terlambat_counts_ips4[$row['ips4']]++;
             }
         }
+        echo "<h3>DATA MINING</h3>";
+
+        echo "<h3>----------------------------------------</h3>";
+
         // Output informasi yang diminta
         echo "Jumlah total data: " . $total_count . "<br>";
         echo "Jumlah LAKI-LAKI: " . $laki_laki_count . "<br>";
@@ -173,6 +182,9 @@ if (isset($_GET['table'])) {
         echo "Jumlah data TEPAT WAKTU: " . $tepat_waktu_count . "<br>";
         echo "Jumlah data TERLAMBAT: " . $terlambat_count . "<br>";
         // Output informasi yang diminta
+        echo "<h3>----------------------------------------</h3>";
+
+        echo "<br>";
         echo "<h3>TEPAT WAKTU</h3>";
         foreach ($tepat_waktu_counts_ips1 as $grade => $count) {
             echo "Jumlah IPS1 $grade: " . $count . "<br>";
@@ -190,6 +202,7 @@ if (isset($_GET['table'])) {
             echo "Jumlah IPS4 $grade: " . $count . "<br>";
         }
         echo "<br>";
+        echo "<h3>----------------------------------------</h3>";
 
         echo "<h3>TERLAMBAT</h3>";
         foreach ($terlambat_counts_ips1 as $grade => $count) {
@@ -247,6 +260,8 @@ if (isset($_GET['table'])) {
         echo "Jumlah TEPAT WAKTU CUKUP: " . $tepat_waktu_counts['CUKUP'] . "<br>";
         echo "Jumlah TEPAT WAKTU KURANG: " . $tepat_waktu_counts['KURANG'] . "<br>";
         echo "<br>";
+        echo "<h3>----------------------------------------</h3>";
+
         echo "<h3>JUMLAH TERLAMBAT</h3>";
         echo "Jumlah TERLAMBAT SANGAT BAIK: " . $terlambat_counts['SANGAT BAIK'] . "<br>";
         echo "Jumlah TERLAMBAT BAIK: " . $terlambat_counts['BAIK'] . "<br>";
@@ -264,6 +279,7 @@ if (isset($_GET['table'])) {
         echo "<h3>Entropy Total Data</h3>";
         $entropy_total = calculateEntropyTotal($total_count, $tepat_waktu_count, $terlambat_count);
         echo "Entropy Total: " . $entropy_total;
+        echo "<h3>----------------------------------------</h3>";
 
         echo "<h3>Entropy Jenis Kelamin</h3>";
         // Output entropi untuk masing-masing jenis kelamin
@@ -342,6 +358,8 @@ if (isset($_GET['table'])) {
             );
             $entropy_ips4[$kategori] = calculateEntropyIPS($counts_ips4);
         }
+        echo "<h3>----------------------------------------</h3>";
+
         // Melanjutkan perhitungan entropi untuk setiap kategori pada IPS2, IPS3, dan IPS4
         // Disesuaikan dengan pola yang sama seperti yang dilakukan untuk IPS1
         // Output entropi untuk setiap kategori pada setiap IPS
@@ -367,7 +385,10 @@ if (isset($_GET['table'])) {
         $gain_ips2 = calculateGain($entropy_total, $ips2_counts, $total_count);
         $gain_ips3 = calculateGain($entropy_total, $ips3_counts, $total_count);
         $gain_ips4 = calculateGain($entropy_total, $ips4_counts, $total_count);
+
         echo "<br>";
+        echo "<h3>----------------------------------------</h3>";
+
         echo "<h3>Gain untuk setiap IPS</h3>";
         echo "Gain IPS1: " . $gain_ips1 . "<br>";
         echo "Gain IPS2: " . $gain_ips2 . "<br>";
@@ -384,6 +405,11 @@ if (isset($_GET['table'])) {
 
         $best_attribute = array_keys($attributes_gain, max($attributes_gain))[0];
         echo "Atribut terbaik untuk split pertama: " . $best_attribute . "<br>";
+        echo "<br>";
+        echo "<h3>----------------------------------------</h3>";
+        echo "<br>";
+
+        include 'tree.php';
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

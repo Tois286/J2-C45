@@ -1,35 +1,22 @@
+<!-- <?php
+        include("config/koneksi.php");
+
+        session_start();
+        if (!isset($_SESSION['username'])) {
+            echo "<p>Anda belum login. <a href='index.php'>Klik di sini untuk login</a>.</p>";
+        } else {
+            // Bagian ini hanya dijalankan jika pengguna telah login
+            $result = mysqli_query($koneksi, "SELECT * FROM users");
+            // Proses hasil query dan tampilkan data jika diperlukan
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<p>User: " . $row['username'] . "</p>";
+            }
+        }
+        ?> -->
+
 <?php
-include("config/koneksi.php");
-
-session_start();
-if (!isset($_SESSION['username'])) {
-    echo "<p>Anda belum login. <a href='index.php'>Klik di sini untuk login</a>.</p>";
-} else {
-    // Bagian ini hanya dijalankan jika pengguna telah login
-    $result = mysqli_query($koneksi, "SELECT * FROM users");
-    // Proses hasil query dan tampilkan data jika diperlukan
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<p>User: " . $row['username'] . "</p>";
-    }
-}
+include 'modul/header.php';
 ?>
-<link rel="stylesheet" href="src/css/style.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Dapatkan URL saat ini
-        let currentUrl = window.location.href;
-
-        // Cari posisi dari tanda '?' (jika ada)
-        let queryPosition = currentUrl.indexOf('?');
-
-        // Ambil bagian URL sebelum '?' untuk mendapatkan base URL
-        let baseUrl = (queryPosition !== -1) ? currentUrl.substring(0, queryPosition) : currentUrl;
-
-        // Ubah URL tanpa query parameters menggunakan history.replaceState
-        history.replaceState(null, '', baseUrl);
-    });
-</script>
 
 <body>
     <!-- Navbar -->
