@@ -96,6 +96,8 @@
                         <div id="table-content-container"></div>
                         <?php
                         // Sekarang Anda bisa menggunakan pohon keputusan dari sesi
+                        // require_once 'c45/mining.php';
+
                         // session_start();
                         if (isset($_SESSION['decision_tree'])) {
                             $decision_tree = $_SESSION['decision_tree'];
@@ -116,32 +118,31 @@
             <div class="card-home" style="color: black;">
                 <p>Ini adalah konten untuk Step Tree.</p>
                 <?php
-                // Fungsi rekursif untuk mendapatkan aturan per cabang
-                function getRules($tree, $currentRule = [])
-                {
-                    $rules = [];
+                if (isset($_SESSION['decision_tree'])) {
+                    $decision_tree = $_SESSION['decision_tree'];
 
-                    if (is_array($tree) && isset($tree['attribute'], $tree['branches'])) {
-                        foreach ($tree['branches'] as $key => $value) {
-                            $newRule = $currentRule;
-                            $newRule[$tree['attribute']] = $key;
-
-                            if (is_array($value)) {
-                                $rules = array_merge($rules, getRules($value, $newRule));
-                            } else {
-                                $newRule['Status Lulus'] = $value;
-                                $rules[] = $newRule;
+                    function getRules($tree, $currentRule = [])
+                    {
+                        $rules = [];
+                        if (is_array($tree)) {
+                            foreach ($tree as $attribute => $branches) {
+                                foreach ($branches as $value => $subtree) {
+                                    $newRule = $currentRule;
+                                    $newRule[$attribute] = $value;
+                                    if (is_array($subtree)) {
+                                        $rules = array_merge($rules, getRules($subtree, $newRule));
+                                    } else {
+                                        $newRule['Status Lulus'] = $subtree;
+                                        $rules[] = $newRule;
+                                    }
+                                }
                             }
                         }
+                        return $rules;
                     }
 
-                    return $rules;
+                    $rules = getRules($decision_tree);
                 }
-
-                // Memperoleh aturan-aturan dari decision tree
-                $rules = getRules($decision_tree);
-
-                // Menampilkan aturan-aturan dalam tabel HTML
                 ?>
                 <div class="table-container">
                     <table class="styled-table">
@@ -152,23 +153,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($rules as $index => $rule) : ?>
-                                <tr>
-                                    <td><?php echo $index + 1; ?></td>
-                                    <td>
-                                        <?php
-                                        $ruleStr = [];
-                                        foreach ($rule as $key => $value) {
-                                            if ($key !== 'Status Lulus') {
-                                                $ruleStr[] = "$key = $value";
+                            <?php if (!empty($rules)) : ?>
+                                <?php foreach ($rules as $index => $rule) : ?>
+                                    <tr>
+                                        <td><?php echo $index + 1; ?></td>
+                                        <td>
+                                            <?php
+                                            $ruleStr = [];
+                                            foreach ($rule as $key => $value) {
+                                                if ($key !== 'Status Lulus') {
+                                                    $ruleStr[] = "$key = $value";
+                                                }
                                             }
-                                        }
-                                        echo implode(', ', $ruleStr);
-                                        echo $rule['Status Lulus'];
-                                        ?>
-                                    </td>
+                                            echo implode(', ', $ruleStr);
+                                            echo " -> " . $rule['Status Lulus'];
+                                            ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td colspan="2">Tidak ada aturan yang ditemukan.</td>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

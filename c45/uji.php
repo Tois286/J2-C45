@@ -8,7 +8,7 @@ if (isset($_GET['table'])) {
     $tidak_lulus = "TERLAMBAT"; // Kategori negatif
 
     // Koneksi ke Database
-    $koneksi1 = new mysqli($servername, $username, $password, $dbname);
+    $koneksi1 = new mysqli($host, $username, $password, $dbname);
     if ($koneksi1->connect_error) {
         die("Connection failed: " . $koneksi1->connect_error);
     }
@@ -18,6 +18,7 @@ if (isset($_GET['table'])) {
     $result = $koneksi1->query($query);
 
     if ($result->num_rows > 0) {
+        echo "<div class='table-container'>";
         echo "<table id='table-content'>";
         echo "<tr>";
         echo "<th>NO</th>";
@@ -32,6 +33,7 @@ if (isset($_GET['table'])) {
             }
         }
         echo "</tr>";
+        echo "</div>";
 
         $data = [];
         $counter = 1;
@@ -163,7 +165,6 @@ if (isset($_GET['table'])) {
 
             // Hitung spesifisitas
             $specificity = ($TN + $FP) > 0 ? ($TN / ($TN + $FP) * 100.0) : 0;
-
             // Hitung akurasi, sensitivitas, dan kembalikan semua metrik
             $accuracy = ($TP + $TN) / ($TP + $TN + $FP + $FN) * 100.0;
             $sensitivity = ($TP + $FN) > 0 ? ($TP / ($TP + $FN) * 100.0) : 0;
@@ -180,16 +181,16 @@ if (isset($_GET['table'])) {
 
         // Hitung dan tampilkan metrik
         $metrics = calculateMetrics($testSet);
-        echo "<p>Accuracy: " . $metrics['accuracy'] . "%</p>";
-        echo "<p>Sensitivity: " . $metrics['sensitivity'] . "%</p>";
-        echo "<p>Specificity: " . $metrics['specificity'] . "%</p>";
         echo "<p>TP: " . $metrics['TP'] . "</p>";
         echo "<p>FN: " . $metrics['FN'] . "</p>";
         echo "<p>FP: " . $metrics['FP'] . "</p>";
+
+        echo "<p>Accuracy: " . $metrics['accuracy'] . "%</p>";
+        echo "<p>Sensitivity: " . $metrics['sensitivity'] . "%</p>";
+        echo "<p>Specificity: " . $metrics['specificity'] . "%</p>";
     } else {
         echo "Tidak ada data yang ditemukan.";
     }
-
     $koneksi1->close();
 } else {
     echo "Nama tabel tidak diberikan.";
