@@ -54,7 +54,7 @@ if (isset($_GET['table'])) {
             echo "</tr>";
         }
         echo "</table>";
-
+        echo "</div>";
         // Fungsi untuk membagi data menjadi training set dan testing set
         function splitData($data, $splitRatio)
         {
@@ -157,9 +157,9 @@ if (isset($_GET['table'])) {
                 } elseif ($actualLabel == 'TERLAMBAT' && $predictedLabel == 'TEPAT WAKTU') {
                     $FP++;
                 } elseif ($actualLabel == 'TEPAT WAKTU' && $predictedLabel == 'TERLAMBAT') {
-                    $FN++;
-                } elseif ($actualLabel == 'TERLAMBAT' && $predictedLabel == 'TERLAMBAT') {
                     $TN++;
+                } elseif ($actualLabel == 'TERLAMBAT' && $predictedLabel == 'TERLAMBAT') {
+                    $FN++;
                 }
             }
 
@@ -175,19 +175,42 @@ if (isset($_GET['table'])) {
                 'specificity' => $specificity,
                 'TP' => $TP,
                 'FN' => $FN,
-                'FP' => $FP
+                'FP' => $FP,
+                'TN' => $TN
             ];
         }
 
         // Hitung dan tampilkan metrik
         $metrics = calculateMetrics($testSet);
-        echo "<p>TP: " . $metrics['TP'] . "</p>";
-        echo "<p>FN: " . $metrics['FN'] . "</p>";
-        echo "<p>FP: " . $metrics['FP'] . "</p>";
+
+        echo "
+        
+        <table border='1' cellspacing='0' cellpadding='5'class='styled-table'>
+        <center>
+            <tr>
+                <th rowspan='2'>Actual</th>
+                <th colspan='2'>Prediksi</th>
+            </tr>
+            <tr>
+                <th>Tepat Waktu</th>
+                <th>Terlambat</th>
+            </tr>
+            <tr>
+                <td>Tepat Waktu</td>
+                <td>{$metrics['TP']}</td>
+                <td>{$metrics['FN']}</td>
+            </tr>
+            <tr>
+                <td>Terlambat</td>
+                <td>{$metrics['FP']}</td>
+                <td>{$metrics['TN']}</td>
+            </tr>
+            </center>
+        </table>";
 
         echo "<p>Accuracy: " . $metrics['accuracy'] . "%</p>";
-        echo "<p>Sensitivity: " . $metrics['sensitivity'] . "%</p>";
         echo "<p>Specificity: " . $metrics['specificity'] . "%</p>";
+        echo "<p>Sensitivity: " . $metrics['sensitivity'] . "%</p>";
     } else {
         echo "Tidak ada data yang ditemukan.";
     }

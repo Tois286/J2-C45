@@ -1,5 +1,5 @@
 <?php
-session_start(); // Mulai sesi PHP
+// session_start(); // Mulai sesi PHP
 // include '../config/koneksi.php';
 // Fungsi untuk membuat pohon keputusan
 function buildDecisionTree($data, $best_attribute, $depth = 0, $max_depth = 10)
@@ -66,8 +66,6 @@ if (isset($_GET['table'])) {
             print_r($decision_tree);
             echo "</pre>";
 
-            header("Location: view/pk.php");
-            echo "<h3>Pohon Keputusan</h3>";
             exit;
         }
     } catch (PDOException $e) {

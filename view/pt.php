@@ -11,7 +11,6 @@
             <a href="c45/uji.php?table=<?php echo $table_name; ?>" id="loading" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
             <!-- onclick="startLoading(event)" -->
             <a href='#proji' onclick="showContent('proji')" class='button-mining'>Proses Uji</a>
-            <a href='#lihas' onclick="showContent('lihas')" class='button-mining'>Lihat Hasil Uji</a>
             <div class="table-container">
                 <div class="card-home" id="content">
                     <div id="table-content-container">
@@ -97,12 +96,6 @@
                 <div class="card-home">
                     <p>proses Testing</p>
                     <?php include 'c45/uji.php' ?>
-                </div>
-            </div>
-            <div id="lihas" class="hidden">
-                <div id="card-home">
-                    <p>Hasil Proses</p>
-
                 </div>
             </div>
         </div>

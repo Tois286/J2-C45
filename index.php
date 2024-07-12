@@ -63,11 +63,10 @@
                     <a href="#">Data Testing</a>
                     <div class="dropdown-content" id="submenu-testing">
                         <a href="#" onclick="showContent('prosesTesting')">Proses Testing</a>
-                        <a href="#" onclick="showContent('hasilTesting')">Hasil Testing</a>
+                        <a href="#" onclick="showContent('export')">Cetak Data</a>
                     </div>
                 </li>
                 <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
-                <li><a href="#export" onclick="showContent('export')">Cetak</a></li>
 
             </ul>
         </div>
@@ -92,17 +91,14 @@
             <?php include 'view/pt.php' ?>
         </div>
 
-        <div class="content" id="hasilTesting" style="display: none;">
-            <?php include 'view/ht.php' ?>
+        <div class="content" id="export" style="display: none;">
+            <?php include 'view/print.php' ?>
         </div>
 
         <div class="content" id="analytics" style="display: none;">
             <?php include 'view/prediksi.php' ?>
         </div>
 
-        <div class="content" id="export" style="display: none;">
-            <?php include 'view/print.php' ?>
-        </div>
         <div class="content" id="login" style="display: none;">
             <?php include 'public/login.php' ?>
         </div>

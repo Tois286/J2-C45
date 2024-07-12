@@ -39,6 +39,9 @@
                         $result = $conn->query($query);
 
                         if ($result->num_rows > 0) {
+                            echo "<h3>";
+                            echo $table_name;
+                            echo "</h3>";
                             echo "<table id='table-content'>";
                             echo "<tr>";
                             // Tambahkan kolom NO sebagai header pertama
@@ -95,10 +98,8 @@
                     <div class="card-table" style="background-color:black; padding:40px; color:white; ">
                         <div id="table-content-container"></div>
                         <?php
-                        // Sekarang Anda bisa menggunakan pohon keputusan dari sesi
-                        // require_once 'c45/mining.php';
-
                         // session_start();
+                        require_once 'c45/tree.php';
                         if (isset($_SESSION['decision_tree'])) {
                             $decision_tree = $_SESSION['decision_tree'];
                             echo "<h3>Pohon Keputusan</h3>";
@@ -109,7 +110,6 @@
                             echo "Tidak ada pohon keputusan yang ditemukan di sesi.";
                         }
                         ?>
-
                     </div>
                 </div>
             </div>

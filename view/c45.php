@@ -22,9 +22,6 @@
                     while ($row = $result->fetch_assoc()) {
                         $table_name = $row["Tables_in_" . $dbname];
 
-                        // Debugging var_dump
-                        // var_dump($table_name);
-
                         // Check if table_name is "users"
                         if ($table_name == "users") {
                             // Check if user is logged in (you need to implement this check)
@@ -47,7 +44,7 @@
             </div>
         </div>
         <button class="button button1" style="left: 50%; background-color:red; border-radius:8px; color: white; width: 100%; ">
-            Refresh Halaman Untuk aktifasi Vitur</button>
+            Klik Mining Untuk membuat Pohon keputusan dan Refresh Halaman Untuk aktifasi Viturnya</button>
     </div>
 </div>
 <div class="card-tree">
