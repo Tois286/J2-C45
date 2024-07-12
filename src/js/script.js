@@ -82,7 +82,6 @@ function saveToLocalStorage(key, value) {
         localStorage.setItem(key, value);
     }
 }
-
 function chooseTable(tableName) {
     // Menyimpan tableName ke localStorage
     localStorage.setItem("chooseTableTrainingProcess", tableName);
@@ -101,54 +100,50 @@ function chooseTable(tableName) {
     $.ajax({
         url: 'view/load_table.php', // Sesuaikan dengan file yang sesuai di proyek Anda
         type: 'GET',
-        data: {
-            table: tableName
-        },
+        data: { table: tableName },
         dataType: 'json',
         success: function(data) {
-            console.log('Server Response:', data); // Tambahkan ini
-    var tableHtml = '<table id="table-content">';
-     tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
-    // Add mining button
-    tableHtml += '<a href="c45/mining.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">mining</a>';
-    // Add Prediksi button
-   
-    if (data.fields.length > 0) {
-        // Create table header
-        tableHtml += '<tr>';
-        data.fields.forEach(function(field) {
-            tableHtml += '<th>' + field + '</th>';
-        });
-        tableHtml += '<th>Action</th></tr>';
+            console.log('Server Response:', data); // Log server response
 
-        // Create table rows
-        data.rows.forEach(function(row) {
-            tableHtml += '<tr>';
-            for (var field in row) {
-                tableHtml += '<td>' + row[field] + '</td>';
+            var tableHtml = '<table id="table-content">';
+            tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
+            tableHtml += '<a href="c45/mining.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Mining</a>';
+           
+            if (data.fields.length > 0) {
+                // Create table header
+                tableHtml += '<tr>';
+                data.fields.forEach(function(field) {
+                    tableHtml += '<th>' + field + '</th>';
+                });
+                tableHtml += '<th>Action</th></tr>';
+
+                // Create table rows
+                data.rows.forEach(function(row) {
+                    tableHtml += '<tr>';
+                    data.fields.forEach(function(field) {
+                        tableHtml += '<td>' + row[field] + '</td>';
+                    });
+
+                    // Add action buttons
+                    tableHtml += '<td>';
+                    tableHtml += '<a href="edit.php?id=' + row.id + '">Edit</a> | ';
+                    tableHtml += '<a href="delete.php?id=' + row.id + '">Delete</a>';
+                    tableHtml += '</td></tr>';
+                });
+            } else {
+                tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
             }
+            tableHtml += '</table>';
 
-            // Add action buttons
-            tableHtml += '<td>';
-            tableHtml += '<a href="edit.php?id=' + row.id + '">Edit</a> | ';
-            tableHtml += '<a href="delete.php?id=' + row.id + '">Delete</a> | ';
-
-            tableHtml += '</td></tr>';
-        });
-    } else {
-        tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
-    }
-    tableHtml += '</table>';
-
-    $('#table-content-container').html(tableHtml);
-},
-
+            $('#table-content-container').html(tableHtml);
+        },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error loading data:', textStatus, errorThrown); // Log the error details
             $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
         }
     });
 }
+
 
 function startLoading(event) {
     event.preventDefault(); // Mencegah pengalihan default

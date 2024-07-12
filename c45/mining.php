@@ -3,6 +3,10 @@
 </head>
 <a href="../index.php" value="' . $table_name . '" class="button-mining">Back</a>
 <?php
+echo ini_get('memory_limit');
+memory_get_usage();
+// ini_set('memory_limit', '1024M');
+session_start();
 include '../config/koneksi.php';
 // include 'tree.php';
 
@@ -278,6 +282,7 @@ if (isset($_GET['table'])) {
 
         echo "<h3>Entropy Total Data</h3>";
         $entropy_total = calculateEntropyTotal($total_count, $tepat_waktu_count, $terlambat_count);
+
         echo "Entropy Total: " . $entropy_total;
         echo "<h3>----------------------------------------</h3>";
 
@@ -358,37 +363,54 @@ if (isset($_GET['table'])) {
             );
             $entropy_ips4[$kategori] = calculateEntropyIPS($counts_ips4);
         }
-        echo "<h3>----------------------------------------</h3>";
 
+        echo "<h3>----------------------------------------</h3>";
+        echo "<br>";
         // Melanjutkan perhitungan entropi untuk setiap kategori pada IPS2, IPS3, dan IPS4
         // Disesuaikan dengan pola yang sama seperti yang dilakukan untuk IPS1
         // Output entropi untuk setiap kategori pada setiap IPS
+
         echo "<h3>Entropy untuk kategori SANGAT BAIK, BAIK, CUKUP, dan KURANG pada setiap IPS</h3>";
+
         foreach (array('IPS1', 'IPS2', 'IPS3', 'IPS4') as $ips) {
             foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
                 echo "Entropy $ips $kategori: " . ${"entropy_" . strtolower($ips)}[$kategori] . "<br>";
             }
         }
-        // Menghitung gain untuk setiap atribut
-        function calculateGain($total_entropy, $counts, $total_count)
+        function calculateCategoryEntropy($counts_tepat, $counts_terlambat)
         {
-            $weighted_entropy_sum = 0;
-
-            foreach ($counts as $count) {
-                $weighted_entropy_sum += ($count / $total_count) * calculateEntropy($count, $total_count);
+            $entropy = array();
+            foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
+                $counts = array(
+                    $counts_tepat[$kategori],
+                    $counts_terlambat[$kategori]
+                );
+                $entropy[$kategori] = calculateEntropyIPS($counts);
             }
-
-            return $total_entropy - $weighted_entropy_sum;
+            return $entropy;
         }
 
-        $gain_ips1 = calculateGain($entropy_total, $ips1_counts, $total_count);
-        $gain_ips2 = calculateGain($entropy_total, $ips2_counts, $total_count);
-        $gain_ips3 = calculateGain($entropy_total, $ips3_counts, $total_count);
-        $gain_ips4 = calculateGain($entropy_total, $ips4_counts, $total_count);
+        function calculateGain($entropy_total, $counts_tepat, $counts_terlambat, $entropy_attribute)
+        {
+            $total_counts = array_sum($counts_tepat) + array_sum($counts_terlambat);
+            $weighted_entropy = 0;
 
-        echo "<br>";
-        echo "<h3>----------------------------------------</h3>";
+            foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
+                $subset_counts = $counts_tepat[$kategori] + $counts_terlambat[$kategori];
+                if ($subset_counts > 0) {
+                    $weighted_entropy += ($subset_counts / $total_counts) * $entropy_attribute[$kategori];
+                }
+            }
 
+            return $entropy_total - $weighted_entropy;
+        }
+
+        $gain_ips1 = calculateGain($entropy_total, $tepat_waktu_counts_ips1, $terlambat_counts_ips1, $entropy_ips1);
+        $gain_ips2 = calculateGain($entropy_total, $tepat_waktu_counts_ips2, $terlambat_counts_ips2, $entropy_ips2);
+        $gain_ips3 = calculateGain($entropy_total, $tepat_waktu_counts_ips3, $terlambat_counts_ips3, $entropy_ips3);
+        $gain_ips4 = calculateGain($entropy_total, $tepat_waktu_counts_ips4, $terlambat_counts_ips4, $entropy_ips4);
+
+        // Menampilkan hasil
         echo "<h3>Gain untuk setiap IPS</h3>";
         echo "Gain IPS1: " . $gain_ips1 . "<br>";
         echo "Gain IPS2: " . $gain_ips2 . "<br>";
@@ -408,8 +430,46 @@ if (isset($_GET['table'])) {
         echo "<br>";
         echo "<h3>----------------------------------------</h3>";
         echo "<br>";
+        function buildDecisionTree($data, $best_attribute)
+        {
+            // Pisahkan data berdasarkan nilai atribut terbaik
+            $groups = array();
+            foreach ($data as $row) {
+                $attribute_value = $row[$best_attribute];
+                if (!isset($groups[$attribute_value])) {
+                    $groups[$attribute_value] = array();
+                }
+                $groups[$attribute_value][] = $row;
+            }
 
-        include 'tree.php';
+            // Tampilkan pohon keputusan dalam bentuk array
+            $tree = array();
+            foreach ($groups as $value => $group) {
+                $tree[$best_attribute][$value] = buildDecisionTree($group, getNextBestAttribute($group));
+            }
+
+            return $tree;
+        }
+
+        // Fungsi untuk memilih atribut terbaik berikutnya (dummy untuk contoh)
+        function getNextBestAttribute($data)
+        {
+            // Contoh: Secara acak memilih atribut lainnya sebagai contoh
+            $attributes = array_keys($data[0]); // Ambil semua atribut
+            $next_best_attribute = $attributes[rand(0, count($attributes) - 1)]; // Pilih secara acak (ini hanya contoh)
+
+            return $next_best_attribute;
+        }
+
+        // Memanggil fungsi untuk membangun pohon keputusan
+        if (isset($data) && isset($best_attribute)) {
+            $decision_tree = buildDecisionTree($data, $best_attribute);
+
+            // Outputkan pohon keputusan
+            echo "<pre>";
+            print_r($decision_tree);
+            echo "</pre>";
+        }
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }

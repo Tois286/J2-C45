@@ -5,12 +5,9 @@
             <button class="button button1" id="chooseTable" style="left: 50%;">Pilih Tabel</button>
             <div class="dropdown-content">
                 <?php
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "dbmining-base";
+                include 'config/koneksi.php';
 
-                $conn = new mysqli($servername, $username, $password, $dbname);
+                $conn = new mysqli($host, $username, $password, $dbname);
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
                 }
@@ -47,7 +44,7 @@
             </div>
         </div>
         <button class="button button1" style="left: 50%; background-color:red; border-radius:8px; color: white; width: 100%; ">
-            Format wajib .xlsx atau excel.</button>
+            Refresh Halaman Untuk aktifasi Vitur</button>
     </div>
 </div>
 <div class="card-tree">

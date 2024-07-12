@@ -4,13 +4,9 @@
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
 
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "dbmining-base";
-
+    include 'config/koneksi.php';
     // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($host, $username, $password, $dbname);
 
     // Check connection
     if ($conn->connect_error) {
