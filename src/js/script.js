@@ -82,6 +82,7 @@ function saveToLocalStorage(key, value) {
         localStorage.setItem(key, value);
     }
 }
+
 function chooseTable(tableName) {
     // Menyimpan tableName ke localStorage
     localStorage.setItem("chooseTableTrainingProcess", tableName);
@@ -104,6 +105,11 @@ function chooseTable(tableName) {
         dataType: 'json',
         success: function(data) {
             console.log('Server Response:', data); // Log server response
+
+            if (data.error) {
+                $('#table-content-container').html('<p>Error: ' + data.error + '</p>');
+                return;
+            }
 
             var tableHtml = '<table id="table-content">';
             tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';

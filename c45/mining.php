@@ -5,7 +5,9 @@
 <?php
 echo ini_get('memory_limit');
 memory_get_usage();
-// ini_set('memory_limit', '1024M');
+ini_set('memory_limit', '512M');
+
+
 session_start();
 include '../config/koneksi.php';
 // include 'tree.php';
@@ -430,8 +432,13 @@ if (isset($_GET['table'])) {
         echo "<br>";
         echo "<h3>----------------------------------------</h3>";
         echo "<br>";
-        function buildDecisionTree($data, $best_attribute)
+        function buildDecisionTree($data, $best_attribute, $depth = 0, $max_depth = 10)
         {
+            // Batasi kedalaman pohon
+            if ($depth >= $max_depth) {
+                return "Leaf node"; // Atau gunakan prediksi mayoritas
+            }
+
             // Pisahkan data berdasarkan nilai atribut terbaik
             $groups = array();
             foreach ($data as $row) {
@@ -445,7 +452,12 @@ if (isset($_GET['table'])) {
             // Tampilkan pohon keputusan dalam bentuk array
             $tree = array();
             foreach ($groups as $value => $group) {
-                $tree[$best_attribute][$value] = buildDecisionTree($group, getNextBestAttribute($group));
+                $next_best_attribute = getNextBestAttribute($group);
+                if ($next_best_attribute !== null) {
+                    $tree[$best_attribute][$value] = buildDecisionTree($group, $next_best_attribute, $depth + 1, $max_depth);
+                } else {
+                    $tree[$best_attribute][$value] = "Leaf node"; // Atau gunakan prediksi mayoritas
+                }
             }
 
             return $tree;
@@ -456,9 +468,11 @@ if (isset($_GET['table'])) {
         {
             // Contoh: Secara acak memilih atribut lainnya sebagai contoh
             $attributes = array_keys($data[0]); // Ambil semua atribut
-            $next_best_attribute = $attributes[rand(0, count($attributes) - 1)]; // Pilih secara acak (ini hanya contoh)
-
-            return $next_best_attribute;
+            if (count($attributes) > 1) {
+                $next_best_attribute = $attributes[rand(0, count($attributes) - 1)]; // Pilih secara acak (ini hanya contoh)
+                return $next_best_attribute;
+            }
+            return null; // Jika tidak ada atribut lain yang tersedia
         }
 
         // Memanggil fungsi untuk membangun pohon keputusan

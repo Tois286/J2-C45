@@ -6,7 +6,10 @@
                 <a href='#miningTree' onclick="showContent('miningTree')" class='button-mining'>Lihat Hasil Uji</a>
                 <div class="card-home" id="content">
                     <?php
-                    include 'config/koneksi.php';
+                    $host = 'localhost';
+                    $dbname = 'dbmining';
+                    $username = 'root';
+                    $password = '';
 
                     if (isset($_GET['table'])) {
                         $table_name = $_GET['table'];

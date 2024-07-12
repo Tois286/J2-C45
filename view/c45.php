@@ -5,7 +5,10 @@
             <button class="button button1" id="chooseTable" style="left: 50%;">Pilih Tabel</button>
             <div class="dropdown-content">
                 <?php
-                include 'config/koneksi.php';
+                $host = 'localhost';
+                $dbname = 'dbmining';
+                $username = 'root';
+                $password = '';
 
                 $conn = new mysqli($host, $username, $password, $dbname);
                 if ($conn->connect_error) {
@@ -61,4 +64,4 @@
 <!-- Include jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- Your custom script -->
-<!-- <script src="../src/js/script.js"></script> -->
+<script src="src/js/script.js"></script>

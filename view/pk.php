@@ -13,7 +13,10 @@
             <div class="table-container">
                 <div class="card-home">
                     <?php
-                    include 'config/koneksi.php';
+                    $host = 'localhost';
+                    $dbname = 'dbmining';
+                    $username = 'root';
+                    $password = '';
 
                     if (isset($_GET['table'])) {
                         $table_name = $_GET['table'];

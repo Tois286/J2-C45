@@ -12,7 +12,11 @@
             <button class="button button1" id="chooseTable" style="left: 50%;">Pilih Tabel</button>
             <div class="dropdown-content">
                 <?php
-                include 'config/koneksi.php';
+                $host = 'localhost';
+                $dbname = 'dbmining';
+                $username = 'root';
+                $password = '';
+
                 $conn = new mysqli($host, $username, $password, $dbname);
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
