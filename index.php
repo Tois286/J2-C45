@@ -1,18 +1,18 @@
-<!-- <?php
-        include("config/koneksi.php");
+<?php
+include("config/koneksi.php");
 
-        session_start();
-        if (!isset($_SESSION['username'])) {
-            echo "<p>Anda belum login. <a href='index.php'>Klik di sini untuk login</a>.</p>";
-        } else {
-            // Bagian ini hanya dijalankan jika pengguna telah login
-            $result = mysqli_query($koneksi, "SELECT * FROM users");
-            // Proses hasil query dan tampilkan data jika diperlukan
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo "<p>User: " . $row['username'] . "</p>";
-            }
-        }
-        ?> -->
+session_start();
+if (!isset($_SESSION['username'])) {
+    echo "<p>Anda belum login. <a href='index.php'>Klik di sini untuk login</a>.</p>";
+} else {
+    // Bagian ini hanya dijalankan jika pengguna telah login
+    $result = mysqli_query($koneksi, "SELECT * FROM users");
+    // Proses hasil query dan tampilkan data jika diperlukan
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<p>User: " . $row['username'] . "</p>";
+    }
+}
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -42,9 +42,6 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-brand">My Dashboard</div>
-        <ul class="navbar-nav">
-            <li><a href="#login" onclick="showContent('login')">login</a></li>
-        </ul>
     </nav>
     <!-- Main Content -->
     <div>
@@ -67,6 +64,7 @@
                     </div>
                 </li>
                 <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
+                <li><a href="#login" onclick="showContent('login')">login</a></li>
 
             </ul>
         </div>

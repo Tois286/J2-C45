@@ -3,11 +3,11 @@
 </head>
 <a href="../index.php" value="' . $table_name . '" class="button-mining">Back</a>
 <?php
-echo ini_get('memory_limit');
+// echo ini_get('memory_limit');
 memory_get_usage();
 ini_set('memory_limit', '512M');
 
-// session_start();
+session_start();
 include '../config/koneksi.php';
 // include 'tree.php';
 

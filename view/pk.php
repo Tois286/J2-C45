@@ -95,15 +95,15 @@
         <div id="miningTree" class="hidden">
             <div class="card-home">
                 <div class="table-container">
-                    <div class="card-table" style="background-color:black; padding:40px; color:white; ">
+                    <div class="card-table" style="background-color:black;color:white;width:100%;height:200px; display: inline-table; padding:20px;">
                         <div id="table-content-container"></div>
                         <?php
                         // session_start();
-                        require_once 'c45/tree.php';
+                        // require_once 'c45/mining.php';
                         if (isset($_SESSION['decision_tree'])) {
                             $decision_tree = $_SESSION['decision_tree'];
                             echo "<h3>Pohon Keputusan</h3>";
-                            echo "<pre>";
+                            echo "<pre style='font-size:12px;'>";
                             print_r($decision_tree);
                             echo "</pre>";
                         } else {
