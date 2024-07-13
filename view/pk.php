@@ -99,8 +99,7 @@
                 <div class="card-table" style="background-color:black;color:white; display: inline-table; padding:20px;">
                     <div id="table-content-container"></div>
                     <?php
-                    // session_start();
-                    // require_once 'c45/mining.php';
+                    session_start();
                     if (isset($_SESSION['decision_tree'])) {
                         $decision_tree = $_SESSION['decision_tree'];
                         echo "<h3>Pohon Keputusan</h3>";

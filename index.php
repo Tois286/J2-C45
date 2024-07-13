@@ -1,16 +1,8 @@
 <?php
-include("config/koneksi.php");
-
 session_start();
-if (!isset($_SESSION['username'])) {
-    echo "<p>Anda belum login. <a href='index.php'>Klik di sini untuk login</a>.</p>";
-} else {
-    // Bagian ini hanya dijalankan jika pengguna telah login
-    $result = mysqli_query($koneksi, "SELECT * FROM users");
-    // Proses hasil query dan tampilkan data jika diperlukan
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<p>User: " . $row['username'] . "</p>";
-    }
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
 }
 ?>
 
@@ -64,7 +56,7 @@ if (!isset($_SESSION['username'])) {
                     </div>
                 </li>
                 <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
-                <li><a href="#login" onclick="showContent('login')">login</a></li>
+                <li><a href="logout.php">Logout</a></li>
 
             </ul>
         </div>
@@ -97,9 +89,6 @@ if (!isset($_SESSION['username'])) {
             <?php include 'view/prediksi.php' ?>
         </div>
 
-        <div class="content" id="login" style="display: none;">
-            <?php include 'public/login.php' ?>
-        </div>
     </div>
     <script src="src/js/script.js"></script>
 </body>

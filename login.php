@@ -1,6 +1,11 @@
-<h1>Login</h1>
-<div class="card-home">
+<!-- login.php -->
+<link rel="stylesheet" href="src/css/style.css">
+
+<body style="background-image: url('asset/cc.jpg')">
     <div class="container-login">
+        <center>
+            <h1>Login</h1>
+        </center>
         <div class="box-login">
             <div class="img">
                 <center>
@@ -21,5 +26,5 @@
             </form>
         </div>
     </div>
-</div>
-<?php include 'modul/footer.php' ?>
+    <?php include 'modul/footer.php' ?>
+</body>

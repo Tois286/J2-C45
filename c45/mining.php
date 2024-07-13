@@ -494,7 +494,7 @@ if (isset($_GET['table'])) {
             print_r($decision_tree);
             echo "</pre>";
 
-            header("Location: view/pk.php");
+            header("Location: ../view/pk.php");
             echo "<h3>Pohon Keputusan</h3>";
             exit;
         }
