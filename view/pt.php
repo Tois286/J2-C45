@@ -10,7 +10,8 @@
         <div id="table-content">
             <a href="c45/uji.php?table=<?php echo $table_name; ?>" id="loading" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
             <!-- onclick="startLoading(event)" -->
-            <a href='#proji' onclick="showContent('proji')" class='button-mining'>Proses Uji</a>
+            <a href='#proji' onclick="showContent('proji')" class='button-mining'>Proses Uji </a>
+            Dari <span style="display: inline; font-size: 2em; font-weight: bold; margin: 0;">30%</span> data
             <div class="table-container">
                 <div class="card-home" id="content">
                     <div id="table-content-container">
@@ -29,18 +30,19 @@
                             }
 
                             // Hitung jumlah total baris pada tabel
-                            $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name WHERE KETERANGAN='$lulus'");
+                            $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name ");
                             $row = $result->fetch_assoc();
                             $total_rows = $row['total_rows'];
 
-                            // Hitung jumlah baris yang ingin ditampilkan (70% dari total baris)
+                            // Hitung jumlah baris yang ingin ditampilkan (30% dari total baris)
                             $limit = ceil(0.3 * $total_rows);
 
-                            // Query untuk mengambil 70% data terbaru
-                            $query = "SELECT * FROM $table_name  WHERE KETERANGAN='$lulus' ORDER BY id DESC LIMIT $limit";
+                            // Query untuk mengambil 30% data terbaru
+                            $query = "SELECT * FROM $table_name   ORDER BY id DESC LIMIT $limit";
                             $result = $conn->query($query);
 
                             if ($result->num_rows > 0) {
+
                                 echo "<table id='table-content'>";
                                 echo "<tr>";
 
@@ -96,7 +98,7 @@
     </div>
     <div id="proji" class="hidden">
         <div class="card-home">
-            <p>proses Testing</p>
+            <p>Menampilkan <span style="display: inline; font-size: 2em; font-weight: bold; margin: 0;">100%</span> data</p>
             <?php include 'c45/uji.php' ?>
         </div>
     </div>
