@@ -5,6 +5,10 @@ $username = 'root';
 $password = '';
 
 $koneksi = mysqli_connect($host, $username, $password, $dbname);
+if (!$koneksi) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
 $koneksi1 = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
 try {

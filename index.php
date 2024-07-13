@@ -4,7 +4,11 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+$role = $_SESSION['user_role'];
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -41,23 +45,26 @@ if (!isset($_SESSION['user_id'])) {
             <ul>
                 <li><a href="#home" onclick="showContent('home')">Home</a></li>
                 <li><a href="#dataSiswa" onclick="showContent('dataSiswa')">Data Siswa</a></li>
-                <li class="dropdown" id="data-training">
-                    <a href="#">Data Training</a>
-                    <div class="dropdown-content" id="submenu-training">
-                        <a href="#" onclick="showContent('prosesC45')">Proses Training</a>
-                        <a href="#" onclick="showContent('pohonKeputusan')">Pohon Keputusan</a>
-                    </div>
-                </li>
-                <li class="dropdown" id="data-testing">
-                    <a href="#">Data Testing</a>
-                    <div class="dropdown-content" id="submenu-testing">
-                        <a href="#" onclick="showContent('prosesTesting')">Proses Testing</a>
-                        <a href="#" onclick="showContent('export')">Cetak Data</a>
-                    </div>
-                </li>
+
+                <?php if ($role == 'admin') : ?>
+                    <li class="dropdown" id="data-training">
+                        <a href="#">Data Training</a>
+                        <div class="dropdown-content" id="submenu-training">
+                            <a href="#" onclick="showContent('prosesC45')">Proses Training</a>
+                            <a href="#" onclick="showContent('pohonKeputusan')">Pohon Keputusan</a>
+                        </div>
+                    </li>
+                    <li class="dropdown" id="data-testing">
+                        <a href="#">Data Testing</a>
+                        <div class="dropdown-content" id="submenu-testing">
+                            <a href="#" onclick="showContent('prosesTesting')">Proses Testing</a>
+                            <a href="#" onclick="showContent('export')">Cetak Data</a>
+                        </div>
+                    </li>
+                <?php endif; ?>
+
                 <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
                 <li><a href="logout.php">Logout</a></li>
-
             </ul>
         </div>
 

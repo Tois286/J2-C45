@@ -1,4 +1,5 @@
 // // scripts.js
+
 document.addEventListener('DOMContentLoaded', function() {
     var dataTraining = document.getElementById('data-training');
     var submenuTraining = document.getElementById('submenu-training');

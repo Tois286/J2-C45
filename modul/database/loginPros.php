@@ -1,38 +1,34 @@
 <?php
 session_start();
+include '../../config/koneksi.php'; // Sesuaikan path dengan lokasi file config.php
 
-// Jika sudah login, redirect ke halaman index
-if (isset($_SESSION['user_id'])) {
-  header("Location: ../../index.php");
-  exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if (isset($_POST['submit']) && $_POST['submit'] == 'Masuk') {
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  // Koneksi ke database
-  $conn = new mysqli('localhost', 'root', '', 'dbmining');
+  // Cek username dan password dari database
+  $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
+  $stmt->execute(['username' => $username]);
+  $user = $stmt->fetch();
 
-  if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-  }
+  if ($user) {
+    // Verifikasi password
+    if ($password === $user['password']) { // Perhatikan, ini hanya contoh sederhana
+      // Simpan data user di session
+      $_SESSION['user_id'] = $user['id'];
+      $_SESSION['user_role'] = $user['role'];
 
-  // Escape string untuk keamanan
-  $username = $conn->real_escape_string($username);
-  $password = $conn->real_escape_string($password);
-
-  $sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-  $result = $conn->query($sql);
-
-  if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $_SESSION['user_id'] = $row['user_id'];
-    header("Location: ../../index.php");
-    exit();
+      // Redirect ke halaman index
+      header("Location: ../../index.php");
+      exit();
+    } else {
+      // Password salah
+      echo "Password salah!";
+    }
   } else {
-    $error = "Username atau password salah.";
+    // Username tidak ditemukan
+    echo "Username tidak ditemukan!";
   }
-
-  $conn->close();
+} elseif (isset($_POST['submit']) && $_POST['submit'] == 'Daftar') {
+  // Logika untuk pendaftaran (jika ada)
 }
