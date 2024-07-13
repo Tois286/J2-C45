@@ -119,7 +119,7 @@ function chooseTable(tableName) {
                 // Create table header
                 tableHtml += '<tr>';
                 data.fields.forEach(function(field) {
-                    tableHtml += '<th>' + field + '</th>';
+                tableHtml += '<th>' + field + '</th>';
                 });
                 tableHtml += '<th>Action</th></tr>';
 
@@ -132,8 +132,8 @@ function chooseTable(tableName) {
 
                     // Add action buttons
                     tableHtml += '<td>';
-                    tableHtml += '<a href="edit.php?id=' + row.id + '">Edit</a> | ';
-                    tableHtml += '<a href="delete.php?id=' + row.id + '">Delete</a>';
+                    tableHtml += '<a href="view/edit.php?id=' + row.id + '">Edit</a> | ';
+                    tableHtml += '<a href="view/delete.php?id=' + row.id + '" onclick="return confirm(\"Apakah anda yakin ingin menghapus data ini?\")">Delete</a>';
                     tableHtml += '</td></tr>';
                 });
             } else {
