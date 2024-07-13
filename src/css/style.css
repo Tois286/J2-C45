@@ -206,6 +206,7 @@ input[type="file"] {
     border: 1px solid #ccc;
     padding: 8px;
     border-radius: 4px;
+    width: 170px;
     /* Atau gaya lain sesuai kebutuhan */
 }
 .button1 {
