@@ -132,8 +132,8 @@ function chooseTable(tableName) {
 
                     // Add action buttons
                     tableHtml += '<td>';
-                    tableHtml += '<a href="view/edit.php?id=' + row.id + '">Edit</a> | ';
-                    tableHtml += '<a href="view/delete.php?id=' + row.id + '" onclick="return confirm(\"Apakah anda yakin ingin menghapus data ini?\")">Delete</a>';
+                    tableHtml += '<a href="modul/database/edit.php?id=' + row.id + '">Edit</a> | ';
+                    tableHtml += '<a href="modul/database/delete.php?id=' + row.id + '" onclick="return confirm(\"Apakah anda yakin ingin menghapus data ini?\")">Delete</a>';
                     tableHtml += '</td></tr>';
                 });
             } else {
