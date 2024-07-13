@@ -92,94 +92,95 @@
                 </div>
             </div>
         </div>
-        <div id="miningTree" class="hidden">
-            <div class="card-home">
-                <div class="table-container">
-                    <div class="card-table" style="background-color:black;color:white;width:100%;height:200px; display: inline-table; padding:20px;">
-                        <div id="table-content-container"></div>
-                        <?php
-                        // session_start();
-                        // require_once 'c45/mining.php';
-                        if (isset($_SESSION['decision_tree'])) {
-                            $decision_tree = $_SESSION['decision_tree'];
-                            echo "<h3>Pohon Keputusan</h3>";
-                            echo "<pre style='font-size:12px;'>";
-                            print_r($decision_tree);
-                            echo "</pre>";
-                        } else {
-                            echo "Tidak ada pohon keputusan yang ditemukan di sesi.";
-                        }
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="stepTree" class="hidden">
-            <div class="card-home" style="color: black;">
-                <p>Ini adalah konten untuk Step Tree.</p>
-                <?php
-                if (isset($_SESSION['decision_tree'])) {
-                    $decision_tree = $_SESSION['decision_tree'];
-
-                    function getRules($tree, $currentRule = [])
-                    {
-                        $rules = [];
-                        if (is_array($tree)) {
-                            foreach ($tree as $attribute => $branches) {
-                                foreach ($branches as $value => $subtree) {
-                                    $newRule = $currentRule;
-                                    $newRule[$attribute] = $value;
-                                    if (is_array($subtree)) {
-                                        $rules = array_merge($rules, getRules($subtree, $newRule));
-                                    } else {
-                                        $newRule['Status Lulus'] = $subtree;
-                                        $rules[] = $newRule;
-                                    }
-                                }
-                            }
-                        }
-                        return $rules;
+    </div>
+    <div id="miningTree" class="hidden">
+        <div class="card-home">
+            <div class="table-container" style="width:100%;height:200px;">
+                <div class="card-table" style="background-color:black;color:white; display: inline-table; padding:20px;">
+                    <div id="table-content-container"></div>
+                    <?php
+                    // session_start();
+                    // require_once 'c45/mining.php';
+                    if (isset($_SESSION['decision_tree'])) {
+                        $decision_tree = $_SESSION['decision_tree'];
+                        echo "<h3>Pohon Keputusan</h3>";
+                        echo "<pre>";
+                        print_r($decision_tree);
+                        echo "</pre>";
+                    } else {
+                        echo "Tidak ada pohon keputusan yang ditemukan di sesi.";
                     }
-
-                    $rules = getRules($decision_tree);
-                }
-                ?>
-                <div class="table-container">
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Rule</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (!empty($rules)) : ?>
-                                <?php foreach ($rules as $index => $rule) : ?>
-                                    <tr>
-                                        <td><?php echo $index + 1; ?></td>
-                                        <td>
-                                            <?php
-                                            $ruleStr = [];
-                                            foreach ($rule as $key => $value) {
-                                                if ($key !== 'Status Lulus') {
-                                                    $ruleStr[] = "$key = $value";
-                                                }
-                                            }
-                                            echo implode(', ', $ruleStr);
-                                            echo " -> " . $rule['Status Lulus'];
-                                            ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else : ?>
-                                <tr>
-                                    <td colspan="2">Tidak ada aturan yang ditemukan.</td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
+                    ?>
                 </div>
             </div>
         </div>
     </div>
+    <div id="stepTree" class="hidden">
+        <div class="card-home" style="color: black;">
+            <p>Ini adalah konten untuk Step Tree.</p>
+            <?php
+            if (isset($_SESSION['decision_tree'])) {
+                $decision_tree = $_SESSION['decision_tree'];
+
+                function getRules($tree, $currentRule = [])
+                {
+                    $rules = [];
+                    if (is_array($tree)) {
+                        foreach ($tree as $attribute => $branches) {
+                            foreach ($branches as $value => $subtree) {
+                                $newRule = $currentRule;
+                                $newRule[$attribute] = $value;
+                                if (is_array($subtree)) {
+                                    $rules = array_merge($rules, getRules($subtree, $newRule));
+                                } else {
+                                    $newRule['Status Lulus'] = $subtree;
+                                    $rules[] = $newRule;
+                                }
+                            }
+                        }
+                    }
+                    return $rules;
+                }
+
+                $rules = getRules($decision_tree);
+            }
+            ?>
+            <div class="table-container">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Rule</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($rules)) : ?>
+                            <?php foreach ($rules as $index => $rule) : ?>
+                                <tr>
+                                    <td><?php echo $index + 1; ?></td>
+                                    <td>
+                                        <?php
+                                        $ruleStr = [];
+                                        foreach ($rule as $key => $value) {
+                                            if ($key !== 'Status Lulus') {
+                                                $ruleStr[] = "$key = $value";
+                                            }
+                                        }
+                                        echo implode(', ', $ruleStr);
+                                        echo " -> " . $rule['Status Lulus'];
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="2">Tidak ada aturan yang ditemukan.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 </div>

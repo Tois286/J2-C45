@@ -43,7 +43,7 @@
                 ?>
             </div>
         </div>
-        <button class="button button1" style="left: 50%; background-color:red; border-radius:8px; color: white; width: 100%; ">
+        <button class="button button1" style="left: 50%; background-color:#009879; border-radius:8px; color: white; width: 100%; ">
             Klik Mining Untuk membuat Pohon keputusan dan Refresh Halaman Untuk aktifasi Viturnya</button>
     </div>
 </div>

@@ -92,12 +92,12 @@
                     </div>
                 </div>
             </div>
-            <div id="proji" class="hidden">
-                <div class="card-home">
-                    <p>proses Testing</p>
-                    <?php include 'c45/uji.php' ?>
-                </div>
-            </div>
+        </div>
+    </div>
+    <div id="proji" class="hidden">
+        <div class="card-home">
+            <p>proses Testing</p>
+            <?php include 'c45/uji.php' ?>
         </div>
     </div>
 </div>
