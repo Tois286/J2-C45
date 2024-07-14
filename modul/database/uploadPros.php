@@ -7,6 +7,8 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 // Database configuration
 require '../../config/koneksi.php';
 
+ini_set('memory_limit', '600M');
+set_time_limit(300);
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["excelFile"])) {
     $fileTmpPath = $_FILES['excelFile']['tmp_name'];
     $fileName = $_FILES['excelFile']['name'];

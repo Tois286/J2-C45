@@ -1,6 +1,10 @@
 <?php
 // Include autoload.php dari PhpSpreadsheet
 require '../../config/koneksi.php';
+// Contoh penggunaan error_log di skrip PHP
+$error_message = "Data tidak lengkap pada baris ke-" . $row_number;
+error_log($error_message);
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tableName"]) && isset($_POST["columns"])) {
     $tableName = $_POST["tableName"];
@@ -44,6 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tableName"]) && isset(
             die("Error inserting data: " . $e->getMessage());
         }
     }
-    header("Location: ../..//index.php");
+    header("Location: ../../index.php");
     exit;
 }

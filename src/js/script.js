@@ -50,7 +50,7 @@ function showContent(id) {
 
 // // Show home content by default
 document.addEventListener('DOMContentLoaded', () => {
-    showContent('index.php');
+    showContent('home');
 });
 
 function loadTable(tableName) {

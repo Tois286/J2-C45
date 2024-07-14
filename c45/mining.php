@@ -5,7 +5,7 @@
 <?php
 // echo ini_get('memory_limit');
 memory_get_usage();
-ini_set('memory_limit', '512M');
+ini_set('memory_limit', '800M');
 
 session_start();
 include '../config/koneksi.php';
@@ -434,10 +434,10 @@ if (isset($_GET['table'])) {
         echo "<h3>Data Rule</h3>";
         echo "<h3>----------------------------------------</h3>";
 
-        echo "<br>";
-        echo "<pre>";
-        print_r($data);
-        echo "</pre>";
+        // echo "<br>";
+        // echo "<pre>";
+        // print_r($data);
+        // echo "</pre>";
         function buildDecisionTree($data, $best_attribute, $depth = 0, $max_depth = 10)
         {
             // Batasi kedalaman pohon

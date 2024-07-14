@@ -64,7 +64,7 @@ if (isset($_GET['table'])) {
             return [$trainSet, $testSet];
         }
 
-        list($trainSet, $testSet) = splitData($data, 0.3);
+        list($trainSet, $testSet) = splitData($data, 0.7);
 
         // Implementasi Decision Tree C4.5 (dummy untuk demonstrasi)
         class Node
@@ -156,18 +156,17 @@ if (isset($_GET['table'])) {
                     $TP++;
                 } elseif ($actualLabel == 'TERLAMBAT' && $predictedLabel == 'TEPAT WAKTU') {
                     $FP++;
-                } elseif ($actualLabel == 'TEPAT WAKTU' && $predictedLabel == 'TERLAMBAT') {
-                    $TN++;
                 } elseif ($actualLabel == 'TERLAMBAT' && $predictedLabel == 'TERLAMBAT') {
+                    $TN++;
+                } elseif ($actualLabel == 'TEPAT WAKTU' && $predictedLabel == 'TERLAMBAT') {
                     $FN++;
                 }
             }
 
-            // Hitung spesifisitas
-            $specificity = ($TN + $FP) > 0 ? ($TN / ($TN + $FP) * 100.0) : 0;
-            // Hitung akurasi, sensitivitas, dan kembalikan semua metrik
-            $accuracy = ($TP + $TN) / ($TP + $TN + $FP + $FN) * 100.0;
-            $sensitivity = ($TP + $FN) > 0 ? ($TP / ($TP + $FN) * 100.0) : 0;
+            // Hitung spesifisitas, akurasi, dan sensitivitas
+            $accuracy = ($TP + $TN) / ($TP + $TN + $FP + $FN) * 100;
+            $sensitivity = ($TP + $FN) > 0 ? ($TP / ($TP + $FN) * 100) : 0;
+            $specificity = ($TN + $FP) > 0 ? ($TN / ($TN + $FP) * 100) : 0;
 
             return [
                 'accuracy' => $accuracy,
