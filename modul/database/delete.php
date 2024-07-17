@@ -1,69 +1,32 @@
-<?php 
+<?php
+$host = 'localhost';
+$dbname = 'dbmining';
+$username = 'root';
+$password = '';
 
-$id = $_GET["id"]; // Konsistensi penggunaan variabel $id
+if (isset($_GET['table']) && isset($_GET['id'])) {
+    $table_name = $_GET['table'];
+    $id = $_GET['id'];
 
-$conn = mysqli_connect("localhost", "root", "", "dbmining");
-
-// Memastikan koneksi berhasil
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-function query($query) {
-    global $conn;
-    $result = mysqli_query($conn, $query);
-    $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $rows[] = $row;
+    $conn = new mysqli($host, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
-    return $rows;
-}
 
-function hapus($id, $table) {
-    global $conn;
-    // Escape table name to prevent SQL injection
-    $table = mysqli_real_escape_string($conn, $table);
-    // Escape id to prevent SQL injection
-    $id = mysqli_real_escape_string($conn, $id);
-    
-    $query = "DELETE FROM $table WHERE id = $id";
-    mysqli_query($conn, $query);
-    
-    return mysqli_affected_rows($conn);
-}
+    // Lakukan proses delete berdasarkan id
+    $delete_query = "DELETE FROM $table_name WHERE id = ?";
+    $stmt = $conn->prepare($delete_query);
+    $stmt->bind_param("i", $id);
 
-// Pastikan untuk menyebutkan nama tabel saat memanggil fungsi hapus
-if ( hapus($id, 'book1') > 0 ) {
-    echo "
-        <script>
-            alert('data berhasil di hapus');
-            document.location.href = 'c45.php';
-        </script>
-    ";
+    if ($stmt->execute()) {
+        echo "<script>alert('Data berhasil dihapus');</script>";
+        echo "<script>window.location.href='../../index.php';</script>"; // Ganti index.php dengan halaman yang sesuai
+    } else {
+        echo "Error: " . $conn->error;
+    }
+
+    $stmt->close();
+    $conn->close();
 } else {
-    echo "
-        <script>
-            alert('data gagal di hapus');
-            document.location.href = 'c45.php';
-        </script>
-    ";
+    echo "<p>Parameter table dan id tidak ditemukan.</p>";
 }
-
-// untuk menghaous table book2
-if ( hapus($id, 'book2') > 0 ) {
-    echo "
-        <script>
-            alert('data berhasil di hapus');
-            document.location.href = 'c45.php';
-        </script>
-    ";
-} else {
-    echo "
-        <script>
-            alert('data gagal di hapus');
-            document.location.href = 'c45.php';
-        </script>
-    ";
-}
-
-?>

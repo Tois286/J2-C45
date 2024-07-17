@@ -115,14 +115,13 @@ function chooseTable(tableName) {
             var tableHtml = '<table id="table-content">';
             tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
             tableHtml += '<a href="c45/mining.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Mining</a>';
-           
+           console.log(tableName);
             if (data.fields.length > 0) {
                 // Create table header
                 tableHtml += '<tr>';
                 data.fields.forEach(function(field) {
                 tableHtml += '<th>' + field + '</th>';
                 });
-                tableHtml += '<th>Action</th></tr>';
 
                 // Create table rows
                 data.rows.forEach(function(row) {
@@ -130,12 +129,7 @@ function chooseTable(tableName) {
                     data.fields.forEach(function(field) {
                         tableHtml += '<td>' + row[field] + '</td>';
                     });
-
-                    // Add action buttons
-                    tableHtml += '<td>';
-                    tableHtml += '<a href="modul/database/edit.php?id=' + row.id + '">Edit</a> | ';
-                    tableHtml += '<a href="modul/database/delete.php?id=' + row.id + '" onclick="return confirm(\"Apakah anda yakin ingin menghapus data ini?\")">Delete</a>';
-                    tableHtml += '</td></tr>';
+                  
                 });
             } else {
                 tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';

@@ -45,7 +45,6 @@ $role = $_SESSION['user_role'];
             <ul>
                 <li><a href="#home" onclick="showContent('home')">Home</a></li>
                 <li><a href="#dataSiswa" onclick="showContent('dataSiswa')">Data Siswa</a></li>
-
                 <?php if ($role == 'admin') : ?>
                     <li class="dropdown" id="data-training">
                         <a href="#">Data Training</a>
@@ -62,7 +61,6 @@ $role = $_SESSION['user_role'];
                         </div>
                     </li>
                 <?php endif; ?>
-
                 <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>

@@ -1,68 +1,79 @@
-<div>
-    <h1>Proses Prediksi</h1>
-    <div class="card-home">
-        <div class="upload">
-            <form action="modul/database/uploadPros.php" method="post" enctype="multipart/form-data">
-                <input type="file" name="excelFile" accept=".xlsx, .xls">
-                <button type="submit" class="button button1">Upload</button>
-            </form>
-            <button class="button button1" style="background-color:#009879; color:white; width:55%; font-size: 12px;">file Wjib Excel, Menggunakan Huruf kapital dan Tandapa spasi!! (IPS1,KETERANGAN,DLL)</button>
-        </div>
-        <div class="dropdown">
-            <button class="button button1" id="chooseTable" style="left: 50%;">Pilih Tabel</button>
-            <div class="dropdown-content">
-                <?php
-                $host = 'localhost';
-                $dbname = 'dbmining';
-                $username = 'root';
-                $password = '';
+<div class="card-home">
+    <a href='modul/database/tambah.php?table=<?php echo $table_name; ?>' value="<?php echo $table_name; ?>" class='button-mining'>tambah</a>
+    <a href='modul/database/deleteTabel.php?table=<?php echo $table_name; ?>' value="<?php echo $table_name; ?>" class='button-mining'>Hapus</a>
+    <a href="modul/database/PrintPros.php?table=<?php echo $table_name; ?>" value="<?php echo $table_name; ?>" class="button-mining" onclick="printDocument('print')">Cetak Berkas Anda</a>
+    <div class="table-container">
+        <?php
+        $host = 'localhost';
+        $dbname = 'dbmining';
+        $username = 'root';
+        $password = '';
 
-                $conn = new mysqli($host, $username, $password, $dbname);
-                if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);
-                }
+        if (isset($_GET['table'])) {
+            $table_name = $_GET['table'];
 
-                $sql = "SHOW TABLES";
-                $result = $conn->query($sql);
+            $conn = new mysqli($host, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
 
+            // Hitung jumlah total baris pada tabel
+            $result = $conn->query("SELECT * FROM $table_name");
+
+            if ($result) {
                 if ($result->num_rows > 0) {
+                    echo "<h3>$table_name</h3>";
+                    echo "<br>";
+                    echo "<table id='table-content'>";
+                    echo "<tr>";
+                    echo "<th>NO</th>"; // Kolom nomor urut
+
+                    $fields = $result->fetch_fields();
+                    $headerColumns = [];
+
+                    foreach ($fields as $field) {
+                        // Tambahkan kondisi untuk mengecualikan kolom 'id' dan 'NO'
+                        if ($field->name != 'id' && $field->name != 'NO') {
+                            $headerColumns[] = $field->name;
+                            echo "<th>" . $field->name . "</th>";
+                        }
+                    }
+                    echo "<th>Edit</th>"; // Kolom untuk edit
+                    echo "<th>Delete</th>"; // Kolom untuk delete
+                    echo "</tr>";
+
+                    $counter = 1; // Counter untuk nomor urut
+
                     while ($row = $result->fetch_assoc()) {
-                        $table_name = $row["Tables_in_" . $dbname];
+                        echo "<tr>";
+                        echo "<td>" . $counter . "</td>"; // Tampilkan nomor urut
+                        $counter++;
 
-                        // Debugging var_dump
-                        // var_dump($table_name);
-
-                        // Check if table_name is "users"
-                        if ($table_name == "users") {
-                            // Check if user is logged in (you need to implement this check)
-                            $isLoggedIn = false; // Example: Replace with your actual login check
-
-                            if (!$isLoggedIn) {
-                                continue; // Skip displaying this table if user is not logged in
+                        foreach ($row as $key => $value) {
+                            // Tambahkan kondisi untuk mengecualikan kolom 'id' dan 'NO'
+                            if ($key != 'id' && $key != 'NO') {
+                                echo "<td>$value</td>";
                             }
                         }
 
-                        // Display the table button
-                        echo "<button name='table' class='button-mining' onclick='chooseTable(\"$table_name\")' value='$table_name'>$table_name</button><br>";
+                        // Kolom edit dengan link ke halaman edit
+                        echo "<td><a href='modul/database/edit.php?table=$table_name&id=" . $row['id'] . "'>Edit</a></td>";
+                        // Kolom delete dengan link untuk menghapus
+                        echo "<td><a href='modul/database/delete.php?table=$table_name&id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Delete</a></td>";
+                        echo "</tr>";
                     }
+                    echo "</table>";
                 } else {
-                    echo "<span>Tidak ada tabel</span>";
+                    echo "<p>No data found</p>";
                 }
+            } else {
+                echo "<p>Error executing query: " . $conn->error . "</p>";
+            }
 
-                $conn->close();
-                ?>
-            </div>
-        </div>
-        <div class="card-tree">
-            <div class="table-container">
-                <!-- <a href="c45/Prediksi.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
-        <a href="c45/mining.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">mining</a>
-        id="loading" onclick="startLoading(event)" -->
-                <div class="card-table">
-                    <div id="table-content-container">
-                    </div>
-                </div>
-            </div>
-        </div>
+            $conn->close();
+        } else {
+            echo "<p>Silakan pilih tabel dari dropdown di atas dan lakukan prediksi</p>";
+        }
+        ?>
     </div>
-</div
+</div>
