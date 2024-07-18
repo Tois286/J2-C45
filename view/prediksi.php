@@ -1,5 +1,6 @@
+<h1>Prediksi</h1>
 <div class="card-home">
-    <a href='modul/database/tambah.php?table=<?php echo $table_name; ?>' value="<?php echo $table_name; ?>" class='button-mining'>tambah</a>
+    <a href='modul/tambah.php?table=<?php echo $table_name; ?>' value="<?php echo $table_name; ?>" class='button-mining'>tambah</a>
     <a href='modul/database/deleteTabel.php?table=<?php echo $table_name; ?>' value="<?php echo $table_name; ?>" class='button-mining'>Hapus</a>
     <a href="modul/database/PrintPros.php?table=<?php echo $table_name; ?>" value="<?php echo $table_name; ?>" class="button-mining" onclick="printDocument('print')">Cetak Berkas Anda</a>
     <div class="table-container">

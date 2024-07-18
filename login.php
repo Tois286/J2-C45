@@ -21,7 +21,6 @@
                 </div>
                 <div class="login-btn">
                     <input type="submit" value="Masuk" name="submit" class="button button1">
-                    <input type="submit" value="Daftar" name="submit" class="button button1">
                 </div>
             </form>
         </div>

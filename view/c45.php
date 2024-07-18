@@ -57,6 +57,19 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        // Mendapatkan nilai peran dari PHP ke dalam JavaScript
+        var userRole = '<?php echo $role; ?>';
+
+        // Memeriksa apakah peran adalah admin
+        if (userRole === 'admin') {
+            // Memasukkan tombol "Beri Akses" jika peran adalah admin
+            var tableHtml = '<a href="modul/database/akses.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Beri Akses</a>';
+            // Anda bisa melanjutkan dengan menambahkan tautan ke HTML atau manipulasi DOM lainnya di sini
+        }
+    });
+</script>
 
 <!-- Include jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
