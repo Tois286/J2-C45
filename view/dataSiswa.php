@@ -10,6 +10,43 @@
                 <button class="button button1" style="background-color:#009879; color:white; width:70%; font-size: 12px;">Menggunakan Huruf kapital dan Tanpa spasi!! (WAJIB memiliki kolom IPS dan KETERANGAN, dengan Format xlsx)</button>
             </div>
         </div>
+        <div class="card-home">
+            <table class="table-container" id="table-content">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>username</th>
+                        <th>password</th>
+                        <th>role</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <?php
+                include 'config/koneksi.php';
+                $sql = mysqli_query($koneksi, "SELECT * FROM users");
+                $no = 0;
+                while ($data = mysqli_fetch_array($sql)) {
+                    $no++;
+                ?>
+                    <tbody>
+                        <tr>
+                            <td><?php echo $no; ?></td>
+                            <td><?php echo $data["nama"];   ?></td>
+                            <td><?php echo $data["username"];   ?></td>
+                            <td><?php echo $data["password"];   ?></td>
+                            <td><?php echo $data["role"];   ?></td>
+                            <td>
+                                <a href="modul/database/hapusAkses.php?id=<?php echo $data['username']; ?>" type="button" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?')">Hapus</a> |
+                                <a href="modul/database/editAkses.php?id=<?php echo $data['username']; ?>" type="button">Edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                <?php
+                }
+                ?>
+            </table>
+        </div>
     </div>
 <?php endif; ?>
 <?php if ($role == 'user') : ?>
@@ -32,8 +69,8 @@
                             $username = 'root';
                             $password = '';
 
-                            // Create a new PDO instance
                             try {
+                                // Create a new PDO instance
                                 $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
                                 // Set the PDO error mode to exception
                                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -53,18 +90,11 @@
                                 while ($row = $result->fetch_assoc()) {
                                     $table_name = $row["Tables_in_" . $dbname];
 
-                                    // Check if table_name is "users"
-                                    if ($table_name == "users") {
-                                        // Check if user is logged in (you need to implement this check)
-                                        $isLoggedIn = false; // Example: Replace with your actual login check
-
-                                        if (!$isLoggedIn) {
-                                            continue; // Skip displaying this table if user is not logged in
-                                        }
+                                    // Check if table_name starts with "m_"
+                                    if (strpos($table_name, "m_") === 0) {
+                                        // Display the table button
+                                        echo "<button name='table' class='button-mining' onclick='chooseTable(\"$table_name\")' value='$table_name'>$table_name</button><br>";
                                     }
-
-                                    // Display the table button
-                                    echo "<button name='table' class='button-mining' onclick='chooseTable(\"$table_name\")' value='$table_name'>$table_name</button><br>";
                                 }
                             } else {
                                 echo "<span>Tidak ada tabel</span>";
@@ -72,6 +102,7 @@
 
                             $conn->close();
                             ?>
+
                         </div>
                     </div>
                 </div>

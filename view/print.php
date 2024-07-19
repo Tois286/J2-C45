@@ -2,8 +2,9 @@
     <h1>Cetak Halaman</h1>
     <div class="card-home">
         <a href="modul/database/PrintPros.php?table=<?php echo $table_name; ?>" value="<?php echo $table_name; ?>" class="button-mining" onclick="printDocument('print')">Cetak Berkas Anda</a>
+        <a href="modul/database/akses.php?table=<?php echo $table_name; ?>" value="<?php echo $table_name; ?>" class="button-mining">Berikan Akses</a>
     </div>
-    <div class="card-tree">
+    <div class=" card-tree">
         <div class="table-container">
             <?php
 

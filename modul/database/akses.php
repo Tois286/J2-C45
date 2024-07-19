@@ -7,38 +7,52 @@ $password = '';
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
 
-    // Create connection
+    // Buat koneksi ke database
     $conn = new mysqli($host, $username, $password, $dbname);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Query to fetch NPM from the table
-    $query = "SELECT NPM FROM $table_name";
+    // Query untuk mendapatkan NPM dari tabel yang dipilih
+    $query = "SELECT NAMA, NPM FROM $table_name";
     $result = $conn->query($query);
 
     if ($result) {
-        // Prepare a statement for inserting into users table
-        $insert_stmt = $conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
+        // Query untuk mendapatkan ID terakhir dari tabel users
+        $id_query = "SELECT MAX(id) AS max_id FROM users";
+        $id_result = $conn->query($id_query);
+        $last_id = 0;
 
-        // Check if there are rows returned
+        if ($id_result && $id_result->num_rows > 0) {
+            $row = $id_result->fetch_assoc();
+            $last_id = $row['max_id'];
+        }
+
+        // Menginisialisasi ID baru dengan menambahkan 1 ke ID terakhir
+        $new_id = $last_id + 1;
+
+        // Siapkan statement untuk memasukkan data ke tabel users
+        $insert_stmt = $conn->prepare("INSERT INTO users (id, nama, username, password, role) VALUES (?, ?, ?, ?, ?)");
+
+        // Periksa apakah ada baris yang dikembalikan
         if ($result->num_rows > 0) {
-            // Bind parameters
-            $insert_stmt->bind_param("sss", $npm, $password, $role);
+            // Bind parameter
+            $insert_stmt->bind_param("issss", $new_id, $nama, $npm, $password, $role);
 
-            // Fetch each row and output NPM values with generated passwords
+            // Fetch setiap baris dan masukkan ke tabel users
             while ($row = $result->fetch_assoc()) {
-                $role = 'user';
+                $nama = $row['NAMA'];
                 $npm = $row['NPM'];
-                // Extract last 4 digits of NPM
+                $role = 'user';
+                // Ekstrak 4 digit terakhir dari NPM
                 $last_four_digits = substr($npm, -4);
-                // Generate password
+                // Buat password
                 $password = "unipi#" . $last_four_digits;
 
-                // Execute the insert statement
+                // Eksekusi statement insert
                 if ($insert_stmt->execute()) {
-                    echo "<script>alert('Data berhasil Membuat Akses');</script>";
-                    echo "<script>window.location.href='../../index.php';</script>";
+                    // Tambahkan ID baru untuk entri berikutnya
+                    $new_id++;
                 } else {
                     echo "<p>Error updating data: " . $insert_stmt->error . "</p>";
                 }
@@ -46,14 +60,15 @@ if (isset($_GET['table'])) {
         } else {
             echo "No records found in table $table_name";
         }
-
-        // Close statement
+        header("Location: ../../index.php");
+        exit();
+        // Tutup statement
         $insert_stmt->close();
     } else {
         echo "Error executing query: " . $conn->error;
     }
 
-    // Close connection
+    // Tutup koneksi
     $conn->close();
 } else {
     echo "No table name provided.";

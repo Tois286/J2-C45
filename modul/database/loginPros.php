@@ -15,7 +15,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Masuk') {
     // Verifikasi password
     if ($password === $user['password']) { // Perhatikan, ini hanya contoh sederhana
       // Simpan data user di session
-      $_SESSION['user_id'] = $user['id'];
+      $_SESSION['user_id'] = $user['user_id'];
       $_SESSION['user_role'] = $user['role'];
 
       // Redirect ke halaman index

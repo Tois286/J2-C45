@@ -95,6 +95,10 @@
         background-color: #A11111;
     }
 </style>
+<?php
+// Contoh mendapatkan nama tabel dari parameter GET atau set default
+$table_name = isset($_GET['table']) ? $_GET['table'] : 'default_table_name';
+?>
 
 <body>
     <div class="container-register">
@@ -102,7 +106,7 @@
             <center>
                 <h1>Daftarkan</h1>
             </center>
-            <form action="tambahPros.php" method="POST" class="register-form">
+            <form action="database/tambahPros.php?table=<?php echo $table_name; ?>" method="POST" class="register-form">
                 <label for="nama">Nama :</label>
                 <input type="text" name="nama" id="nama" required placeholder="Nama">
 
