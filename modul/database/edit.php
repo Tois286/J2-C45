@@ -38,15 +38,39 @@ if (isset($_GET['table']) && isset($_GET['id'])) {
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>Edit Data</title>
                     <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        .card-home {
+                            max-width: 600px;
+                            margin: 20px auto;
+                            padding: 20px;
+                            border-radius: 8px;
+                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                            background-color: #fff;
+                        }
+
+                        h3 {
+                            margin-top: 0;
+                        }
+
                         label {
-                            display: inline-block;
-                            width: 100px;
-                            margin-bottom: 10px;
+                            display: block;
+                            margin-bottom: 8px;
+                            font-weight: bold;
                         }
 
                         input[type="text"] {
-                            width: 300px;
-                            padding: 5px;
+                            width: calc(100% - 22px);
+                            padding: 10px;
+                            margin-bottom: 15px;
+                            border: 1px solid #ccc;
+                            border-radius: 4px;
+                            box-sizing: border-box;
                         }
 
                         input[type="submit"] {
@@ -54,7 +78,10 @@ if (isset($_GET['table']) && isset($_GET['id'])) {
                             background-color: #4CAF50;
                             color: white;
                             border: none;
+                            border-radius: 4px;
                             cursor: pointer;
+                            font-size: 16px;
+                            transition: background-color 0.3s ease;
                         }
 
                         input[type="submit"]:hover {
@@ -64,22 +91,23 @@ if (isset($_GET['table']) && isset($_GET['id'])) {
                 </head>
 
                 <body>
-                    <h3>Edit Data</h3>
-                    <form method="POST" action="update.php">
-                        <input type="hidden" name="table" value="<?= $table_name ?>">
-                        <input type="hidden" name="id" value="<?= $id ?>">
-                        <?php
-                        foreach ($row as $key => $value) {
-                            // Tampilkan field yang bisa diubah, kecuali id
-                            if ($key != 'id') {
-                                echo "<label for='$key'>$key:</label>";
-                                echo "<input type='text' id='$key' name='$key' value='$value'><br>";
+                    <div class="card-home">
+                        <h3>Edit Data</h3>
+                        <form method="POST" action="update.php">
+                            <input type="hidden" name="table" value="<?= htmlspecialchars($table_name, ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="hidden" name="id" value="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>">
+                            <?php
+                            foreach ($row as $key => $value) {
+                                // Tampilkan field yang bisa diubah, kecuali id
+                                if ($key != 'id') {
+                                    echo "<label for='$key'>" . htmlspecialchars($key, ENT_QUOTES, 'UTF-8') . ":</label>";
+                                    echo "<input type='text' id='$key' name='$key' value='" . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . "'><br>";
+                                }
                             }
-                        }
-                        ?>
-                        <br>
-                        <input type="submit" value="Update">
-                    </form>
+                            ?>
+                            <input type="submit" value="Update">
+                        </form>
+                    </div>
                 </body>
 
                 </html>

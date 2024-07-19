@@ -38,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['table']) && isset($_PO
 
         // Eksekusi statement
         if ($stmt->execute()) {
-            echo "<p>Data has been updated successfully.</p>";
-            echo "<p><a href='javascript:history.back()'>Back to Table</a></p>";
+            echo "<script>alert('Data berhasil di Update');</script>";
+            echo "<script>window.location.href='../../index.php';</script>";
         } else {
             echo "<p>Error updating data: " . $stmt->error . "</p>";
         }
