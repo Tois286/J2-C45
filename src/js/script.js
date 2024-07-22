@@ -1,11 +1,11 @@
 // // scripts.js
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var dataTraining = document.getElementById('data-training');
     var submenuTraining = document.getElementById('submenu-training');
 
     // Tambahkan event listener untuk menampilkan submenu saat klik
-    dataTraining.addEventListener('click', function(event) {
+    dataTraining.addEventListener('click', function (event) {
         event.stopPropagation(); // Mencegah event click menyebar ke elemen lain
         if (submenuTraining.style.display === 'none' || submenuTraining.style.display === '') {
             submenuTraining.style.display = 'block';
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var submenuTesting = document.getElementById('submenu-testing');
 
     // Tambahkan event listener untuk menampilkan submenu saat klik
-    dataTesting.addEventListener('click', function(event) {
+    dataTesting.addEventListener('click', function (event) {
         event.stopPropagation(); // Mencegah event click menyebar ke elemen lain
         if (submenuTesting.style.display === 'none' || submenuTesting.style.display === '') {
             submenuTesting.style.display = 'block';
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Menutup submenu saat klik di luar elemen dropdown
-    document.addEventListener('click', function() {
+    document.addEventListener('click', function () {
         submenuTraining.style.display = 'block';
         submenuTesting.style.display = 'block';
     });
@@ -58,11 +58,11 @@ function loadTable(tableName) {
     tableContainer.innerHTML = '';
 
     var xhttp = new XMLHttpRequest();
-    
+
     xhttp.open("GET", "?table=" + tableName, true);
     xhttp.setRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    
-    xhttp.onreadystatechange = function() {
+
+    xhttp.onreadystatechange = function () {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
             var tableHtml = xhttp.responseText;
             var tableElement = document.createElement("table");
@@ -70,7 +70,7 @@ function loadTable(tableName) {
             tableContainer.appendChild(tableElement);
         }
     };
-    
+
     xhttp.send();
 }
 
@@ -104,7 +104,7 @@ function chooseTable(tableName) {
         type: 'GET',
         data: { table: tableName },
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             console.log('Server Response:', data); // Log server response
 
             if (data.error) {
@@ -113,24 +113,28 @@ function chooseTable(tableName) {
             }
 
             var tableHtml = '<table id="table-content">';
-            tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
+            // tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
             tableHtml += '<a href="c45/mining.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Mining</a>';
             // tableHtml += '<a href="modul/database/akses.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Beri Akses</a>';
-           console.log(tableName);
+            console.log(tableName);
             if (data.fields.length > 0) {
                 // Create table header
                 tableHtml += '<tr>';
-                data.fields.forEach(function(field) {
-                tableHtml += '<th>' + field + '</th>';
+                data.fields.forEach(function (field) {
+                    if (field != 'PREDIKSI') {
+                        tableHtml += '<th>' + field + '</th>';
+                    }
                 });
 
                 // Create table rows
-                data.rows.forEach(function(row) {
+                data.rows.forEach(function (row) {
                     tableHtml += '<tr>';
-                    data.fields.forEach(function(field) {
-                        tableHtml += '<td>' + row[field] + '</td>';
+                    data.fields.forEach(function (field) {
+                        if (field != 'PREDIKSI') {
+                            tableHtml += '<td>' + row[field] + '</td>';
+                        }
                     });
-                  
+
                 });
             } else {
                 tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
@@ -139,7 +143,7 @@ function chooseTable(tableName) {
 
             $('#table-content-container').html(tableHtml);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.error('Error loading data:', textStatus, errorThrown); // Log the error details
             $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
         }
@@ -156,7 +160,7 @@ function startLoading(event) {
         // Ubah teks tombol menjadi "Loading..."
         button.innerHTML = "Loading...";
         // Simulasikan proses mining
-        setTimeout(function() {
+        setTimeout(function () {
             // Setelah selesai, arahkan halaman ke pk.php
             window.location.href = button.href;
         }, 2000); // Contoh waktu tunggu 2 detik (2000 milidetik)

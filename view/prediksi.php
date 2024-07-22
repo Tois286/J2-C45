@@ -12,10 +12,19 @@
 </style>
 <h1>Prediksi</h1>
 <div class="card-home">
+    <div class="upload">
+        <form action="modul/database/uploadPros.php" method="post" enctype="multipart/form-data">
+            <input type="file" name="excelFile" accept=".xlsx, .xls">
+            <button type="submit" class="button button1">Upload</button>
+        </form>
+        <button class="button button1"
+            style="background-color:#009879; color:white; width:70%; font-size: 12px;">Menggunakan Huruf kapital dan
+            Tanpa spasi!! (WAJIB memiliki kolom IPS dan KETERANGAN, dengan Format xlsx)</button>
+    </div>
     <div class="table-container">
         <?php
         // Kode koneksi database dan pengambilan data tabel sudah ada di sini
-
+        
         if (isset($_GET['table'])) {
             $table_name = $_GET['table'];
             $search_query = isset($_GET['search']) ? $_GET['search'] : '';
@@ -40,7 +49,9 @@
             }
 
             $result = $conn->query($sql);
-            echo '<a href="modul/tambah.php?table=' . htmlspecialchars($table_name) . '" class="button-mining">tambah</a>';
+            echo '<a href="modul/tambah.php?table=' . htmlspecialchars($table_name) . '" class="button-mining">Tambah</a>';
+            echo '<a href="#" class="button-mining">Hapus</a>';
+            echo '<a href="#" class="button-mining">Lakukan Prediksi</a>';
             echo '<a href="modul/database/PrintPros.php?table=' . htmlspecialchars($table_name) . '" class="button-mining" onclick="printDocument(\'print\')">Cetak Berkas Anda</a>';
             // Menampilkan form pencarian
             echo "<form method='GET' action='' class='form-search'>";
@@ -55,7 +66,7 @@
                     echo "<table id='table-content'>";
                     echo "<tr>";
                     echo "<th>NO</th>"; // Kolom nomor urut
-
+        
                     $fields = $result->fetch_fields();
                     $headerColumns = [];
 
@@ -72,7 +83,7 @@
                     echo "</tr>";
 
                     $counter = 1; // Counter untuk nomor urut
-
+        
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>" . $counter . "</td>"; // Tampilkan nomor urut
