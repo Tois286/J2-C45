@@ -501,6 +501,20 @@ if (isset($_GET['table'])) {
             arsort($counts); // Urutkan berdasarkan jumlah terbanyak
             return key($counts); // Kembalikan label dengan jumlah terbanyak
         }
+        function calculateGainGenderTree($entropy_total, $entropy_gender, $total_count, $laki_laki_count, $perempuan_count)
+        {
+            $entropy_laki = $entropy_gender['LAKI-LAKI']; // Entropi untuk LAKI-LAKI
+            $entropy_perempuan = $entropy_gender['PEREMPUAN']; // Entropi untuk PEREMPUAN
+            // Inisialisasi variabel jumlah untuk jenis kelamin dan nilai IPS
+
+            // Hitung gain untuk jenis kelamin
+            $gender_gain = $entropy_total - (($laki_laki_count / $total_count) * $entropy_laki + ($perempuan_count / $total_count) * $entropy_perempuan);
+
+            return $gender_gain;
+        }
+        // Hitung gain untuk jenis kelamin
+        $gender_gain = calculateGainGenderTree($entropy_total, $entropy_gender, $total_count, $laki_laki_count, $perempuan_count);
+
 
         function getNextBestAttribute($data)
         {
@@ -510,19 +524,18 @@ if (isset($_GET['table'])) {
             $tepat_waktu_count = array_reduce($data, function ($carry, $item) {
                 return $carry + ($item['KETERANGAN'] == 'TEPAT WAKTU' ? 1 : 0);
             }, 0);
-
             $terlambat_count = $total_count - $tepat_waktu_count;
 
             $entropy_total = calculateEntropyTotal($total_count, $tepat_waktu_count, $terlambat_count);
 
             // Atribut-atribut yang akan dipertimbangkan
-            $attributes = array('ips1', 'ips2', 'ips3', 'ips4', 'jenis_kelamin');
+            $attributes = array('ips1', 'ips2', 'ips3', 'ips4');
             $gains = array();
 
             foreach ($attributes as $attribute) {
                 // Hitung jumlah kategori untuk atribut ini
-                $counts_tepat = array('SANGAT BAIK' => 0, 'BAIK' => 0, 'CUKUP' => 0, 'KURANG' => 0, 'LAKI-LAKI' => 0, 'PEREMPUAN' => 0);
-                $counts_terlambat = array('SANGAT BAIK' => 0, 'BAIK' => 0, 'CUKUP' => 0, 'KURANG' => 0, 'LAKI-LAKI' => 0, 'PEREMPUAN' => 0);
+                $counts_tepat = array('SANGAT BAIK' => 0, 'BAIK' => 0, 'CUKUP' => 0, 'KURANG' => 0);
+                $counts_terlambat = array('SANGAT BAIK' => 0, 'BAIK' => 0, 'CUKUP' => 0, 'KURANG' => 0);
 
                 foreach ($data as $row) {
                     if ($row['KETERANGAN'] == 'TEPAT WAKTU') {
