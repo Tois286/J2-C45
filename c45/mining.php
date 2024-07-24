@@ -1,8 +1,12 @@
 <?php
 include '../config/koneksi.php';
 session_start();
+
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
+    echo  '<link rel="stylesheet" href="../src/css/style.css">';
+    echo '<a href="../index.php?table=' . $table_name . '" value="' . $table_name . '" class="button-mining">Back</a>';
+    echo '<div class="card-home">';
     // Mengambil Data dari Database
     try {
         $stmt = $pdo->prepare("SELECT id, jenis_kelamin, ips1, ips2, ips3, ips4, KETERANGAN FROM $table_name");
@@ -150,6 +154,11 @@ if (isset($_GET['table'])) {
             }
         }
 
+        echo "<br>";
+        echo "<pre>";
+        echo "<h1>C45 Training</h1>";
+        echo "</pre>";
+        echo "<br>";
         // Function to print attribute information
         function printAttributeInformation($data, $attributes, $targetAttribute)
         {
@@ -227,20 +236,25 @@ if (isset($_GET['table'])) {
 
         // Build and print decision tree
         $decisionTree = buildDecisionTree($data, $attributes, $targetAttribute);
+        echo "<br>";
         echo "<pre>";
+        echo "<h1>Split Node</h1>";
         printDecisionTree($decisionTree);
         echo "</pre>";
+        echo "<br>";
 
         // Print decision rules
         echo "<pre>";
+        echo "<h1>Rule Node</h1>";
         printDecisionRules($decisionTree);
         echo "</pre>";
         // Build and store decision tree in session
         $_SESSION['decision_tree'] = $decisionTree;
 
         // Redirect to another page to display the decision tree and rules
-        header("Location: ../view/pk.php");
+        // header("Location: /view/pk.php");
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
+    echo '<div>';
 }
