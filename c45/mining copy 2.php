@@ -44,7 +44,6 @@ if (!function_exists('calculateEntropyGender')) {
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
     // Mengambil Data dari Database
-
     try {
         $stmt = $pdo->prepare("SELECT id, jenis_kelamin, ips1, ips2, ips3, ips4, KETERANGAN FROM $table_name");
         $stmt->execute();
@@ -114,7 +113,6 @@ if (isset($_GET['table'])) {
             'LAKI-LAKI' => array('TEPAT WAKTU' => 0, 'TERLAMBAT' => 0),
             'PEREMPUAN' => array('TEPAT WAKTU' => 0, 'TERLAMBAT' => 0)
         );
-
 
         // Hitung jumlah berdasarkan jenis kelamin dan nilai IPS
         foreach ($data as $row) {
@@ -311,23 +309,6 @@ if (isset($_GET['table'])) {
         echo "Entropy PEREMPUAN: " . $entropy_gender['PEREMPUAN'] . "<br>";
         echo "<br>";
 
-        // Menghitung entropy untuk keseluruhan data
-        function calculateGainGender($entropy_total, $entropy_gender, $total_count, $laki_laki_count, $perempuan_count)
-        {
-            $entropy_laki = $entropy_gender['LAKI-LAKI']; // Entropi untuk LAKI-LAKI
-            $entropy_perempuan = $entropy_gender['PEREMPUAN']; // Entropi untuk PEREMPUAN
-            // Inisialisasi variabel jumlah untuk jenis kelamin dan nilai IPS
-
-            // Hitung gain untuk jenis kelamin
-            $gender_gain = $entropy_total - (($laki_laki_count / $total_count) * $entropy_laki + ($perempuan_count / $total_count) * $entropy_perempuan);
-
-            return $gender_gain;
-        }
-        // Hitung gain untuk jenis kelamin
-        $gender_gain = calculateGainGender($entropy_total, $entropy_gender, $total_count, $laki_laki_count, $perempuan_count);
-
-        echo "Gain untuk Jenis Kelamin: " . $gender_gain;
-
         // Menghitung entropi untuk setiap atribut IPS
         function calculateEntropyIPS($counts)
         {
@@ -410,39 +391,64 @@ if (isset($_GET['table'])) {
             return $entropy;
         }
 
+
         function calculateGain($entropy_total, $counts_tepat, $counts_terlambat, $entropy_attribute)
         {
             $total_counts = array_sum($counts_tepat) + array_sum($counts_terlambat);
             $weighted_entropy = 0;
 
             foreach (array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG') as $kategori) {
-                $subset_counts = $counts_tepat[$kategori] + $counts_terlambat[$kategori];
-                if ($subset_counts > 0) {
-                    $weighted_entropy += ($subset_counts / $total_counts) * $entropy_attribute[$kategori];
+                $count_tepat = $counts_tepat[$kategori];
+                $count_terlambat = $counts_terlambat[$kategori];
+                $count_total = $count_tepat + $count_terlambat;
+
+                if ($count_total > 0) {
+                    $prob_tepat = $count_tepat / $total_counts;
+                    $prob_terlambat = $count_terlambat / $total_counts;
+                    $entropy = $entropy_attribute[$kategori];
+
+                    $weighted_entropy += ($prob_tepat + $prob_terlambat) * $entropy;
                 }
             }
 
             return $entropy_total - $weighted_entropy;
         }
 
+        function calculateGainGender($entropy_total, $entropy_gender, $total_count, $laki_laki_count, $perempuan_count)
+        {
+            $entropy_laki = $entropy_gender['LAKI-LAKI']; // Entropi untuk LAKI-LAKI
+            $entropy_perempuan = $entropy_gender['PEREMPUAN']; // Entropi untuk PEREMPUAN
+            // Inisialisasi variabel jumlah untuk jenis kelamin dan nilai IPS
+
+            // Hitung gain untuk jenis kelamin
+            $gender_gain = $entropy_total - (($laki_laki_count / $total_count) * $entropy_laki + ($perempuan_count / $total_count) * $entropy_perempuan);
+
+            return $gender_gain;
+        }
+
+        // Menghitung Gain
+        $gender_gain = calculateGainGender($entropy_total, $entropy_gender, $total_count, $laki_laki_count, $perempuan_count);
         $gain_ips1 = calculateGain($entropy_total, $tepat_waktu_counts_ips1, $terlambat_counts_ips1, $entropy_ips1);
         $gain_ips2 = calculateGain($entropy_total, $tepat_waktu_counts_ips2, $terlambat_counts_ips2, $entropy_ips2);
         $gain_ips3 = calculateGain($entropy_total, $tepat_waktu_counts_ips3, $terlambat_counts_ips3, $entropy_ips3);
         $gain_ips4 = calculateGain($entropy_total, $tepat_waktu_counts_ips4, $terlambat_counts_ips4, $entropy_ips4);
 
+        echo "<br>";
         // Menampilkan hasil
         echo "<h3>Gain untuk setiap IPS</h3>";
         echo "Gain IPS1: " . $gain_ips1 . "<br>";
         echo "Gain IPS2: " . $gain_ips2 . "<br>";
         echo "Gain IPS3: " . $gain_ips3 . "<br>";
         echo "Gain IPS4: " . $gain_ips4 . "<br>";
+        echo "Gain Jenis Kelamin: " . $gender_gain . "<br>";
 
         // Memilih atribut dengan gain tertinggi untuk split pertama
         $attributes_gain = array(
             'ips1' => $gain_ips1,
             'ips2' => $gain_ips2,
             'ips3' => $gain_ips3,
-            'ips4' => $gain_ips4
+            'ips4' => $gain_ips4,
+            'jenis_kelamin' => $gender_gain
         );
 
         $best_attribute = array_keys($attributes_gain, max($attributes_gain))[0];
@@ -453,10 +459,7 @@ if (isset($_GET['table'])) {
         echo "<h3>Data Rule</h3>";
         echo "<h3>----------------------------------------</h3>";
 
-        // echo "<br>";
-        // echo "<pre>";
-        // print_r($data);
-        // echo "</pre>";
+        // Fungsi untuk membangun pohon keputusan
         function buildDecisionTree($data, $best_attribute, $depth = 0, $max_depth = 10)
         {
             // Jika kedalaman maksimum tercapai, kembalikan prediksi mayoritas
@@ -501,79 +504,52 @@ if (isset($_GET['table'])) {
             arsort($counts); // Urutkan berdasarkan jumlah terbanyak
             return key($counts); // Kembalikan label dengan jumlah terbanyak
         }
-        function calculateGainGenderTree($entropy_total, $entropy_gender, $total_count, $laki_laki_count, $perempuan_count)
-        {
-            $entropy_laki = $entropy_gender['LAKI-LAKI']; // Entropi untuk LAKI-LAKI
-            $entropy_perempuan = $entropy_gender['PEREMPUAN']; // Entropi untuk PEREMPUAN
-            // Inisialisasi variabel jumlah untuk jenis kelamin dan nilai IPS
-
-            // Hitung gain untuk jenis kelamin
-            $gender_gain = $entropy_total - (($laki_laki_count / $total_count) * $entropy_laki + ($perempuan_count / $total_count) * $entropy_perempuan);
-
-            return $gender_gain;
-        }
-        // Hitung gain untuk jenis kelamin
-        $gender_gain = calculateGainGenderTree($entropy_total, $entropy_gender, $total_count, $laki_laki_count, $perempuan_count);
-
 
         function getNextBestAttribute($data)
         {
-            // Misalnya, kita memiliki fungsi calculateGain yang telah Anda definisikan
-            // Pertama-tama, kita perlu menghitung entropy total dari data
             $total_count = count($data);
             $tepat_waktu_count = array_reduce($data, function ($carry, $item) {
                 return $carry + ($item['KETERANGAN'] == 'TEPAT WAKTU' ? 1 : 0);
             }, 0);
+
             $terlambat_count = $total_count - $tepat_waktu_count;
 
             $entropy_total = calculateEntropyTotal($total_count, $tepat_waktu_count, $terlambat_count);
 
-            // Atribut-atribut yang akan dipertimbangkan
             $attributes = array('ips1', 'ips2', 'ips3', 'ips4');
             $gains = array();
 
             foreach ($attributes as $attribute) {
-                // Hitung jumlah kategori untuk atribut ini
-                $counts_tepat = array('SANGAT BAIK' => 0, 'BAIK' => 0, 'CUKUP' => 0, 'KURANG' => 0);
-                $counts_terlambat = array('SANGAT BAIK' => 0, 'BAIK' => 0, 'CUKUP' => 0, 'KURANG' => 0);
-
+                $counts_tepat = array_fill_keys(array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG'), 0);
+                $counts_terlambat = array_fill_keys(array('SANGAT BAIK', 'BAIK', 'CUKUP', 'KURANG'), 0);
                 foreach ($data as $row) {
-                    if ($row['KETERANGAN'] == 'TEPAT WAKTU') {
-                        $counts_tepat[$row[$attribute]]++;
-                    } elseif ($row['KETERANGAN'] == 'TERLAMBAT') {
-                        $counts_terlambat[$row[$attribute]]++;
+                    if (isset($counts_tepat[$row[$attribute]])) {
+                        if ($row['KETERANGAN'] == 'TEPAT WAKTU') {
+                            $counts_tepat[$row[$attribute]]++;
+                        } elseif ($row['KETERANGAN'] == 'TERLAMBAT') {
+                            $counts_terlambat[$row[$attribute]]++;
+                        }
                     }
                 }
-
                 $entropy_attribute = calculateCategoryEntropy($counts_tepat, $counts_terlambat);
                 $gain = calculateGain($entropy_total, $counts_tepat, $counts_terlambat, $entropy_attribute);
 
                 $gains[$attribute] = $gain;
             }
-            // Pastikan $gains tidak kosong
+
             if (empty($gains)) {
-                return null; // Atau berikan atribut default jika perlu
+                return null;
             }
 
-            // Pilih atribut dengan gain tertinggi
             $max_gain = max($gains);
             $best_attributes = array_keys($gains, $max_gain);
-
-            // Jika ada lebih dari satu atribut dengan nilai gain tertinggi, pilih yang pertama
-            $best_attribute = reset($best_attributes);
-
-            return $best_attribute;
+            return reset($best_attributes);
         }
-
 
         // Memanggil fungsi untuk membangun pohon keputusan
         if (isset($data) && isset($best_attribute)) {
             $decision_tree = buildDecisionTree($data, $best_attribute);
             $_SESSION['decision_tree'] = $decision_tree;
-            // echo "<pre>";
-            // print_r($data);
-            // echo "</pre>";
-
             echo "<pre>";
             print_r($decision_tree);
             echo "</pre>";

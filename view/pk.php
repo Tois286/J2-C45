@@ -94,27 +94,7 @@
             </div>
         </div>
     </div>
-    <div id="miningTree" class="hidden">
-        <div class="card-home">
-            <div class="table-container" style="width:100%;height:200px;">
-                <div class="card-table" style="background-color:black;color:white; display: inline-table; padding:20px;">
-                    <div id="table-content-container"></div>
-                    <?php
-                    session_start();
-                    if (isset($_SESSION['decision_tree'])) {
-                        $decision_tree = $_SESSION['decision_tree'];
-                        echo "<h3>Pohon Keputusan</h3>";
-                        echo "<pre>";
-                        print_r($decision_tree);
-                        echo "</pre>";
-                    } else {
-                        echo "Tidak ada pohon keputusan yang ditemukan di sesi.";
-                    }
-                    ?>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <div id="stepTree" class="hidden">
         <div class="card-home" style="color: black;">
             <p>Ini adalah konten untuk Step Tree.</p>
