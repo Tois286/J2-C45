@@ -17,7 +17,7 @@ if (isset($_GET['table'])) {
         $total_data = count($subset_data);
 
         // Hitung jumlah data yang ingin diambil (70%)
-        $subset_size = (int)($total_data * 0.70);
+        $subset_size = ceil(0.7 * $total_data);
 
         // Ambil subset data
         $data = array_slice($subset_data, 0, $subset_size);

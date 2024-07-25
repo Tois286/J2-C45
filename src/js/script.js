@@ -83,7 +83,6 @@ function saveToLocalStorage(key, value) {
         localStorage.setItem(key, value);
     }
 }
-
 function chooseTable(tableName) {
     // Menyimpan tableName ke localStorage
     localStorage.setItem("chooseTableTrainingProcess", tableName);
@@ -113,12 +112,10 @@ function chooseTable(tableName) {
             }
 
             var tableHtml = '<table id="table-content">';
-            // tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
-           
             tableHtml += '<a href="c45/mining.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Mining</a>';
-            // tableHtml += '<a href="c45/deleteUpload.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Delete</a>';
-            // tableHtml += '<a href="modul/database/akses.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Beri Akses</a>';
+            tableHtml += '<a href="c45/deleteUpload.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Delete</a>';
             console.log(tableName);
+            
             if (data.fields.length > 0) {
                 // Create table header
                 tableHtml += '<tr>';
@@ -127,17 +124,22 @@ function chooseTable(tableName) {
                         tableHtml += '<th>' + field + '</th>';
                     }
                 });
+                tableHtml += '</tr>';
 
-                // Create table rows
-                data.rows.forEach(function (row) {
+                // Calculate the number of rows to display (70% of total rows)
+                const totalRows = data.rows.length;
+                const rowsToShow = Math.ceil(totalRows * 0.7);
+
+                // Create table rows for 70% of the data
+                for (let i = 0; i < rowsToShow; i++) {
                     tableHtml += '<tr>';
                     data.fields.forEach(function (field) {
                         if (field != 'PREDIKSI') {
-                            tableHtml += '<td>' + row[field] + '</td>';
+                            tableHtml += '<td>' + data.rows[i][field] + '</td>';
                         }
                     });
-
-                });
+                    tableHtml += '</tr>';
+                }
             } else {
                 tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
             }
@@ -151,6 +153,7 @@ function chooseTable(tableName) {
         }
     });
 }
+
 
 
 function startLoading(event) {
