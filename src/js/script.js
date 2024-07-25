@@ -83,6 +83,7 @@ function saveToLocalStorage(key, value) {
         localStorage.setItem(key, value);
     }
 }
+
 function chooseTable(tableName) {
     // Menyimpan tableName ke localStorage
     localStorage.setItem("chooseTableTrainingProcess", tableName);
@@ -155,22 +156,16 @@ function chooseTable(tableName) {
 }
 
 
+ document.addEventListener("DOMContentLoaded", function() {
+            // Dapatkan URL saat ini
+            let currentUrl = window.location.href;
 
-function startLoading(event) {
-    event.preventDefault(); // Mencegah pengalihan default
-    // Tampilkan konfirmasi kepada pengguna
-    var proceed = confirm("Apakah Anda ingin melanjutkan proses mining?");
-    if (proceed) {
-        var button = event.target;
-        // Ubah teks tombol menjadi "Loading..."
-        button.innerHTML = "Loading...";
-        // Simulasikan proses mining
-        setTimeout(function () {
-            // Setelah selesai, arahkan halaman ke pk.php
-            window.location.href = button.href;
-        }, 2000); // Contoh waktu tunggu 2 detik (2000 milidetik)
-        window.location.href = "home";
-    } else {
-        alert("Proses mining dibatalkan.");
-    }
-}
+            // Cari posisi dari tanda '?' (jika ada)
+            let queryPosition = currentUrl.indexOf('?');
+
+            // Ambil bagian URL sebelum '?' untuk mendapatkan base URL
+            let baseUrl = (queryPosition !== -1) ? currentUrl.substring(0, queryPosition) : currentUrl;
+
+            // Ubah URL tanpa query parameters menggunakan history.replaceState
+            history.replaceState(null, '', baseUrl);
+        });
