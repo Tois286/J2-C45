@@ -116,7 +116,7 @@ function chooseTable(tableName) {
             // tableHtml += '<a href="c45/Prediksi.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Prediksi</a>';
            
             tableHtml += '<a href="c45/mining.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Mining</a>';
-            tableHtml += '<a href="modul/database/deleteUpload.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Delete</a>';
+            // tableHtml += '<a href="c45/deleteUpload.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Delete</a>';
             // tableHtml += '<a href="modul/database/akses.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Beri Akses</a>';
             console.log(tableName);
             if (data.fields.length > 0) {

@@ -1,5 +1,4 @@
 <style>
-    /* Gaya umum untuk seluruh halaman */
     body {
         background-image: url('../asset/cc.jpg');
         background-size: cover;
@@ -106,30 +105,15 @@ $table_name = isset($_GET['table']) ? $_GET['table'] : 'default_table_name';
             <center>
                 <h1>Daftarkan</h1>
             </center>
-            <form action="database/tambahPros.php?table=<?php echo $table_name; ?>" method="POST" class="register-form">
+            <form action="database/tambahUserPros.php?table=<?php echo $table_name; ?>" method="POST" class="register-form">
                 <label for="nama">Nama :</label>
                 <input type="text" name="nama" id="nama" required placeholder="Nama">
 
-                <label for="npm">NPM :</label>
-                <input type="text" name="npm" id="npm" required placeholder="NPM">
+                <label for="username">username :</label>
+                <input type="text" name="username" id="username" required placeholder="username">
 
-                <label for="jenis_kelamin">Jenis Kelamin :</label>
-                <select name="jenis_kelamin" id="jenis_kelamin" required>
-                    <option value="LAKI-LAKI">Laki-laki</option>
-                    <option value="PEREMPUAN">Perempuan</option>
-                </select>
-
-                <label for="ips1">IPS1 :</label>
-                <input type="text" name="ips1" id="ips1" required placeholder="IPS1">
-
-                <label for="ips2">IPS2 :</label>
-                <input type="text" name="ips2" id="ips2" required placeholder="IPS2">
-
-                <label for="ips3">IPS3 :</label>
-                <input type="text" name="ips3" id="ips3" required placeholder="IPS3">
-
-                <label for="ips4">IPS4 :</label>
-                <input type="text" name="ips4" id="ips4" required placeholder="IPS4">
+                <label for="password">password :</label>
+                <input type="text" name="password" id="password" required placeholder="password">
 
                 <div class="register-btn">
                     <input type="submit" value="Daftar" name="submit" class="button button1">

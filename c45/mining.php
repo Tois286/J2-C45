@@ -5,7 +5,7 @@ session_start();
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
     echo  '<link rel="stylesheet" href="../src/css/style.css">';
-    echo '<a href="../index.php?table=' . $table_name . '" value="' . $table_name . '" class="button-mining">Back</a>';
+    echo '<a href="../index.php" class="button-mining">Back</a>';
     echo '<div class="card-home">';
     // Mengambil Data dari Database
     try {

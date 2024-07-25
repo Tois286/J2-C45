@@ -1,5 +1,5 @@
 <?php
-include '../../config/koneksi.php';
+include '../config/koneksi.php';
 
 if (isset($_GET['table'])) {
     // Sanitize the table name to prevent SQL injection
@@ -12,7 +12,8 @@ if (isset($_GET['table'])) {
 
         // Execute the query
         if (mysqli_query($koneksi, $sqlDrop)) {
-            echo "Table '$table_name' dropped successfully.";
+            header("Location: ../index.php");
+            exit;
         } else {
             echo "Error dropping table: " . mysqli_error($koneksi);
         }

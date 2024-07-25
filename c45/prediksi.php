@@ -1,19 +1,14 @@
-<head>
-    <link rel="stylesheet" href="../src/css/style.css">
-</head>
 <div class="card-home">
     <?php
     include '../config/koneksi.php';
     // include 'mining.php';
     if (isset($_GET['table'])) {
         $table_name = $_GET['table'];
-
         // Mengambil Data dari Database
         try {
             $stmt = $pdo->prepare("SELECT id, ips1, ips2, ips3, ips4 FROM $table_name");
             $stmt->execute();
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo "<a class='button button1' type='button' href='../index.php'>Back</a>";
 
             // Debug: Periksa data yang diterima
             echo "<pre>";

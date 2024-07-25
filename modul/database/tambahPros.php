@@ -13,13 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['table'])) {
     $ips2 = $_POST['ips2'] ?? null;
     $ips3 = $_POST['ips3'] ?? null;
     $ips4 = $_POST['ips4'] ?? null;
-    $keterangan = $_POST['keterangan'] ?? null;
 
     // Validate form data
-    if ($nama && $npm && $jenis_kelamin && $ips1 && $ips2 && $ips3 && $ips4 && $keterangan) {
+    if ($nama && $npm && $jenis_kelamin && $ips1 && $ips2 && $ips3 && $ips4) {
         // Prepare an SQL statement
-        $sql = "INSERT INTO $table_name (nama, npm, jenis_kelamin, ips1, ips2, ips3, ips4, keterangan) 
-                VALUES (:nama, :npm, :jenis_kelamin, :ips1, :ips2, :ips3, :ips4, :keterangan)";
+        $sql = "INSERT INTO $table_name (nama, npm, jenis_kelamin, ips1, ips2, ips3, ips4) 
+                VALUES (:nama, :npm, :jenis_kelamin, :ips1, :ips2, :ips3, :ips4)";
 
         // Execute the SQL statement
         $stmt = $pdo->prepare($sql);
@@ -32,11 +31,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['table'])) {
         $stmt->bindParam(':ips2', $ips2);
         $stmt->bindParam(':ips3', $ips3);
         $stmt->bindParam(':ips4', $ips4);
-        $stmt->bindParam(':keterangan', $keterangan);
 
         // Execute and check if successful
         if ($stmt->execute()) {
-            header('Location: index.php');
+            header('Location: ../index.php');
             exit();
         } else {
             echo "Terjadi kesalahan saat menambahkan data.";

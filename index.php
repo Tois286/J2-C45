@@ -44,7 +44,7 @@ $role = $_SESSION['user_role'];
         <div class="sidebar">
             <ul>
                 <li><a href="#home" onclick="showContent('home')">Home</a></li>
-                <li><a href="#dataSiswa" onclick="showContent('dataSiswa')">Data Siswa</a></li>
+                <li><a href="#dataSiswa" onclick="showContent('dataSiswa')">Data Pengguna</a></li>
                 <?php if ($role == 'admin') : ?>
                     <li class="dropdown" id="data-training">
                         <a href="#">Data Training</a>
@@ -95,7 +95,6 @@ $role = $_SESSION['user_role'];
         </div>
 
     </div>
-    <script src="src/js/script.js"></script>
 </body>
 
 </html>

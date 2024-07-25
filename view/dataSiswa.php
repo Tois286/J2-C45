@@ -2,9 +2,7 @@
     <div>
         <h1>Data Pengguna</h1>
         <div class="card-home">
-            <a href="#" class="button-mining">
-                Tambah
-            </a>
+            <a href="modul/tambahUser.php" class="button-mining">Tambah</a>
             <table class="table-container" id="table-content">
                 <thead>
                     <tr>

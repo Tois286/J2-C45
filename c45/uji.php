@@ -1,6 +1,6 @@
 <?php
 
-include 'config/koneksi.php'; // Sesuaikan dengan path koneksi Anda
+include '../config/koneksi.php'; // Sesuaikan dengan path koneksi Anda
 
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
