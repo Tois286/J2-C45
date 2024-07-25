@@ -30,7 +30,7 @@
                             }
 
                             // Hitung jumlah total baris pada tabel
-                            $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name ");
+                            $result = $conn->query("SELECT COUNT(*) AS total_rows FROM $table_name");
                             $row = $result->fetch_assoc();
                             $total_rows = $row['total_rows'];
 
@@ -38,11 +38,10 @@
                             $limit = ceil(0.3 * $total_rows);
 
                             // Query untuk mengambil 30% data terbaru
-                            $query = "SELECT * FROM $table_name   ORDER BY id DESC LIMIT $limit";
+                            $query = "SELECT * FROM $table_name ORDER BY id DESC LIMIT $limit";
                             $result = $conn->query($query);
 
                             if ($result->num_rows > 0) {
-
                                 echo "<table id='table-content'>";
                                 echo "<tr>";
 
@@ -53,7 +52,7 @@
                                 $headerColumns = [];
 
                                 foreach ($fields as $field) {
-                                    // Tambahkan kondisi untuk mengecualikan kolom 'id' dan 'NO'
+                                    // Tambahkan kondisi untuk mengecualikan kolom 'id', 'NO', dan 'PREDIKSI'
                                     if ($field->name != 'id' && $field->name != 'NO') {
                                         $headerColumns[] = $field->name;
                                         echo "<th>" . $field->name . "</th>";
@@ -71,10 +70,8 @@
                                     $counter++; // Increment counter untuk nomor urut
 
                                     foreach ($row as $key => $value) {
-                                        // Tambahkan kondisi untuk mengecualikan kolom 'id' dan 'NO'
-                                        if (
-                                            $key != 'id' && $key != 'NO'
-                                        ) {
+                                        // Tambahkan kondisi untuk mengecualikan kolom 'id', 'NO', dan 'PREDIKSI'
+                                        if ($key != 'id' && $key != 'NO') {
                                             echo "<td>$value</td>";
                                         }
                                     }
@@ -91,6 +88,7 @@
                             echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
                         }
                         ?>
+
                     </div>
                 </div>
             </div>
@@ -98,7 +96,6 @@
     </div>
     <div id="proji" class="hidden">
         <div class="card-home">
-            <p>Menampilkan <span style="display: inline; font-size: 2em; font-weight: bold; margin: 0;">100%</span> data</p>
             <?php include 'c45/uji.php' ?>
         </div>
     </div>

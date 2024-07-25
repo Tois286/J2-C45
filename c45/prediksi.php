@@ -201,6 +201,7 @@
         } catch (PDOException $e) {
             die("Error retrieving data: " . $e->getMessage());
         }
+        echo '<script>setTimeout(function() { window.history.back(); }, 2000);</script>';
     }
     ?>
 </div>

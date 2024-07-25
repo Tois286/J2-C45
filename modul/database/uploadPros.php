@@ -7,7 +7,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 // Database configuration
 require '../../config/koneksi.php';
 
-ini_set('memory_limit', '600M');
+ini_set('memory_limit', '22G');
 set_time_limit(300);
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["excelFile"])) {
     $fileTmpPath = $_FILES['excelFile']['tmp_name'];
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["excelFile"])) {
             $columnProcessed = 0; // Counter for processed columns
 
             // Limit the number of columns to iterate through (assuming $columns is set accordingly)
-            $maxColumns = min(9, count($columns)); // Limit to a maximum of 9 columns or the number of columns available
+            $maxColumns = min(10, count($columns)); // Limit to a maximum of 9 columns or the number of columns available
 
             foreach ($cellIterator as $cell) {
                 if ($columnProcessed >= $maxColumns) {

@@ -13,24 +13,55 @@ if (isset($_GET['table'])) {
         die("Connection failed: " . $koneksi1->connect_error);
     }
 
-    // Query untuk mengambil data dari tabel
-    $query = "SELECT * FROM $table_name";
+    $result = $koneksi1->query("SELECT COUNT(*) AS total_rows FROM $table_name");
+    $row = $result->fetch_assoc();
+    $total_rows = $row['total_rows'];
+
+    // Hitung jumlah baris yang ingin ditampilkan (30% dari total baris)
+    $limit = ceil(0.3 * $total_rows);
+
+    // Query untuk mengambil 30% data terbaru
+    $query = "SELECT * FROM $table_name ORDER BY id DESC LIMIT $limit";
     $result = $koneksi1->query($query);
 
     if ($result->num_rows > 0) {
+        echo "<div class='table-container'>";
+        echo "<table id='table-content'>";
+        echo "<tr>";
+        echo "<th>NO</th>";
+
+        $fields = $result->fetch_fields();
+        $headerColumns = [];
+
+        foreach ($fields as $field) {
+            if ($field->name != 'id' && $field->name != 'NO') {
+                $headerColumns[] = $field->name;
+                echo "<th>" . $field->name . "</th>";
+            }
+        }
+        echo "</tr>";
+        echo "</div>";
+
         $data = [];
         $counter = 1;
 
         while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $counter . "</td>";
+            $counter++;
+
             $rowData = [];
             foreach ($row as $key => $value) {
                 if ($key != 'id' && $key != 'NO') {
+                    echo "<td>$value</td>";
                     $rowData[$key] = $value;
                 }
             }
             $data[] = $rowData;
+            echo "</tr>";
         }
-
+        echo "</table>";
+        echo "</div>";
         // Fungsi untuk membagi data menjadi training set dan testing set
         function splitData($data, $splitRatio)
         {
@@ -42,6 +73,7 @@ if (isset($_GET['table'])) {
 
         list($trainSet, $testSet) = splitData($data, 0.7);
 
+        // Implementasi Decision Tree C4.5 (dummy untuk demonstrasi)
         class Node
         {
             public $isLeaf = false;
@@ -158,7 +190,8 @@ if (isset($_GET['table'])) {
         $metrics = calculateMetrics($testSet);
 
         echo "
-        <table border='1' cellspacing='0' cellpadding='5' class='styled-table'>
+        
+        <table border='1' cellspacing='0' cellpadding='5'class='styled-table'>
         <center>
             <tr>
                 <th rowspan='2'>Actual</th>

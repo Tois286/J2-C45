@@ -56,6 +56,15 @@
         border-radius: 5px;
     }
 
+    .register-form input[type="password"],
+    .register-form select {
+        width: calc(98% - 20px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
     /* Gaya untuk tombol */
     .register-btn {
         text-align: center;
@@ -113,7 +122,7 @@ $table_name = isset($_GET['table']) ? $_GET['table'] : 'default_table_name';
                 <input type="text" name="username" id="username" required placeholder="username">
 
                 <label for="password">password :</label>
-                <input type="text" name="password" id="password" required placeholder="password">
+                <input type="password" name="password" id="password" required placeholder="password">
 
                 <div class="register-btn">
                     <input type="submit" value="Daftar" name="submit" class="button button1">

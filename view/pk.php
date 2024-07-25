@@ -3,7 +3,6 @@
         display: none;
     }
 </style>
-
 <div>
     <h1>Pohon Keputusan</h1>
     <div class="card-home">

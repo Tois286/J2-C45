@@ -30,6 +30,14 @@
                         $table_name = $row["Tables_in_" . $dbname];
 
                         // Check if table_name is "users"
+                        if (strpos($table_name, 'r_') === 0) {
+                            continue; // Lewati tabel yang nama-namanya diawali dengan 'R_'
+                        }
+                        if (strpos($table_name, 'm_') === 0) {
+                            continue; // Lewati tabel yang nama-namanya diawali dengan 'R_'
+                        }
+
+                        // Check if table_name is "users"
                         if ($table_name == "users") {
                             // Check if user is logged in (you need to implement this check)
                             $isLoggedIn = false; // Example: Replace with your actual login check
