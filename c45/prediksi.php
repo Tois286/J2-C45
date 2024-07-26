@@ -201,7 +201,20 @@
         } catch (PDOException $e) {
             die("Error retrieving data: " . $e->getMessage());
         }
-        echo '<script>setTimeout(function() { window.history.back(); }, 2000);</script>';
+        $tableName = $_GET['table'] ?? 'default_table'; // Menangani kasus jika $tableName tidak ada
+
+        // Output JavaScript dengan menyertakan variabel PHP
+        echo '<script>
+    // Encode variabel PHP ke dalam JavaScript
+    var tableName = ' . json_encode($tableName) . ';
+
+    // Menyertakan tableName dalam URL atau tindakan lainnya
+    setTimeout(function() {
+        // Misalnya, menggunakan tableName dalam URL
+        var redirectUrl = "../index.php?table=" + encodeURIComponent(tableName);
+        window.location.href = redirectUrl;
+    }, 1);
+</script>';
     }
     ?>
 </div>

@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function showContent(id) {
     // Hide all content
+    event.preventDefault(); // Mencegah refresh halaman
     const contents = document.querySelectorAll('.content');
     contents.forEach(content => {
         content.style.display = 'none';
@@ -85,6 +86,8 @@ function saveToLocalStorage(key, value) {
 }
 
 function chooseTable(tableName) {
+    event.preventDefault(); // Mencegah refresh halaman
+
     // Menyimpan tableName ke localStorage
     localStorage.setItem("chooseTableTrainingProcess", tableName);
 
@@ -157,6 +160,7 @@ function chooseTable(tableName) {
 
 
  document.addEventListener("DOMContentLoaded", function() {
+    
             // Dapatkan URL saat ini
             let currentUrl = window.location.href;
 
@@ -169,3 +173,17 @@ function chooseTable(tableName) {
             // Ubah URL tanpa query parameters menggunakan history.replaceState
             history.replaceState(null, '', baseUrl);
         });
+
+$(document).ready(function() {
+        // Mendapatkan nilai peran dari PHP ke dalam JavaScript
+        var userRole = '<?php echo $role; ?>';
+
+        // Memeriksa apakah peran adalah admin
+        if (userRole === 'admin') {
+            // Memasukkan tombol "Beri Akses" jika peran adalah admin
+            var tableHtml = '<a href="modul/database/akses.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Beri Akses</a>';
+            // Anda bisa melanjutkan dengan menambahkan tautan ke HTML atau manipulasi DOM lainnya di sini
+        }
+    });
+
+    

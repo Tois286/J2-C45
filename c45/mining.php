@@ -4,9 +4,6 @@ session_start();
 
 if (isset($_GET['table'])) {
     $table_name = $_GET['table'];
-    echo  '<link rel="stylesheet" href="../src/css/style.css">';
-    echo '<a href="../index.php" class="button-mining">Back</a>';
-    echo '<div class="card-home">';
     // Mengambil Data dari Database
     try {
         $stmt = $pdo->prepare("SELECT id, jenis_kelamin, ips1, ips2, ips3, ips4, KETERANGAN FROM $table_name");
@@ -21,7 +18,9 @@ if (isset($_GET['table'])) {
 
         // Ambil subset data
         $data = array_slice($subset_data, 0, $subset_size);
-
+        echo  '<link rel="stylesheet" href="../src/css/style.css">';
+        echo '<a href="../index.php?table=' . $table_name . '" class="button-mining" id="back">Back</a>';
+        echo '<div class="card-home">';
         // Function to calculate entropy
         function calculateEntropy($data, $targetAttribute)
         {

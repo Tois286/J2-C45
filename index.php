@@ -15,8 +15,10 @@ $role = $_SESSION['user_role'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="src/css/style.css">
-    <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="src/js/script.js"></script>
+</head>
 
 <body>
     <!-- Navbar -->
@@ -29,6 +31,7 @@ $role = $_SESSION['user_role'];
             <ul>
                 <li><a href="#home" onclick="showContent('home')">Home</a></li>
                 <?php if ($role == 'admin') : ?>
+                    <li><a href="#dataSiswa" onclick="showContent('dataSiswa')">Data Pengguna</a></li>
                     <li class="dropdown" id="data-training">
                         <a href="#">Data Training</a>
                         <div class="dropdown-content" id="submenu-training">
@@ -43,7 +46,6 @@ $role = $_SESSION['user_role'];
                             <a href="#" onclick="showContent('export')">Cetak Data</a>
                         </div>
                     </li>
-                    <li><a href="#dataSiswa" onclick="showContent('dataSiswa')">Data Pengguna</a></li>
                 <?php endif; ?>
                 <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
                 <li><a href="logout.php">Logout</a></li>

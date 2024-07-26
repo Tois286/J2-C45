@@ -8,7 +8,7 @@
     <h1>Proses Testing</h1>
     <div class="card-home">
         <div id="table-content">
-            <a href="c45/prediksi.php?table=<?php echo $table_name; ?>" id="loading" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
+            <a href="c45/prediksi.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
             <!-- onclick="startLoading(event)" -->
             <a href='#proji' onclick="showContent('proji')" class='button-mining'>Proses Uji </a>
             Dari <span style="display: inline; font-size: 2em; font-weight: bold; margin: 0;">30%</span> data
@@ -88,7 +88,6 @@
                             echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
                         }
                         ?>
-
                     </div>
                 </div>
             </div>

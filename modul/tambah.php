@@ -120,16 +120,17 @@ $table_name = isset($_GET['table']) ? $_GET['table'] : 'default_table_name';
                 </select>
 
                 <label for="ips1">IPS1 :</label>
-                <input type="text" name="ips1" id="ips1" required placeholder="IPS1">
+                <input type="text" name="ips1" id="ips1" required placeholder="IPS1" pattern="\d+(\.\d{1,2})?" title="Masukkan angka desimal dengan titik sebagai pemisah desimal">
 
                 <label for="ips2">IPS2 :</label>
-                <input type="text" name="ips2" id="ips2" required placeholder="IPS2">
+                <input type="text" name="ips2" id="ips2" required placeholder="IPS2" pattern="\d+(\.\d{1,2})?" title="Masukkan angka desimal dengan titik sebagai pemisah desimal">
 
                 <label for="ips3">IPS3 :</label>
-                <input type="text" name="ips3" id="ips3" required placeholder="IPS3">
+                <input type="text" name="ips3" id="ips3" required placeholder="IPS3" pattern="\d+(\.\d{1,2})?" title="Masukkan angka desimal dengan titik sebagai pemisah desimal">
 
                 <label for="ips4">IPS4 :</label>
-                <input type="text" name="ips4" id="ips4" required placeholder="IPS4">
+                <input type="text" name="ips4" id="ips4" required placeholder="IPS4" pattern="\d+(\.\d{1,2})?" title="Masukkan angka desimal dengan titik sebagai pemisah desimal">
+
 
                 <div class="register-btn">
                     <input type="submit" value="Daftar" name="submit" class="button button1">

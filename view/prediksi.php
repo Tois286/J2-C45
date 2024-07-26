@@ -81,7 +81,7 @@
                         }
                         if ($role == 'admin') {
                             echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/edit.php?table=$table_name&id=" . $row['id'] . "'>Edit</a></td>";
-                            echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/delete.php?table=$table_name&id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Delete</a></td>";
+                            echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/delete.php?id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Delete</a></td>";
                         }
                         echo '</tr>';
                     }

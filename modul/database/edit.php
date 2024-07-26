@@ -87,6 +87,21 @@ if (isset($_GET['table']) && isset($_GET['id'])) {
                         input[type="submit"]:hover {
                             background-color: #45a049;
                         }
+
+                        .batal {
+                            padding: 10px 20px;
+                            background-color: #DB2D2D;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 16px;
+                            transition: background-color 0.3s ease;
+                        }
+
+                        .batal:hover {
+                            background-color: #C91E1E;
+                        }
                     </style>
                 </head>
 
@@ -98,14 +113,15 @@ if (isset($_GET['table']) && isset($_GET['id'])) {
                             <input type="hidden" name="id" value="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>">
                             <?php
                             foreach ($row as $key => $value) {
-                                // Tampilkan field yang bisa diubah, kecuali id
-                                if ($key != 'id') {
+                                // Tampilkan field yang bisa diubah, kecuali id dan PREDIKSI
+                                if ($key != 'id' && $key != 'PREDIKSI') {
                                     echo "<label for='$key'>" . htmlspecialchars($key, ENT_QUOTES, 'UTF-8') . ":</label>";
                                     echo "<input type='text' id='$key' name='$key' value='" . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . "'><br>";
                                 }
                             }
                             ?>
                             <input type="submit" value="Update">
+                            <button type="button" class="batal" onclick="window.history.back();">Batal</button>
                         </form>
                     </div>
                 </body>
