@@ -1,5 +1,5 @@
 <style>
-    .hidden {
+    .view {
         display: none;
     }
 </style>
@@ -10,7 +10,7 @@
         <div id="table-content">
             <a href="c45/prediksi.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>
             <!-- onclick="startLoading(event)" -->
-            <a href='#proji' onclick="showContent('proji')" class='button-mining'>Proses Uji </a>
+            <a href='#proji' onclick="view('proji')" class='button-mining'>Proses Uji </a>
             Dari <span style="display: inline; font-size: 2em; font-weight: bold; margin: 0;">30%</span> data
             <div class="table-container">
                 <div class="card-home" id="content">
@@ -93,7 +93,7 @@
             </div>
         </div>
     </div>
-    <div id="proji" class="hidden">
+    <div id="proji" class="view">
         <div class="card-home">
             <?php include 'c45/uji.php' ?>
         </div>

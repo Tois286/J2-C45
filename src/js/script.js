@@ -54,6 +54,19 @@ document.addEventListener('DOMContentLoaded', () => {
     showContent('home');
 });
 
+function view(id) {
+    // Sembunyikan semua elemen dengan class 'content'
+    var contents = document.querySelectorAll('.view');
+    contents.forEach(function(content) {
+        content.style.display = 'none';
+    });
+
+    // Tampilkan elemen dengan ID yang sesuai
+    var element = document.getElementById(id);
+    if (element) {
+        element.style.display = 'block';
+    }
+}
 
 function saveToLocalStorage(key, value) {
     if (localStorage.getItem(key) === null) {

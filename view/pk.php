@@ -1,5 +1,5 @@
 <style>
-    .hidden {
+    .view {
         display: none;
     }
 </style>
@@ -7,8 +7,8 @@
     <h1>Pohon Keputusan</h1>
     <div class="card-home">
         <div>
-            <a href='#miningTree' onclick="showContent('miningTree')" class='button-mining'>Proses Training</a>
-            <a href='#stepTree' onclick="showContent('stepTree')" class='button-mining'>Step Tree</a>
+            <a href='#miningTree' onclick="view('miningTree')" class='button-mining'>Proses Training</a>
+            <a href='#stepTree' onclick="view('stepTree')" class='button-mining'>Step Tree</a>
             Dari <span style="display: inline; font-size: 2em; font-weight: bold; margin: 0;">70%</span> data
             <div class="table-container">
                 <?php
@@ -45,7 +45,7 @@
             </div>
         </div>
     </div>
-    <div id="miningTree" class="hidden">
+    <div id="miningTree" class="view">
         <div class="card-home">
             <div class="table-container" style="width:100%;height:200px;">
                 <div class="card-table" style="background-color:black;color:white; display: inline-table; padding:20px;">
@@ -66,7 +66,7 @@
             </div>
         </div>
     </div>
-    <div id="stepTree" class="hidden">
+    <div id="stepTree" class="view">
         <div class="card-home" style="color: black;">
             <p>Ini adalah konten untuk Step Tree <?php echo $table_name ?></p>
             <?php

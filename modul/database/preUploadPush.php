@@ -1,6 +1,6 @@
 <?php
-// Include autoload.php dari PhpSpreadsheet
 require '../../config/koneksi.php';
+
 // Contoh penggunaan error_log di skrip PHP
 $error_message = "Data tidak lengkap pada baris ke-" . $row_number;
 error_log($error_message);
@@ -9,22 +9,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tableName"]) && isset(
     $tableName = $_POST["tableName"];
     $columns = $_POST["columns"];
 
+    // Mendapatkan tanggal saat ini
+    $tgl = date('Y-m-d');
+
     // Tentukan kolom yang akan diinput
-    $allowedColumns = ['NPM', 'NAMA', 'JENIS_KELAMIN', 'IPS1', 'IPS2', 'IPS3', 'IPS4']; // Ganti dengan nama kolom yang sesuai
+    $allowedColumns = ['tgl_prediksi', 'NPM', 'NAMA', 'JENIS_KELAMIN', 'IPS1', 'IPS2', 'IPS3', 'IPS4'];
 
     // Filter kolom yang akan digunakan dari input
     $filteredColumns = array_intersect($columns, $allowedColumns);
 
+    // Pastikan ada tepat 7 kolom yang valid
     if (count($filteredColumns) !== 7) {
         die("Harap pastikan ada tepat 7 kolom yang valid.");
     }
 
+    // Tambahkan 'tgl_prediksi' ke dalam daftar kolom dan nilai
+    $filteredColumns[] = 'tgl_prediksi'; // Tambahkan kolom tanggal
+    $placeholders = array_map(function ($col) {
+        return preg_replace('/[^a-zA-Z0-9_]/', '_', $col);
+    }, $filteredColumns);
+
     // Prepare INSERT INTO SQL statement
     $insertSql = "INSERT INTO `$tableName` (" . implode(', ', array_map(function ($col) {
         return "`" . preg_replace('/[^a-zA-Z0-9_]/', '_', $col) . "`";
-    }, $filteredColumns)) . ") VALUES (:" . implode(', :', array_map(function ($col) {
-        return preg_replace('/[^a-zA-Z0-9_]/', '_', $col);
-    }, $filteredColumns)) . ");";
+    }, $filteredColumns)) . ") VALUES (:" . implode(', :', $placeholders) . ");";
 
     $stmt = $pdo->prepare($insertSql);
 
@@ -34,7 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tableName"]) && isset(
         $data = [];
         foreach ($filteredColumns as $column) {
             $sanitizedColumn = preg_replace('/[^a-zA-Z0-9_]/', '_', $column);
-            $data[$sanitizedColumn] = $_POST[$column][$i];
+            // Set data untuk kolom tanggal prediksi jika ada
+            if ($column === 'tgl_prediksi') {
+                $data[$sanitizedColumn] = $tgl; // Set tanggal prediksi
+            } else {
+                $data[$sanitizedColumn] = $_POST[$column][$i];
+            }
         }
 
         try {
