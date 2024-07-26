@@ -98,6 +98,7 @@ function loadTable(tableName) {
 
     xhttp.send();
 }
+
 function chooseTable(tableName) {
     // Store tableName in localStorage
     localStorage.setItem("chooseTableTrainingProcess", tableName);
@@ -120,6 +121,7 @@ function chooseTable(tableName) {
     // Load table content via AJAX
     loadTableDataView(tableName);
 }
+
 function loadTableDataView(tableName) {
     $.ajax({
         url: 'view/load_table.php', // Adjust URL as necessary
@@ -219,5 +221,3 @@ $(document).ready(function() {
             // Anda bisa melanjutkan dengan menambahkan tautan ke HTML atau manipulasi DOM lainnya di sini
         }
     });
-
-    

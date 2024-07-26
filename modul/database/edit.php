@@ -4,8 +4,8 @@ $dbname = 'dbmining';
 $username = 'root';
 $password = '';
 
-if (isset($_GET['table']) && isset($_GET['id'])) {
-    $table_name = $_GET['table'];
+if (isset($_GET['tpredik']) && isset($_GET['id'])) {
+    $t_prediksi = $_GET['tpredik'];
     $id = $_GET['id'];
 
     $conn = new mysqli($host, $username, $password, $dbname);
@@ -14,7 +14,7 @@ if (isset($_GET['table']) && isset($_GET['id'])) {
     }
 
     // Ambil data yang akan diedit berdasarkan ID
-    $sql = "SELECT * FROM $table_name WHERE id = ?";
+    $sql = "SELECT * FROM $t_prediksi WHERE id = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt === false) {
@@ -109,7 +109,7 @@ if (isset($_GET['table']) && isset($_GET['id'])) {
                     <div class="card-home">
                         <h3>Edit Data</h3>
                         <form method="POST" action="update.php">
-                            <input type="hidden" name="table" value="<?= htmlspecialchars($table_name, ENT_QUOTES, 'UTF-8') ?>">
+                            <input type="hidden" name="tpredik" value="<?= htmlspecialchars($t_prediksi, ENT_QUOTES, 'UTF-8') ?>">
                             <input type="hidden" name="id" value="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>">
                             <?php
                             foreach ($row as $key => $value) {
@@ -139,6 +139,6 @@ if (isset($_GET['table']) && isset($_GET['id'])) {
     $stmt->close();
     $conn->close();
 } else {
-    echo "<p>Invalid request. Please provide table name and ID.</p>";
+    echo "<p>Invalid request. Please provide table prediksi name and ID.</p>";
 }
 ?>

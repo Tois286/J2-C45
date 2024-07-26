@@ -65,11 +65,11 @@
                     // Fungsi untuk membagi data menjadi training set dan testing set
 
                 } else {
-                    echo "Tidak ada data yang ditemukan.";
+                    echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
                 }
                 $koneksi1->close();
             } else {
-                echo "Nama tabel tidak diberikan.";
+                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
             }
             ?>
             <!-- <a href="c45/Prediksi.php?table=<?php echo $table_name; ?>" class="button-mining" value="<?php echo $table_name; ?>">Prediksi</a>

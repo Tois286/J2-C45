@@ -8,18 +8,16 @@
     <h1>Proses Testing</h1>
     <div class="card-home">
         <div id="table-content">
+
             <a href='#proji' onclick="view('proji')" class='button-mining'>Proses Uji </a>
-            <a href='#hasil' onclick="view('hasil')" class='button-mining'>Hasil Uji </a>
+            <a href='#hasil' onclick="view('')" class='button-mining'>Hasil Uji </a>
             Dari <span style="display: inline; font-size: 2em; font-weight: bold; margin: 0;">30%</span> data
             <div class="table-container">
-                <div id="content">
+                <div class="card-home" id="content">
                     <div id="table-content-container">
                         <?php
-                        $host = 'localhost';
-                        $dbname = 'dbmining';
-                        $username = 'root';
-                        $password = '';
-
+                        include 'config/koneksi.php';
+                        // Function to classify data using the decision tree
                         function classify($tree, $data)
                         {
                             foreach ($tree as $attribute => $branches) {
@@ -159,15 +157,15 @@
                                             }
                                             echo "</table>";
                                         } else {
-                                            echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                                            echo "<h2>Pohon keputusan tidak ditemukan di session.</h2>";
                                         }
                                     }
                                 }
                             } catch (PDOException $e) {
-                                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                                echo "Error: " . $e->getMessage();
                             }
                         } else {
-                            echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                            echo "<h2>Parameter table_name tidak ditemukan.</h2>";
                         }
                         ?>
                     </div>
@@ -178,151 +176,76 @@
     <div id="proji" class="view">
         <div class="card-home">
             <?php
-            $host = 'localhost';
-            $dbname = 'dbmining';
-            $username = 'root';
-            $password = '';
-
-            if (isset($_GET['table'])) {
-                $table_name = htmlspecialchars($_GET['table']); // Sanitize input
-
-                try {
-                    // Fetch all data
-                    $allData = getAllData($pdo, $table_name);
-
-                    // Check if data is fetched
-                    if (empty($allData)) {
-                        echo "<h2>Data tidak ditemukan di tabel $table_name.</h2>";
-                    } else {
-                        // Fetch test data (30% from start)
-                        $testData = getTestData($allData);
-
-                        // Check if test data is available
-                        if (empty($testData)) {
-                            echo "<h2>Data uji tidak tersedia.</h2>";
-                        } else {
-                            // Fetch decision tree from session
-                            if (isset($_SESSION['decision_tree'])) {
-                                $decisionTree = $_SESSION['decision_tree'];
-
-                                $metrics = evaluateModel($decisionTree, $testData);
-                                // // Display detailed evaluation results
-                                echo "<h2>Hasil Evaluasi</h2>";
-                                echo "<div class='table-container'>";
-                                echo '<div class="styled-table" style="overflow-x: auto;">';
-                                echo '<table style="width: 100%; border-collapse: collapse; font-size: 14px;">';
-                                echo "<tr>";
-                                echo "<th>ID</th>";
-                                echo "<th>Nama</th>";
-                                echo "<th>Jenis Kelamin</th>";
-                                echo "<th>IPS 1</th>";
-                                echo "<th>IPS 2</th>";
-                                echo "<th>IPS 3</th>";
-                                echo "<th>IPS 4</th>";
-                                echo "<th>Actual</th>";
-                                echo "<th>Predicted</th>";
-                                echo "<th>Correct</th>";
-                                echo "</tr>";
-                                foreach ($metrics['results'] as $result) {
-                                    echo "<tr>";
-                                    echo "<td>{$result['id']}</td>";
-                                    echo "<td>{$result['nama']}</td>";
-                                    echo "<td>{$result['jenis_kelamin']}</td>";
-                                    echo "<td>{$result['ips1']}</td>";
-                                    echo "<td>{$result['ips2']}</td>";
-                                    echo "<td>{$result['ips3']}</td>";
-                                    echo "<td>{$result['ips4']}</td>";
-                                    echo "<td>{$result['actual']}</td>";
-                                    echo "<td>{$result['predicted']}</td>";
-                                    echo "<td>{$result['correct']}</td>";
-                                    echo "</tr>";
-                                }
-                                echo "</table>";
-                                echo "</div>";
-                                echo "</div>";
-                            } else {
-                                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
-                            }
-                        }
-                    }
-                } catch (PDOException $e) {
-                    echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
-                }
-            } else {
-                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+            $metrics = evaluateModel($decisionTree, $testData);
+            // // Display detailed evaluation results
+            echo "<h2>Hasil Evaluasi</h2>";
+            echo "<div class='table-container'>";
+            echo '<div class="styled-table" style="overflow-x: auto;">';
+            echo '<table style="width: 100%; border-collapse: collapse; font-size: 14px;">';
+            echo "<tr>";
+            echo "<th>ID</th>";
+            echo "<th>Nama</th>";
+            echo "<th>Jenis Kelamin</th>";
+            echo "<th>IPS 1</th>";
+            echo "<th>IPS 2</th>";
+            echo "<th>IPS 3</th>";
+            echo "<th>IPS 4</th>";
+            echo "<th>Actual</th>";
+            echo "<th>Predicted</th>";
+            echo "<th>Correct</th>";
+            echo "</tr>";
+            foreach ($metrics['results'] as $result) {
+                echo "<tr>";
+                echo "<td>{$result['id']}</td>";
+                echo "<td>{$result['nama']}</td>";
+                echo "<td>{$result['jenis_kelamin']}</td>";
+                echo "<td>{$result['ips1']}</td>";
+                echo "<td>{$result['ips2']}</td>";
+                echo "<td>{$result['ips3']}</td>";
+                echo "<td>{$result['ips4']}</td>";
+                echo "<td>{$result['actual']}</td>";
+                echo "<td>{$result['predicted']}</td>";
+                echo "<td>{$result['correct']}</td>";
+                echo "</tr>";
             }
+            echo "</table>";
+            echo "</div>";
+            echo "</div>";
+
             ?>
         </div>
     </div>
     <div id="hasil" class="view">
         <div class="card-home">
             <?php
-            $host = 'localhost';
-            $dbname = 'dbmining';
-            $username = 'root';
-            $password = '';
+            $metrics = evaluateModel($decisionTree, $testData);
+            // Display evaluation metrics in table
+            echo "<h2>Evaluasi Model</h2>";
+            echo "<table border='1' cellspacing='0' cellpadding='5' class='styled-table'>";
+            echo "<tr>";
+            echo "<th rowspan='2'>Actual</th>";
+            echo "<th colspan='2'>Prediksi</th>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<th>Tepat Waktu</th>";
+            echo "<th>Terlambat</th>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<td>Tepat Waktu</td>";
+            echo "<td>{$metrics['TP']}</td>";
+            echo "<td>{$metrics['FN']}</td>";
+            echo "</tr>";
+            echo "<tr>";
+            echo "<td>Terlambat</td>";
+            echo "<td>{$metrics['FP']}</td>";
+            echo "<td>{$metrics['TN']}</td>";
+            echo "</tr>";
+            echo "</table>";
 
-            if (isset($_GET['table'])) {
-                $table_name = htmlspecialchars($_GET['table']); // Sanitize input
-
-                try {
-                    // Fetch all data
-                    $allData = getAllData($pdo, $table_name);
-
-                    // Check if data is fetched
-                    if (empty($allData)) {
-                        echo "<h2>Data tidak ditemukan di tabel $table_name.</h2>";
-                    } else {
-                        // Fetch test data (30% from start)
-                        $testData = getTestData($allData);
-
-                        // Check if test data is available
-                        if (empty($testData)) {
-                            echo "<h2>Data uji tidak tersedia.</h2>";
-                        } else {
-                            // Fetch decision tree from session
-                            if (isset($_SESSION['decision_tree'])) {
-                                $decisionTree = $_SESSION['decision_tree'];
-
-                                $metrics = evaluateModel($decisionTree, $testData);
-                                // Display evaluation metrics in table
-                                echo "<h2>Evaluasi Model</h2>";
-                                echo "<table border='1' cellspacing='0' cellpadding='5' class='styled-table'>";
-                                echo "<tr>";
-                                echo "<th rowspan='2'>Actual</th>";
-                                echo "<th colspan='2'>Prediksi</th>";
-                                echo "</tr>";
-                                echo "<tr>";
-                                echo "<th>Tepat Waktu</th>";
-                                echo "<th>Terlambat</th>";
-                                echo "</tr>";
-                                echo "<tr>";
-                                echo "<td>Tepat Waktu</td>";
-                                echo "<td>{$metrics['TP']}</td>";
-                                echo "<td>{$metrics['FN']}</td>";
-                                echo "</tr>";
-                                echo "<tr>";
-                                echo "<td>Terlambat</td>";
-                                echo "<td>{$metrics['FP']}</td>";
-                                echo "<td>{$metrics['TN']}</td>";
-                                echo "</tr>";
-                                echo "</table>";
-
-                                // Display additional metrics
-                                echo "<p>Accuracy: " . number_format($metrics['accuracy'], 2) . "%</p>";
-                                echo "<p>Specificity: " . number_format($metrics['specificity'], 2) . "%</p>";
-                                echo "<p>Sensitivity: " . number_format($metrics['sensitivity'], 2) . "%</p>";
-                            } else {
-                                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
-                            }
-                        }
-                    }
-                } catch (PDOException $e) {
-                    echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
-                }
-            } else {
-                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
-            }
+            // Display additional metrics
+            echo "<p>Accuracy: " . number_format($metrics['accuracy'], 2) . "%</p>";
+            echo "<p>Specificity: " . number_format($metrics['specificity'], 2) . "%</p>";
+            echo "<p>Sensitivity: " . number_format($metrics['sensitivity'], 2) . "%</p>";
             ?>
         </div>
     </div>

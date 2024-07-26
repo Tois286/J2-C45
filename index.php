@@ -77,7 +77,7 @@ $role = $_SESSION['user_role'];
         </div>
 
         <div class="content" id="analytics" style="display: none;">
-            <?php include 'view/prediksi.php' ?>
+            <?php include "view/prediksi.php"; ?>
         </div>
 
     </div>
