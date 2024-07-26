@@ -134,7 +134,7 @@ $table_name = isset($_GET['table']) ? $_GET['table'] : 'default_table_name';
 
                 <div class="register-btn">
                     <input type="submit" value="Daftar" name="submit" class="button button1">
-                    <a href="../index.php" type="button" class="button-cancel">cancel</a>
+                    <a href="../" type="button" class="button-cancel">cancel</a>
                 </div>
             </form>
         </div>

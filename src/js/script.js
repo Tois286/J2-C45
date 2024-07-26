@@ -54,6 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
     showContent('home');
 });
 
+
+function saveToLocalStorage(key, value) {
+    if (localStorage.getItem(key) === null) {
+        // Jika kunci belum ada, tambahkan nilai baru
+        localStorage.setItem(key, value);
+    } else {
+        // Jika kunci sudah ada, update nilai
+        localStorage.setItem(key, value);
+    }
+}
+
 function loadTable(tableName) {
     var tableContainer = document.getElementById("table-content");
     tableContainer.innerHTML = '';
@@ -74,89 +85,99 @@ function loadTable(tableName) {
 
     xhttp.send();
 }
-
-function saveToLocalStorage(key, value) {
-    if (localStorage.getItem(key) === null) {
-        // Jika kunci belum ada, tambahkan nilai baru
-        localStorage.setItem(key, value);
-    } else {
-        // Jika kunci sudah ada, update nilai
-        localStorage.setItem(key, value);
-    }
-}
-
 function chooseTable(tableName) {
-    event.preventDefault(); // Mencegah refresh halaman
-
-    // Menyimpan tableName ke localStorage
+    // Store tableName in localStorage
     localStorage.setItem("chooseTableTrainingProcess", tableName);
 
-    // Mengecek apakah sudah ada parameter di URL
+    // Update URL parameter without reloading the page
     let currentUrl = new URL(window.location.href);
     let params = new URLSearchParams(currentUrl.search);
-
-    // Menambahkan atau mengganti nilai parameter 'table'
     params.set('table', tableName);
-
-    // Memperbarui URL tanpa reload halaman
     currentUrl.search = params.toString();
     window.history.replaceState({}, '', currentUrl);
 
+    // Check if redirect is needed
+    if (tableName !== 'index.php') {
+        alert('Lanjut tampilkan ' + tableName + ' untuk di kelola.');
+        setTimeout(function() {
+            window.location.href = "index.php?table=" + encodeURIComponent(tableName);
+        }, 1); // Adjust timeout if needed
+    }
+
+    // Load table content via AJAX
+    loadTableDataView(tableName);
+}
+function loadTableDataView(tableName) {
     $.ajax({
-        url: 'view/load_table.php', // Sesuaikan dengan file yang sesuai di proyek Anda
+        url: 'view/load_table.php', // Adjust URL as necessary
         type: 'GET',
         data: { table: tableName },
         dataType: 'json',
-        success: function (data) {
-            console.log('Server Response:', data); // Log server response
+        success: function(data) {
+            console.log('Server Response:', data);
 
             if (data.error) {
                 $('#table-content-container').html('<p>Error: ' + data.error + '</p>');
                 return;
             }
 
-            var tableHtml = '<table id="table-content">';
+            let tableHtml = '<table id="table-content">';
             tableHtml += '<a href="c45/mining.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Mining</a>';
             tableHtml += '<a href="c45/deleteUpload.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Delete</a>';
-            console.log(tableName);
             
-            if (data.fields.length > 0) {
+            if (data.fields && data.fields.length > 0) {
                 // Create table header
                 tableHtml += '<tr>';
-                data.fields.forEach(function (field) {
-                    if (field != 'PREDIKSI') {
+                data.fields.forEach(function(field) {
+                    if (field !== 'PREDIKSI') {
                         tableHtml += '<th>' + field + '</th>';
                     }
                 });
                 tableHtml += '</tr>';
 
-                // Calculate the number of rows to display (70% of total rows)
+                // Display 70% of rows
                 const totalRows = data.rows.length;
                 const rowsToShow = Math.ceil(totalRows * 0.7);
 
-                // Create table rows for 70% of the data
                 for (let i = 0; i < rowsToShow; i++) {
                     tableHtml += '<tr>';
-                    data.fields.forEach(function (field) {
-                        if (field != 'PREDIKSI') {
+                    data.fields.forEach(function(field) {
+                        if (field !== 'PREDIKSI') {
                             tableHtml += '<td>' + data.rows[i][field] + '</td>';
                         }
                     });
                     tableHtml += '</tr>';
                 }
             } else {
-                tableHtml += '<tr><td colspan="' + (data.fields.length + 1) + '">No data found</td></tr>';
+                tableHtml += '<tr><td colspan="' + (data.fields ? data.fields.length : 2) + '">No data found</td></tr>';
             }
             tableHtml += '</table>';
 
             $('#table-content-container').html(tableHtml);
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error('Error loading data:', textStatus, errorThrown); // Log the error details
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error loading data:', textStatus, errorThrown);
             $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
         }
     });
 }
+$(document).ready(function() {
+    // Check URL for 'table' parameter
+    let urlParams = new URLSearchParams(window.location.search);
+    let tableName = urlParams.get('table');
+
+    // If tableName is not found in URL, check localStorage
+    if (!tableName) {
+        tableName = localStorage.getItem("chooseTableTrainingProcess");
+    }
+
+    // If tableName is found, load the table data
+    if (tableName) {
+        loadTableDataView(tableName);
+    } else {
+        $('#table-content-container').html('<p>Please select a table to display.</p>');
+    }
+});
 
 
  document.addEventListener("DOMContentLoaded", function() {
