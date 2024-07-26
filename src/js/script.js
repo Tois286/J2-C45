@@ -210,14 +210,22 @@ $(document).ready(function() {
             history.replaceState(null, '', baseUrl);
         });
 
-$(document).ready(function() {
-        // Mendapatkan nilai peran dari PHP ke dalam JavaScript
-        var userRole = '<?php echo $role; ?>';
+ $(document).ready(function() {
+       
+        $('#search-form').on('submit', function(event) {
+            event.preventDefault(); // Mencegah refresh halaman
 
-        // Memeriksa apakah peran adalah admin
-        if (userRole === 'admin') {
-            // Memasukkan tombol "Beri Akses" jika peran adalah admin
-            var tableHtml = '<a href="modul/database/akses.php?table=' + encodeURIComponent(tableName) + '" class="button-mining">Beri Akses</a>';
-            // Anda bisa melanjutkan dengan menambahkan tautan ke HTML atau manipulasi DOM lainnya di sini
-        }
+            $.ajax({
+                url: 'modul/database/search.php', // Ganti dengan URL untuk memproses pencarian
+                type: 'GET',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#result-container').html(response);
+                },
+                error: function(xhr, status, error) {
+                    // Tangani kesalahan jika terjadi
+                    alert('Terjadi kesalahan: ' + error);
+                }
+            });
+        });
     });

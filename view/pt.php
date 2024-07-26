@@ -159,15 +159,15 @@
                                             }
                                             echo "</table>";
                                         } else {
-                                            echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                                            echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
                                         }
                                     }
                                 }
                             } catch (PDOException $e) {
-                                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                                echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
                             }
                         } else {
-                            echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                            echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
                         }
                         ?>
                     </div>
@@ -241,15 +241,15 @@
                                 echo "</div>";
                                 echo "</div>";
                             } else {
-                                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                                echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
                             }
                         }
                     }
                 } catch (PDOException $e) {
-                    echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                    echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
                 }
             } else {
-                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
             }
             ?>
         </div>
@@ -313,15 +313,15 @@
                                 echo "<p>Specificity: " . number_format($metrics['specificity'], 2) . "%</p>";
                                 echo "<p>Sensitivity: " . number_format($metrics['sensitivity'], 2) . "%</p>";
                             } else {
-                                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                                echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
                             }
                         }
                     }
                 } catch (PDOException $e) {
-                    echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                    echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
                 }
             } else {
-                echo "<p>Silakan pilih tabel dari dropdown di atas.</p>";
+                echo "<p>Silakan lakukan mining terlebih dahulu agar proses berjalan dengan baik.</p>";
             }
             ?>
         </div>

@@ -11,9 +11,9 @@
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             // Debug: Periksa data yang diterima
-            echo "<pre>";
-            print_r($data);
-            echo "</pre>";
+            // echo "<pre>";
+            // print_r($data);
+            // echo "</pre>";
 
             // Siapkan data untuk pohon keputusan
             $values = [];
@@ -50,9 +50,9 @@
             }
 
             // Debug: Periksa nilai yang sudah diubah
-            echo "<pre>";
-            print_r($values);
-            echo "</pre>";
+            // echo "<pre>";
+            // print_r($values);
+            // echo "</pre>";
 
             // Tentukan fungsi untuk menghitung entropi
             function calculateEntropy($values)
@@ -71,14 +71,14 @@
             // Tentukan fungsi untuk menghitung perolehan informasi
             function calculateInformationGain($values, $attribute)
             {
-                $entropyTotal = calculateEntropy($values);
+                $entropyTotal = calculateEntropy(array_column($values, 'lulus'));
                 $gain = $entropyTotal;
                 $attributeValues = array_column($values, $attribute);
                 foreach (array_unique($attributeValues) as $value) {
                     $subset = array_filter($values, function ($v) use ($value, $attribute) {
                         return $v[$attribute] == $value;
                     });
-                    $gain -= (count($subset) / count($values)) * calculateEntropy($subset);
+                    $gain -= (count($subset) / count($values)) * calculateEntropy(array_column($subset, 'lulus'));
                 }
                 return $gain;
             }
@@ -198,23 +198,13 @@
                     print_r($row);
                 }
             }
+
+            // Alihkan ke halaman index setelah proses selesai
+            header('Location: ../index.php');
+            exit();
         } catch (PDOException $e) {
             die("Error retrieving data: " . $e->getMessage());
         }
-        $tableName = $_GET['table'] ?? 'default_table'; // Menangani kasus jika $tableName tidak ada
-
-        // Output JavaScript dengan menyertakan variabel PHP
-        echo '<script>
-    // Encode variabel PHP ke dalam JavaScript
-    var tableName = ' . json_encode($tableName) . ';
-
-    // Menyertakan tableName dalam URL atau tindakan lainnya
-    setTimeout(function() {
-        // Misalnya, menggunakan tableName dalam URL
-        var redirectUrl = "../index.php?table=" + encodeURIComponent(tableName);
-        window.location.href = redirectUrl;
-    }, 1);
-</script>';
     }
     ?>
 </div>

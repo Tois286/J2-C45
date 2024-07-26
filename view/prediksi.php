@@ -45,17 +45,17 @@
                 if ($sql && mysqli_num_rows($sql) > 0) {
 
                     echo '<a href="modul/tambah.php?table=' . htmlspecialchars($table_name) . '" class="button-mining">Tambah</a>';
-                    echo '<a href="modul/database/hapusPre.php" class="button-mining">Hapus</a>';
                     echo '<a href="c45/prediksi.php?table=' . htmlspecialchars($table_name) . '" class="button-mining">Lakukan Prediksi</a>';
                     echo '<a href="modul/database/PrintPros.php?table=' . htmlspecialchars($table_name) . '" class="button-mining" onclick="printDocument(\'print\')">Cetak Berkas Anda</a>';
+                    echo '<a href="modul/database/hapusPre.php" class="button-mining">Hapus</a>';
 
-                    echo "<form method='GET' action='' class='form-search'>";
+                    echo "<form id='search-form' method='GET' action='' class='form-search'>";
                     echo "<input type='hidden' name='table' value='$table_name'>";
                     echo "<input type='text' name='search' value='" . htmlspecialchars($search_query) . "' placeholder='Search...'>";
                     echo "<input type='submit' class='button-mining' value='Search'>";
                     echo "</form>";
 
-                    echo '<div class="styled-table" style="overflow-x: auto;">';
+                    echo '<div id="result-container" class="styled-table" style="overflow-x: auto;">';
                     echo '<table style="width: 100%; border-collapse: collapse; font-size: 14px;">';
                     echo '<thead>';
                     echo '<tr>';
@@ -97,6 +97,24 @@
 
             mysqli_close($koneksi);
             ?>
+
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#search-form').on('submit', function(event) {
+            event.preventDefault(); // Mencegah refresh halaman
+
+            $.ajax({
+                url: 'modul/database/search.php', // Ganti dengan URL untuk memproses pencarian
+                type: 'GET',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#result-container').html(response);
+                }
+            });
+        });
+    });
+</script>

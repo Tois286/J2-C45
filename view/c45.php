@@ -5,7 +5,7 @@
             <input type="file" name="excelFile" accept=".xlsx, .xls">
             <button type="submit" class="button button1">Upload</button>
         </form>
-        <button class="button button1" style="background-color:#009879; color:white; width:70%; font-size: 12px;">Menggunakan Huruf kapital dan
+        <button class="button button1" style="background-color:#009879; color:white; width:60%; font-size: 11px;">Menggunakan Huruf kapital dan
             Tanpa spasi!! (WAJIB memiliki kolom IPS dan KETERANGAN, dengan Format xlsx)</button>
         <div class="dropdown">
             <button class="button button1" id="chooseTable" style="left: 50%;">Pilih Tabel</button>
