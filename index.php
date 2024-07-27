@@ -33,7 +33,7 @@ $role = $_SESSION['user_role'];
                 <?php if ($role == 'admin') : ?>
                     <li><a href="#dataSiswa" onclick="showContent('dataSiswa')">Data Pengguna</a></li>
                     <li class="dropdown" id="data-training">
-                        <a href="#">Data Training</a>
+                        <a href="#prosesC45">Data Training</a>
                         <div class="dropdown-content" id="submenu-training">
                             <a href="#" onclick="showContent('prosesC45')">Proses Training</a>
                             <a href="#" onclick="showContent('pohonKeputusan')">Pohon Keputusan</a>
