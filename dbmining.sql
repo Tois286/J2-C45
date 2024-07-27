@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 22, 2024 at 03:42 PM
+-- Generation Time: Jul 27, 2024 at 08:53 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,7 +38,7 @@ CREATE TABLE `dataall` (
   `IPS4` text DEFAULT NULL,
   `KETERANGAN` text DEFAULT NULL,
   `PREDIKSI` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `dataall`
@@ -219,6 +219,49 @@ INSERT INTO `dataall` (`id`, `NPM`, `NAMA`, `JENIS_KELAMIN`, `IPS1`, `IPS2`, `IP
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `r_dataprediksi`
+--
+
+CREATE TABLE `r_dataprediksi` (
+  `id` int(11) NOT NULL,
+  `tgl_prediksi` date NOT NULL,
+  `NPM` text DEFAULT NULL,
+  `NAMA` text DEFAULT NULL,
+  `JENIS_KELAMIN` text DEFAULT NULL,
+  `IPS1` text DEFAULT NULL,
+  `IPS2` text DEFAULT NULL,
+  `IPS3` text DEFAULT NULL,
+  `IPS4` text DEFAULT NULL,
+  `PREDIKSI` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `r_dataprediksi`
+--
+
+INSERT INTO `r_dataprediksi` (`id`, `tgl_prediksi`, `NPM`, `NAMA`, `JENIS_KELAMIN`, `IPS1`, `IPS2`, `IPS3`, `IPS4`, `PREDIKSI`) VALUES
+(1, '2024-07-27', '2020804001', 'ALIF', 'LAKI-LAKI', 'CUKUP', 'CUKUP', 'CUKUP', 'BAIK', 'TERLAMBAT'),
+(2, '2024-07-27', '2020804002', 'NENENG', 'PEREMPUAN', 'SANGAT BAIK', 'SANGAT BAIK', 'BAIK', 'SANGAT BAIK', 'TEPAT WAKTU'),
+(3, '2024-07-27', '2020804003', 'AMELIA', 'PEREMPUAN', 'CUKUP', 'CUKUP', 'KURANG', 'KURANG', 'TERLAMBAT'),
+(4, '2024-07-27', '2020804004', 'AHMAD', 'LAKI-LAKI', 'CUKUP', 'BAIK', 'KURANG', 'KURANG', 'TERLAMBAT'),
+(5, '2024-07-27', '2020804005', 'KHOIRUL', 'LAKI-LAKI', 'BAIK', 'BAIK', 'BAIK', 'CUKUP', 'TEPAT WAKTU'),
+(6, '2024-07-27', '2020804006', 'NURUL', 'LAKI-LAKI', 'CUKUP', 'BAIK', 'BAIK', 'CUKUP', 'TEPAT WAKTU'),
+(7, '2024-07-27', '2020804007', 'AZAHELI', 'LAKI-LAKI', 'CUKUP', 'CUKUP', 'KURANG', 'KURANG', 'TERLAMBAT'),
+(8, '2024-07-27', '2020804008', 'AGUSTINUS', 'LAKI-LAKI', 'CUKUP', 'CUKUP', 'KURANG', 'CUKUP', 'TERLAMBAT'),
+(9, '2024-07-27', '2020804009', 'YEMIMA', 'PEREMPUAN', 'BAIK', 'CUKUP', 'KURANG', 'KURANG', 'TERLAMBAT'),
+(10, '2024-07-27', '2020804010', 'SYAHRUL', 'LAKI-LAKI', 'CUKUP', 'KURANG', 'CUKUP', 'BAIK', 'TERLAMBAT'),
+(11, '2024-07-27', '2020804011', 'SEPTYAN', 'LAKI-LAKI', 'CUKUP', 'CUKUP', 'BAIK', 'BAIK', 'TEPAT WAKTU'),
+(12, '2024-07-27', '2020804012', 'PASKALIS', 'LAKI-LAKI', 'BAIK', 'BAIK', 'KURANG', 'BAIK', 'TEPAT WAKTU'),
+(13, '2024-07-27', '2020804013', 'SUPERIAMARTHA', 'PEREMPUAN', 'SANGAT BAIK', 'BAIK', 'KURANG', 'BAIK', 'TEPAT WAKTU'),
+(14, '0000-00-00', '2983123', 'ZUL', 'LAKI-LAKI', 'BAIK', 'SANGAT BAIK', 'SANGAT BAIK', 'CUKUP', 'TEPAT WAKTU'),
+(15, '0000-00-00', '918391823', 'TAJUS', 'LAKI-LAKI', 'BAIK', 'CUKUP', 'SANGAT BAIK', 'KURANG', 'TEPAT WAKTU'),
+(16, '0000-00-00', '2839283131', 'BEWOK', 'LAKI-LAKI', 'BAIK', 'BAIK', 'SANGAT BAIK', 'SANGAT BAIK', 'TEPAT WAKTU'),
+(17, '0000-00-00', '21391312', 'JOKO', 'LAKI-LAKI', 'CUKUP', 'BAIK', 'SANGAT BAIK', 'BAIK', 'TEPAT WAKTU'),
+(18, '0000-00-00', '129839283', 'FARIS', 'LAKI-LAKI', 'CUKUP', 'BAIK', 'SANGAT BAIK', 'SANGAT BAIK', 'TEPAT WAKTU');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -236,7 +279,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `nama`, `username`, `password`, `role`, `id`) VALUES
-(1, 'administrasi', 'admin', 'admin', 'admin', '0');
+(1, 'administrasi', 'admin', 'admin', 'admin', '0'),
+(175, 'user1', 'user1', 'user', 'user', '');
 
 --
 -- Indexes for dumped tables
@@ -246,6 +290,12 @@ INSERT INTO `users` (`user_id`, `nama`, `username`, `password`, `role`, `id`) VA
 -- Indexes for table `dataall`
 --
 ALTER TABLE `dataall`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `r_dataprediksi`
+--
+ALTER TABLE `r_dataprediksi`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -266,10 +316,16 @@ ALTER TABLE `dataall`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
 
 --
+-- AUTO_INCREMENT for table `r_dataprediksi`
+--
+ALTER TABLE `r_dataprediksi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

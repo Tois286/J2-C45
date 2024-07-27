@@ -43,9 +43,9 @@ $role = $_SESSION['user_role'];
                         <a href="#">Data Testing</a>
                         <div class="dropdown-content" id="submenu-testing">
                             <a href="#" onclick="showContent('prosesTesting')">Proses Testing</a>
-                            <a href="#" onclick="showContent('export')">Cetak Data</a>
                         </div>
                     </li>
+                    <li><a href="#" onclick="showContent('export')">Cetak Data</a></li>
                 <?php endif; ?>
                 <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
                 <li><a href="logout.php">Logout</a></li>
