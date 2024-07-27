@@ -1,5 +1,44 @@
 // // scripts.js
+// // Show home content by default
+document.addEventListener('DOMContentLoaded', () => {
+    showContent('home');
+});
+ let lastClicked = null;
+    let clickCount = 0;
 
+document.getElementById('data-training').addEventListener('click', function(event) {
+        event.preventDefault();  // Prevents default link behavior
+
+        clickCount++;
+
+        // Check if it is a double click
+        if (clickCount === 2) {
+            toggleDropdown('submenu-training');
+            clickCount = 0;  // Reset count
+        }
+
+        lastClicked = 'data-training';
+        setTimeout(() => clickCount = 0, 300);  // Reset click count after 300ms
+    });
+
+    document.getElementById('data-testing').addEventListener('click', function(event) {
+        event.preventDefault();  // Prevents default link behavior
+        toggleDropdown('submenu-testing');
+    });
+
+    function toggleDropdown(id) {
+        const dropdown = document.getElementById(id);
+        if (dropdown.style.display === 'block') {
+            dropdown.style.display = 'none';
+        } else {
+            dropdown.style.display = 'block';
+        }
+    }
+
+    function showContent(contentId) {
+        console.log('Showing content:', contentId);
+        // Implement your content display logic here
+    }
 document.addEventListener('DOMContentLoaded', function () {
     var dataTraining = document.getElementById('data-training');
     var submenuTraining = document.getElementById('submenu-training');
@@ -49,10 +88,6 @@ function showContent(id) {
     }
 }
 
-// // Show home content by default
-document.addEventListener('DOMContentLoaded', () => {
-    showContent('home');
-});
 
 function view(id) {
     // Sembunyikan semua elemen dengan class 'content'
