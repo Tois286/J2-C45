@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['table'])) {
     $table_name = $_GET['table'];
 
     // Retrieve form data
+    $tgl = date('Y-m-d');
     $nama = $_POST['nama'] ?? null;
     $npm = $_POST['npm'] ?? null;
     $jenis_kelamin = $_POST['jenis_kelamin'] ?? null;

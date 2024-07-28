@@ -88,6 +88,7 @@
                     echo '</tbody>';
                     echo '</table>';
                     echo '</div>';
+                    echo '<a href="" class="button-mining">Tanggal Upload akan otomatis berubah saat anda melakukan prediksi!!!</a>';
                 } else {
                     echo 'Tidak ada data.';
                 }

@@ -160,7 +160,6 @@
                         'ips4' => $row['ips4'],
                     ]);
 
-                    // Pastikan kunci 'id' ada dalam array $row
                     if (isset($row['id'])) {
                         $user_id = $row['id'];
 
@@ -179,9 +178,26 @@
                             }
                         }
 
-                        // Lakukan update kolom PREDIKSI untuk setiap user id
-                        $stmt_update = $pdo->prepare("UPDATE $table_name SET PREDIKSI = :PREDIKSI WHERE id = :id");
-                        $stmt_update->execute(['PREDIKSI' => $output, 'id' => $user_id]);
+                        // Periksa apakah kolom 'tgl_prediksi' sudah ada di tabel
+                        $stmt_check_date_column = $pdo->query("SHOW COLUMNS FROM $table_name LIKE 'tgl_prediksi'");
+                        $date_column_exists = $stmt_check_date_column->rowCount() > 0;
+
+                        if (!$date_column_exists) {
+                            // Jika kolom 'tgl_prediksi' belum ada, tambahkan kolom
+                            $stmt_add_date_column = $pdo->query("ALTER TABLE $table_name ADD COLUMN tgl_prediksi DATE");
+
+                            if ($stmt_add_date_column) {
+                                echo "Added column tgl_prediksi to table $table_name\n";
+                            } else {
+                                echo "Failed to add column tgl_prediksi to table $table_name\n";
+                            }
+                        }
+
+                        $tgl = date('Y-m-d');
+
+                        // Lakukan update kolom tgl_prediksi dan PREDIKSI untuk setiap user id
+                        $stmt_update = $pdo->prepare("UPDATE $table_name SET tgl_prediksi = :tgl_prediksi, PREDIKSI = :PREDIKSI WHERE id = :id");
+                        $stmt_update->execute(['tgl_prediksi' => $tgl, 'PREDIKSI' => $output, 'id' => $user_id]);
 
                         // Debug: Periksa hasil eksekusi
                         if ($stmt_update->rowCount() > 0) {

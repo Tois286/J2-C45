@@ -20,6 +20,7 @@ if (isset($_GET['table'])) {
         $data = array_slice($subset_data, 0, $subset_size);
         echo  '<link rel="stylesheet" href="../src/css/style.css">';
         echo '<a href="../index.php?table=' . $table_name . '" class="button-mining" id="back">Back</a>';
+        echo '<a href="save.php?table=' . htmlspecialchars($table_name) . '" class="button-mining">Save</a>';
         echo '<div class="card-home">';
         // Function to calculate entropy
         function calculateEntropy($data, $targetAttribute)
@@ -164,7 +165,7 @@ if (isset($_GET['table'])) {
             $totalEntropy = calculateEntropy($data, $targetAttribute);
             $totalCount = count($data);
 
-            echo "<table border='1' cellspacing='0' cellpadding='5'>";
+            echo "<table class='styled-table'>";
             echo "<thead>";
             echo "<tr>
             <th>Attribute</th>
@@ -238,14 +239,18 @@ if (isset($_GET['table'])) {
         echo "<br>";
         echo "<pre>";
         echo "<h1>Split Node</h1>";
+        echo "<div class='card-home'>";
         printDecisionTree($decisionTree);
+        echo "</div>";
         echo "</pre>";
         echo "<br>";
 
         // Print decision rules
         echo "<pre>";
         echo "<h1>Rule Node</h1>";
+        echo "<div class='card-home'>";
         printDecisionRules($decisionTree);
+        echo "</div>";
         echo "</pre>";
         // Build and store decision tree in session
         $_SESSION['decision_tree'] = $decisionTree;

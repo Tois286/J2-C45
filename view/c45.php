@@ -35,7 +35,18 @@
                         if (strpos($table_name, 'm_') === 0) {
                             continue; // Lewati tabel yang nama-namanya diawali dengan 'R_'
                         }
-
+                        if (strpos($table_name, 'hasil_uji') === 0) {
+                            continue; // Lewati tabel yang nama-namanya diawali dengan 'R_'
+                        }
+                        if (strpos($table_name, 'steptree') === 0) {
+                            continue; // Lewati tabel yang nama-namanya diawali dengan 'R_'
+                        }
+                        if (strpos($table_name, 'entropy') === 0) {
+                            continue; // Lewati tabel yang nama-namanya diawali dengan 'R_'
+                        }
+                        if (strpos($table_name, 'gain') === 0) {
+                            continue; // Lewati tabel yang nama-namanya diawali dengan 'R_'
+                        }
                         // Check if table_name is "users"
                         if ($table_name == "users") {
                             // Check if user is logged in (you need to implement this check)

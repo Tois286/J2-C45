@@ -68,9 +68,7 @@
     </div>
     <div id="stepTree" class="view">
         <div class="card-home" style="color: black;">
-            <p>Ini adalah konten untuk Step Tree <?php echo $table_name ?></p>
             <?php
-
             if (isset($_SESSION['decision_tree'])) {
                 $decision_tree = $_SESSION['decision_tree'];
 
@@ -118,9 +116,10 @@
                                                 $ruleStr[] = "$key = $value";
                                             }
                                         }
-                                        echo implode(', ', $ruleStr);
-                                        echo " -> " . $rule['Status Lulus'];
+                                        $ruleText = implode(', ', $ruleStr);
+                                        echo htmlspecialchars($ruleText . " -> " . $rule['Status Lulus']);
                                         ?>
+                                        <input type="hidden" name="rules[]" value="<?php echo htmlspecialchars($ruleText . " -> " . $rule['Status Lulus']); ?>">
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -134,5 +133,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>
