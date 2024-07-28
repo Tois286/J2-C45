@@ -153,12 +153,30 @@ if (isset($_GET['table'])) {
                 }
             }
         }
+        function generateDecisionRules($tree, $rules = [], $level = 0)
+        {
+            $output = "";
+            foreach ($tree as $attribute => $branches) {
+                foreach ($branches as $value => $subtree) {
+                    $newRules = $rules;
+                    $newRules[] = "$attribute = $value";
+
+                    if (is_array($subtree)) {
+                        $output .= generateDecisionRules($subtree, $newRules, $level + 1);
+                    } else {
+                        $output .= str_repeat("  ", $level) . "IF " . implode(' AND ', $newRules) . " THEN $subtree\n";
+                    }
+                }
+            }
+            return $output;
+        }
 
         echo "<br>";
         echo "<pre>";
         echo "<h1>C45 Training</h1>";
         echo "</pre>";
         echo "<br>";
+
         // Function to print attribute information
         function printAttributeInformation($data, $attributes, $targetAttribute)
         {

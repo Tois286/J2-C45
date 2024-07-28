@@ -3,7 +3,7 @@
 
 // Sertakan file yang berisi fungsi
 include 'mining.php';
-
+$rules = generateDecisionRules($decisionTree);
 // Simpan data entropi
 $stmt = $koneksi->prepare("INSERT INTO entropy (nama_tabel, attribute, value, count, tepat_waktu, terlambat, entropy) VALUES (?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("sssiiid", $table_name, $attribute, $value, $subsetCount, $countTEPAT_WAKTU, $countTERLAMBAT, $subsetEntropy);
@@ -36,16 +36,22 @@ foreach ($attributes as $attribute) {
         $stmt->execute();
 
         // Simpan data gain
-        $stmt_gain = $koneksi->prepare("INSERT INTO gain (nama_tabel,attribute, value, gain) VALUES (?, ?, ?, ?)");
+        $stmt_gain = $koneksi->prepare("INSERT INTO gain (nama_tabel, attribute, value, gain) VALUES (?, ?, ?, ?)");
         $stmt_gain->bind_param("sssd", $table_name, $attribute, $value, $gain);
         $stmt_gain->execute();
+
+        // Simpan decision rules
+        $stmt_rule = $koneksi->prepare("INSERT INTO steptree (nama_tabel, rule) VALUES (?, ?)");
+        $stmt_rule->bind_param("ss", $table_name, $rules);
+        $stmt_rule->execute();
     }
 }
-
 // Tutup statement dan koneksi
 $stmt->close();
 $stmt_gain->close();
+$stmt_rule->close();
 ?>
+
 <script>
     alert('Proses selesai dan data berhasil disimpan.');
     window.location.href = '../index.php';
