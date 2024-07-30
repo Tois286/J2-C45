@@ -45,9 +45,9 @@
                 if ($sql && mysqli_num_rows($sql) > 0) {
 
                     echo '<a href="modul/tambah.php?table=' . htmlspecialchars($table_name) . '" class="button-mining">Tambah</a>';
-                    echo '<a href="c45/prediksi.php?table=' . htmlspecialchars($table_name) . '" class="button-mining">Lakukan Prediksi</a>';
-                    echo '<a href="modul/database/PrintPros.php?table=' . htmlspecialchars($table_name) . '" class="button-mining" onclick="printDocument(\'print\')">Cetak Berkas Anda</a>';
-                    echo '<a href="modul/database/hapusPre.php" class="button-mining">Hapus</a>';
+                    echo '<a href="c45/prediksi.php?table=' . htmlspecialchars($table_name) . '" class="button-mining" onclick="return confirm(\'This prediction will update all existing data, are you sure??\')" >Lakukan Prediksi</a>';
+                    echo '<a href="modul/database/PrintProsPre.php?table=' . htmlspecialchars($table_name) . '" class="button-mining" onclick="printDocument(\'print\')">Cetak Berkas Anda</a>';
+                    echo '<a href="modul/database/hapusPre.php" class="button-mining" onclick="return confirm(\'Are you sure you want to delete this data?\')">Hapus</a>';
 
                     echo "<form id='search-form' method='GET' action='' class='form-search'>";
                     echo "<input type='hidden' name='table' value='$table_name'>";
@@ -67,6 +67,7 @@
                     }
                     if ($role == 'admin') {
                         echo "<th style='border: 1px solid #ddd; padding: 8px;'>Edit</th>";
+                        echo "<th style='border: 1px solid #ddd; padding: 8px;'>Prediksi</th>";
                         echo "<th style='border: 1px solid #ddd; padding: 8px;'>Delete</th>";
                     }
                     echo '</tr>';
@@ -81,6 +82,7 @@
                         }
                         if ($role == 'admin') {
                             echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/edit.php?table=$table_name&id=" . $row['id'] . "'>Edit</a></td>";
+                            echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='c45/prediksiOne.php?table=$table_name&id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Prediksi</a></td>";
                             echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/delete.php?id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Delete</a></td>";
                         }
                         echo '</tr>';

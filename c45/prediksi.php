@@ -202,6 +202,7 @@
                         // Debug: Periksa hasil eksekusi
                         if ($stmt_update->rowCount() > 0) {
                             echo "Update successful for ID $user_id\n";
+                            // Alihkan ke halaman index setelah proses selesai
                         } else {
                             echo "Update failed for ID $user_id\n";
                         }
