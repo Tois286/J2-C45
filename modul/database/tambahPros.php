@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['table'])) {
     $ips4 = $_POST['ips4'] ?? null;
 
     // Fungsi untuk menentukan kategori berdasarkan nilai IPS
-    //konversi nilai ips2
+    //konversi nilai ips1
     if ($ips1 < 2.4) {
         $ips1_prediksi = 'KURANG';
     } elseif ($ips1 >= 2.5 && $ips1 < 3.0) {
@@ -59,33 +59,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['table'])) {
 
     // Validate form data
     if ($nama && $npm && $jenis_kelamin && $ips1 && $ips2 && $ips3 && $ips4) {
-        // Prepare an SQL statement
-        $sql = "INSERT INTO $table_name (nama, npm, jenis_kelamin, ips1, ips2, ips3, ips4) 
-                VALUES (:nama, :npm, :jenis_kelamin, :ips1, :ips2, :ips3, :ips4)";
-
-        // Execute the SQL statement
-        $stmt = $pdo->prepare($sql);
-
-        // Bind parameters
-        $stmt->bindParam(':nama', $nama);
+        // Check if NPM already exists
+        $checkNpmSql = "SELECT COUNT(*) FROM $table_name WHERE npm = :npm";
+        $stmt = $pdo->prepare($checkNpmSql);
         $stmt->bindParam(':npm', $npm);
-        $stmt->bindParam(':jenis_kelamin', $jenis_kelamin);
-        $stmt->bindParam(':ips1', $ips1_prediksi);
-        $stmt->bindParam(':ips2', $ips2_prediksi);
-        $stmt->bindParam(':ips3', $ips3_prediksi);
-        $stmt->bindParam(':ips4', $ips4_prediksi);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
 
-        // Execute and check if successful
-        if ($stmt->execute()) {
-            // Redirect or notify success
-            header('Location: ../../index.php');
-            exit();
+        if ($count > 0) {
+            // NPM already exists
+            echo "<script>alert('NPM ini sudah dimiliki seseorang.'); window.history.back();</script>";
         } else {
-            echo "Terjadi kesalahan saat menambahkan data.";
+            // Prepare an SQL statement
+            $sql = "INSERT INTO $table_name (nama, npm, jenis_kelamin, ips1, ips2, ips3, ips4) 
+                    VALUES (:nama, :npm, :jenis_kelamin, :ips1, :ips2, :ips3, :ips4)";
+
+            // Execute the SQL statement
+            $stmt = $pdo->prepare($sql);
+
+            // Bind parameters
+            $stmt->bindParam(':nama', $nama);
+            $stmt->bindParam(':npm', $npm);
+            $stmt->bindParam(':jenis_kelamin', $jenis_kelamin);
+            $stmt->bindParam(':ips1', $ips1_prediksi);
+            $stmt->bindParam(':ips2', $ips2_prediksi);
+            $stmt->bindParam(':ips3', $ips3_prediksi);
+            $stmt->bindParam(':ips4', $ips4_prediksi);
+
+            // Execute and check if successful
+            if ($stmt->execute()) {
+                // Redirect or notify success
+                echo "<script>alert('Data berhasil ditambahkan.'); window.location.href = '../../index.php';</script>";
+            } else {
+                echo "<script>alert('Terjadi kesalahan saat menambahkan data.'); window.history.back();</script>";
+            }
         }
     } else {
-        echo "Semua kolom harus diisi!";
+        echo "<script>alert('Semua kolom harus diisi!'); window.history.back();</script>";
     }
 } else {
-    echo "Metode request tidak valid atau parameter table tidak ada.";
+    echo "<script>alert('Metode request tidak valid atau parameter table tidak ada.'); window.history.back();</script>";
 }

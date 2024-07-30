@@ -172,8 +172,8 @@ function loadTableDataView(tableName) {
             $('#table-content-container').html(tableHtml);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error loading data:', textStatus, errorThrown);
-            $('#table-content-container').html('<p>Error loading data: ' + textStatus + ' - ' + errorThrown + '</p>');
+            console.error('Upload Data Terlebih dahulu:');
+            $('#table-content-container').html('<p>Upload Data Terlebih dahulu: '+ '</p>');
         }
     });
 }

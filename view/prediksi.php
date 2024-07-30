@@ -65,11 +65,9 @@
                     foreach ($field_info as $val) {
                         echo '<th style="border: 1px solid #ddd; padding: 8px;">' . htmlspecialchars($val->name) . '</th>';
                     }
-                    if ($role == 'admin') {
-                        echo "<th style='border: 1px solid #ddd; padding: 8px;'>Edit</th>";
-                        echo "<th style='border: 1px solid #ddd; padding: 8px;'>Prediksi</th>";
-                        echo "<th style='border: 1px solid #ddd; padding: 8px;'>Delete</th>";
-                    }
+                    echo "<th style='border: 1px solid #ddd; padding: 8px;'>Edit</th>";
+                    echo "<th style='border: 1px solid #ddd; padding: 8px;'>Prediksi</th>";
+                    echo "<th style='border: 1px solid #ddd; padding: 8px;'>Delete</th>";
                     echo '</tr>';
                     echo '</thead>';
                     echo '<tbody>';
@@ -80,11 +78,10 @@
                         foreach ($row as $column) {
                             echo '<td style="border: 1px solid #ddd; padding: 8px;">' . htmlspecialchars($column) . '</td>';
                         }
-                        if ($role == 'admin') {
-                            echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/edit.php?table=$table_name&id=" . $row['id'] . "'>Edit</a></td>";
-                            echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='c45/prediksiOne.php?table=$table_name&id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Prediksi</a></td>";
-                            echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/delete.php?id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Delete</a></td>";
-                        }
+                        echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/edit.php?table=$table_name&id=" . $row['id'] . "'>Edit</a></td>";
+                        echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='c45/prediksiOne.php?table=$table_name&id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Prediksi</a></td>";
+                        echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/delete.php?id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Delete</a></td>";
+
                         echo '</tr>';
                     }
                     echo '</tbody>';

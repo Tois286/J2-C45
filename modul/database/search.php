@@ -29,6 +29,7 @@ if ($sql && mysqli_num_rows($sql) > 0) {
     }
 
     echo "<th style='border: 1px solid #ddd; padding: 8px;'>Edit</th>";
+    echo "<th style='border: 1px solid #ddd; padding: 8px;'>Prediksi</th>";
     echo "<th style='border: 1px solid #ddd; padding: 8px;'>Delete</th>";
     echo '</tr>';
     echo '</thead>';
@@ -42,6 +43,7 @@ if ($sql && mysqli_num_rows($sql) > 0) {
         }
 
         echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/edit.php?table=$table_name&id=" . $row['id'] . "'>Edit</a></td>";
+        echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='c45/prediksiOne.php?table=$table_name&id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Prediksi</a></td>";
         echo "<td style='border: 1px solid #ddd; padding: 8px;'><a href='modul/database/delete.php?id=" . $row['id'] . "' onclick='return confirm(\"Are you sure?\")'>Delete</a></td>";
 
         echo '</tr>';
