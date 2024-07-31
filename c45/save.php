@@ -54,5 +54,6 @@ $stmt_rule->close();
 
 <script>
     alert('Proses selesai dan data berhasil disimpan.');
-    window.location.href = '../index.php';
+    var tableName = '<?php echo $table_name; ?>';
+    window.location.href = '../index.php?table=' + encodeURIComponent(tableName);
 </script>
