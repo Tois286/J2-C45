@@ -17,17 +17,16 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Masuk') {
       // Simpan data user di session
       $_SESSION['user_id'] = $user['user_id'];
       $_SESSION['user_role'] = $user['role'];
-
       // Redirect ke halaman index
       header("Location: ../../index.php");
       exit();
     } else {
-      // Password salah
-      echo "Password salah!";
+      echo "<script>alert('username atau password salah!!');</script>";
+      echo "<script>window.location.href='../../login.php';</script>";
     }
   } else {
-    // Username tidak ditemukan
-    echo "Username tidak ditemukan!";
+    echo "<script>alert('username tidak ditemukan!!');</script>";
+    echo "<script>window.location.href='../../login.php';</script>";
   }
 } elseif (isset($_POST['submit']) && $_POST['submit'] == 'Daftar') {
   // Logika untuk pendaftaran (jika ada)

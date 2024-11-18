@@ -1,9 +1,11 @@
 <?php
+
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+
 $role = $_SESSION['user_role'];
 ?>
 
@@ -11,6 +13,10 @@ $role = $_SESSION['user_role'];
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
@@ -19,11 +25,37 @@ $role = $_SESSION['user_role'];
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="src/js/script.js"></script>
 </head>
+<?php
+session_start(); // Memulai sesi
+
+include 'config/koneksi.php'; // Menghubungkan ke database
+
+// Memeriksa apakah user_id ada di sesi
+if (isset($_SESSION['user_id'])) {
+    $id = $_SESSION['user_id'];
+
+    // Query untuk mengambil data pengguna
+    $sql = mysqli_query($koneksi, "SELECT * FROM users WHERE user_id='$id'");
+
+    // Memeriksa hasil query
+    if ($sql && mysqli_num_rows($sql) > 0) {
+        $user = mysqli_fetch_assoc($sql);
+        // Lakukan sesuatu dengan data pengguna
+        // $pengguna = "Nama: " . htmlspecialchars($user['nama']); // Menghindari XSS
+    }
+}
+
+// Menutup koneksi
+mysqli_close($koneksi);
+?>
 
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-brand">C45 by Giri</div>
+        <!-- <div class="navbar-brand">POSYANDU</div> -->
+        <img src="asset/posyandu2.png" alt="" style="width:150px;padding:0;">
+        <!-- <?php echo $pengguna; ?> -->
+        <div>Welcome, <strong><?php echo htmlspecialchars($user['nama']); ?> </strong>!</div>
     </nav>
     <!-- Main Content -->
     <div>
@@ -31,23 +63,28 @@ $role = $_SESSION['user_role'];
             <ul>
                 <li><a href="#home" onclick="showContent('home')">Home</a></li>
                 <?php if ($role == 'admin') : ?>
-                    <li><a href="#dataSiswa" onclick="showContent('dataSiswa')">Data Pengguna</a></li>
-                    <li class="dropdown" id="data-training">
-                        <a href="#">Data Training</a>
-                        <div class="dropdown-content" id="submenu-training">
-                            <a href="#" onclick="showContent('prosesC45')">Proses Training</a>
-                            <a href="#" onclick="showContent('pohonKeputusan')">Pohon Keputusan</a>
-                        </div>
-                    </li>
-                    <li class="dropdown" id="data-testing">
-                        <a href="#">Data Testing</a>
-                        <div class="dropdown-content" id="submenu-testing">
-                            <a href="#" onclick="showContent('prosesTesting')">Proses Testing</a>
-                        </div>
-                    </li>
-                    <li><a href="#" onclick="showContent('export')">Cetak Data</a></li>
+                    <li><a href="#jadwal" onclick="showContent('jadwal')">Jadwal</a></li>
+                    <li><a href="#dataUser" onclick="showContent('dataUser')">Data Orang Tua</a></li>
+                    <li><a href="#dataBalita" onclick="showContent('dataBalita')">Data Balita</a></li>
+                    <li><a href="#dataTimbangan" onclick="showContent('dataTimbangan')">Data Penimbangan</a></li>
+                    <li><a href="#dataImunisasi" onclick="showContent('dataImunisasi')">Imunisasi</a></li>
+                    <li><a href="#lapor" onclick="showContent('lapor')">Pelaporan</a></li>
+                    <li><a href="#cetak" onclick="showContent('cetak')">Cetak Kartu</a></li>
                 <?php endif; ?>
-                <li><a href="#analytics" onclick="showContent('analytics')">Prediksi</a></li>
+                <?php if ($role == 'superUser') : ?>
+                    <li><a href="#jadwal" onclick="showContent('jadwal')">Jadwal</a></li>
+                    <li><a href="#dataBalita" onclick="showContent('dataBalita')">Data Balita</a></li>
+                    <li><a href="#dataTimbangan" onclick="showContent('dataTimbangan')">Data Penimbangan</a></li>
+                    <li><a href="#dataJenis" onclick="showContent('dataJenis')">Imunisasi</a></li>
+                    <li><a href="#lapor" onclick="showContent('lapor')">Pelaporan</a></li>
+                <?php endif; ?>
+                <?php if ($role == 'user') : ?>
+                    <li><a href="#jadwal" onclick="showContent('jadwal')">Jadwal</a></li>
+                    <li><a href="#dataBalita" onclick="showContent('dataBalita')">Data Balita</a></li>
+                    <li><a href="#dataTimbangan" onclick="showContent('dataTimbangan')">Data Penimbangan</a></li>
+                    <li><a href="#dataJenis" onclick="showContent('dataJenis')">Imunisasi</a></li>
+                    <li><a href="#cetak" onclick="showContent('cetak')">Cetak Kartu</a></li>
+                <?php endif; ?>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </div>
@@ -55,31 +92,33 @@ $role = $_SESSION['user_role'];
         <div class="content" id="home" style="display: none;">
             <?php include 'view/home.php' ?>
         </div>
-
-        <div class="content" id="dataSiswa" style="display: none;">
-            <?php include 'view/dataSiswa.php' ?>
+        <div class="content" id="dataUser" style="display: none;">
+            <?php include 'view/dataUser.php' ?>
         </div>
-
-        <div class="content" id="prosesC45" style="display: none;">
-            <?php include 'view/c45.php' ?>
+        <div class="content" id="dataBalita" style="display: none;">
+            <?php include 'view/dataBalita.php' ?>
         </div>
-
-        <div class="content" id="pohonKeputusan" style="display: none;">
-            <?php include 'view/pk.php' ?>
+        <div class="content" id="dataTimbangan" style="display: none;">
+            <?php include 'view/d_timbangan.php' ?>
         </div>
-
-        <div class="content" id="prosesTesting" style="display: none;">
-            <?php include 'view/pt.php' ?>
+        <div class="content" id="dataJenis" style="display: none;">
+            <?php include 'view/d_imunisasi.php' ?>
         </div>
-
-        <div class="content" id="export" style="display: none;">
-            <?php include 'view/print.php' ?>
+        <div class="content" id="dataImunisasi" style="display: none;">
+            <?php include 'view/d_imunisasi.php' ?>
         </div>
-
-        <div class="content" id="analytics" style="display: none;">
-            <?php include "view/prediksi.php"; ?>
+        <div class="content" id="dataMedis" style="display: none;">
+            <?php include 'view/d_medis.php' ?>
         </div>
-
+        <div class="content" id="lapor" style="display: none;">
+            <?php include 'view/lapor.php' ?>
+        </div>
+        <div class="content" id="jadwal" style="display: none;">
+            <?php include 'view/jadwal.php' ?>
+        </div>
+        <div class="content" id="cetak" style="display: none;">
+            <?php include 'view/cetak.php' ?>
+        </div>
     </div>
 </body>
 

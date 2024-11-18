@@ -8,8 +8,8 @@
     }
 </style>
 <center>
-    <footer class="copy">
-        <p>Copy&#9400; | by Giri</p>
-        <p>Universitas Insan Pembangunan Indonesia</p>
+    <footer class="copy" style="color:#219ebc;">
+        <p>Copy&#9400; | by</p>
+        <p>Universitas Pamulang Indonesia</p>
     </footer>
 </center>

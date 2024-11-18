@@ -1,422 +1,446 @@
 /* styles.css */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    /* background-color: #bbcf8d; */
+  font-family: Arial, sans-serif;
+  /* background-color: #bbcf8d; */
 }
 
 .navbar {
-    background-color: #219ebc;
-    color: #fff;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    /* Ubah bayangan agar tidak terlalu tebal */
-    position: fixed;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    /* Pastikan z-index lebih tinggi dari konten lainnya */
+  background-color: #219ebc;
+  color: #fff;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  /* Ubah bayangan agar tidak terlalu tebal */
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  /* Pastikan z-index lebih tinggi dari konten lainnya */
 }
 
 .navbar-brand {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .navbar-nav {
-    list-style: none;
-    display: flex;
+  list-style: none;
+  display: flex;
 }
 
 .navbar-nav li {
-    margin-left: 1rem;
+  margin-left: 1rem;
 }
 
 .navbar-nav a {
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
 }
 
 .navbar-nav a:hover {
-    background-color: #555;
+  background-color: #555;
 }
 
 .sidebar {
-    background-color: #219ebc;
-    width: 200px;
-    padding: 1rem;
-    padding-top: 5rem;
-    /* Padding atas untuk memberikan ruang di atas konten */
-    box-shadow: 10px 0px 11px 0px rgba(0, 0, 0, 0.3);
-    position: fixed;
-    top: 0;
-    /* Membuat sidebar tetap di bagian atas layar */
-    left: 0;
-    /* Membuat sidebar tetap di sisi kiri layar */
-    height: 100vh;
-    /* Tinggi sidebar setara dengan tinggi viewport */
-    overflow-y: auto;
-    /* Memunculkan scrollbar jika konten sidebar lebih panjang dari viewport */
+  background-color: #219ebc;
+  width: 200px;
+  padding: 1rem;
+  padding-top: 5rem;
+  /* Padding atas untuk memberikan ruang di atas konten */
+  box-shadow: 10px 0px 11px 0px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  /* Membuat sidebar tetap di bagian atas layar */
+  left: 0;
+  /* Membuat sidebar tetap di sisi kiri layar */
+  height: 100vh;
+  /* Tinggi sidebar setara dengan tinggi viewport */
+  overflow-y: auto;
+  /* Memunculkan scrollbar jika konten sidebar lebih panjang dari viewport */
 }
 
 .sidebar ul {
-    list-style: none;
+  list-style: none;
 }
 
 .sidebar li {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .sidebar a {
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 95%;
-    color: white;
-    display: block;
-    padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 85%;
+  color: white;
+  display: block;
+  padding: 0.5rem 1rem;
 }
 
 .sidebar a:hover {
-    background-color: white;
-    color: #219ebc;
-    width: 100%;
-    border: 1px solid #219ebc;
-    border-radius: 10px;
+  background-color: white;
+  color: #219ebc;
+  width: 100%;
+  border: 1px solid #219ebc;
+  border-radius: 10px;
 }
 
 .content {
-    display: none;
-    flex-grow: 1;
-    padding: 1.5rem;
-    padding-left: 14rem;
-    padding-top: 5rem;
-    color: #219ebc;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  display: none;
+  flex-grow: 1;
+  padding: 2rem;
+  padding-left: 14rem;
+  padding-top: 3rem !important;
+  color: #219ebc;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .content.active {
-    display: block;
+  display: block;
 }
 
 /* Dropdown styles */
 .dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .dropdown-content {
-    display: none;
-    position: static;
-    /* background-color: #f9f9f9; */
-    /* padding-left: 2%; */
-    min-width: 160px;
-    z-index: 1;
+  display: none;
+  position: static;
+  /* background-color: #f9f9f9; */
+  /* padding-left: 2%; */
+  min-width: 160px;
+  z-index: 1;
 }
 
 .dropdown:hover .dropdown-content {
-    display: block;
+  display: block;
 }
 
 .dropdown-content a {
-    color: white;
-    font-weight: bold;
-    padding: 10px 5px;
-    text-decoration: none;
-    display: block;
+  color: white;
+  font-weight: bold;
+  padding: 10px 5px;
+  text-decoration: none;
+  display: block;
 }
 
 .dropdown-content a:hover {
-    font-size: 12px;
-    background-color: white;
-    width: 85% !important;
-    border-radius: 10px;
-    color: black;
-    padding-right: 5%;
+  font-size: 12px;
+  background-color: white;
+  width: 85% !important;
+  border-radius: 10px;
+  color: black;
+  padding-right: 5%;
 }
 
-.dropdown-lefth{
-    right: 50.5%;
-    /* padding: 5px !important; */
+.dropdown-lefth {
+  right: 50.5%;
+  /* padding: 5px !important; */
 }
 /* Submenu styles */
 .submenu {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 100%;
-    min-width: 160px;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 100%;
+  min-width: 160px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
 
 .dropdown:hover .submenu {
-    display: block;
+  display: block;
 }
 
-.card-home{
-    /* background-color: #93a267; */
-    background-color: white;    
-    height: auto;
-    right: 100%;
-    border-radius: 2px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+.card-home {
+  /* background-color: #93a267; */
+  background-color: white;
+  height: auto;
+  right: 100%;
+  border-radius: 2px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
 
-.img{
-    padding-top: 10px;
-    padding-bottom: 10px;
+.img {
+  padding-top: 10px;
+  padding-bottom: 0px;
 }
-.upload{
-    border: none;
-    background-color: white;
-    padding: 20px;
-    display: flex;
-    background-color: #219ebc;
-    color: white;
-    border-radius: 10px;
+.upload {
+  border: none;
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  background-color: #219ebc;
+  color: white;
+  border-radius: 10px;
 }
 
 .button {
-    border: none;
-    border-radius: 5px;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px;
-    transition-duration: 0.4s;
-    cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none !important;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px;
+  transition-duration: 0.4s;
+  cursor: pointer;
 }
 
-input[type="file"] {
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ccc;
-    padding: 8px;
-    border-radius: 4px;
-    width: 170px;
-    /* Atau gaya lain sesuai kebutuhan */
-}
 .button1 {
-    background-color: white;
-    color: black;
-    border: 2px solid #219ebc;
+  border: 1px solid #219ebc !important;
+  background-color: white;
+  color: #219ebc;
 }
 
 .button1:hover {
-    background-color: #219ebc;
-    color: white;
+  background-color: #219ebc;
+  color: white;
 }
 
-.button2 {
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
+input[type="file"] {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  width: 170px;
+  /* Atau gaya lain sesuai kebutuhan */
 }
 
-.button2:hover {
-    background-color: #008CBA;
-    color: white;
+input[type="text"] {
+  width: 300px; /* Width of the input */
+  padding: 5px; /* Padding inside the input */
+  margin-right: 10px; /* Space between input and button */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px; /* Font size */
+  transition: border-color 0.3s; /* Transition for border color */
+}
+
+/* Change border color on focus */
+input[type="text"]:focus {
+  border-color: #007bff; /* Blue border on focus */
+  outline: none; /* Remove default outline */
 }
 .card-home {
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    max-width: 100%;
-    overflow: hidden;
-    height: auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  max-width: 100%;
+  overflow: hidden;
+  height: auto;
 }
 
 .card-tabel {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    max-width: 100%;
-    overflow: hidden;
-    margin-top: 20px;
-    height: auto
-    /* Tambahkan margin atas untuk memberi jarak dengan elemen di atasnya */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  max-width: 100%;
+  overflow: hidden;
+  margin-top: 20px;
+  height: auto;
+  /* Tambahkan margin atas untuk memberi jarak dengan elemen di atasnya */
 }
 
 .table-container {
-    margin-top: 0px;
-    overflow-x: auto;
-    max-height: 400px;
-    width: auto;
-    color: black;
-padding: 10px;
-border-radius: 8px;
+  margin-top: 0px;
+  overflow-x: auto;
+  max-height: 400px;
+  width: auto;
+  color: black;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 #table-content {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 #table-content th,
 #table-content td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+  font-size: 13px;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
 #table-content th {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 #table-content tr:nth-child(even) {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
 }
 
 #table-content tr:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 #table-content td a {
-    text-decoration: none;
-    color: #007bff;
+  text-decoration: none;
+  color: #007bff;
 }
 
 #table-content td a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 @media (max-width: 768px) {
-    .table-container {
-        width: 100%;
-    }
+  .table-container {
+    width: 100%;
+  }
+}
+/* Container utama untuk login */
+.container-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding-top: 4rem; */
+  height: 100vh; /* Menjaga kontainer login berada di tengah */
 }
 
-.container-login{
-    display: block;
-    padding-top: 4rem;
-    /* text-align: center; */
-    /* margin: auto; */
-}
-.box-login{
-    margin: auto;
-    text-align: center;
-    width: 400px;
-    height: 400px;
-    background-color: rgba(255, 255, 255, 0.432);
-    color: black;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border:2px solid #219ebc;
-    border-radius: 10px;
+.container-login h1 {
+  color: #219ebc;
 }
 
-.login-form{
-    background-color: #219ebc;
-    padding: 1.5rem;
-    border-radius: 5px;
-    color: white;
+/* Kotak login */
+.box-login {
+  width: 400px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #219ebc;
+  border-radius: 10px;
+  text-align: center;
 }
 
-.box-login input{
-    border: 2px #219ebc;
-    padding: 5px;
-    background-color: white;
-    border-radius: 5px;
-    border: 1px solid #219ebc;
-    color: #219ebc;
+/* Gaya untuk form login */
+.login-form {
+  background-color: #219ebc;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 20px; /* Memberikan ruang di bawah form */
+}
+
+/* Input dalam kotak login */
+.box-login input {
+  width: 90%; /* Lebar lebih responsif */
+  margin: 10px 0; /* Jarak vertikal */
+  padding: 10px;
+  border: 1px solid #219ebc;
+  border-radius: 5px;
+  color: #219ebc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s; /* Transisi untuk fokus */
+}
+
+/* Gaya saat input fokus */
+.box-login input:focus {
+  border-color: #007a8c; /* Warna saat fokus */
+  outline: none; /* Menghilangkan outline default */
+}
+
+/* Gaya untuk tombol login */
+.login-btn {
+  margin: 10px 0; /* Jarak vertikal */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Transisi untuk hover */
+}
+
+/* Gaya saat tombol login di-hover */
+.login-btn:hover {
+  background-color: white; /* Warna saat hover */
 }
 
 .mining {
-    position: relative;
-    display: inline-block;
-    left: 89%;
+  position: relative;
+  display: inline-block;
+  left: 89%;
 }
 
-.button-mining{
-    border: none;
-        border-radius: 5px;
-        color: rgb(0, 0, 0);
-        padding: 5px 15px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 12px;
-        margin: 5px;
-        transition-duration: 0.4s;
-        cursor: pointer;
-        border: 2px solid #219ebc;
-}
 .card-tree {
-    background-color: white;
-        height: auto;
-        right: 100%;
-        border-radius: 8px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    /* Optional: Adds space between the cards */
+  background-color: white;
+  height: auto;
+  right: 100%;
+  border-radius: 8px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  /* Optional: Adds space between the cards */
 }
 
 #loadingIndicator {
-    display: none;
+  display: none;
 }
 
 .h4-custom {
-    font-size: 100%;
-    position: center;
-    font-weight: normal;
-    color: #6A6462;
-    padding: 2px;
-    text-align: center;
+  position: relative;
+  color: #6a6462;
+  padding: 2px;
+  text-align: center;
 }
-.h1-custom{
-    font-size: 150%;
-    position: center;
-    font-weight: bold;
-    color: black;
-    padding: 1px;
-    text-align: center;
+
+.h1-custom {
+  font-size: 150%;
+  position: center;
+  font-weight: bold;
+  color: black;
+  padding: 1px;
+  text-align: center;
 }
 .styled-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 1em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 1em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .styled-table thead tr {
-    background-color: #219ebc;
-    color: #ffffff;
-    text-align: left;
+  background-color: #219ebc;
+  color: #ffffff;
+  text-align: left;
 }
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+  padding: 12px 15px;
 }
 
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+  background-color: #f3f3f3;
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #219ebc;
+  border-bottom: 2px solid #219ebc;
 }
 
 .styled-table tbody tr:hover {
-    background-color: #dddddd;
+  background-color: #dddddd;
 }

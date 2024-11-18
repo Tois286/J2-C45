@@ -1,0 +1,121 @@
+/* Gaya umum untuk seluruh halaman */
+body {
+  background-image: url("../asset/cc.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Container utama untuk pendaftaran */
+.container-register {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px;
+  max-width: 100%;
+}
+
+/* Gaya untuk judul pendaftaran */
+.container-register h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Gaya untuk form pendaftaran */
+.register-form {
+  margin-top: 20px;
+  max-height: 60vh;
+  /* Tentukan tinggi maksimum yang Anda inginkan */
+  overflow-y: auto;
+  /* Aktifkan scrolling vertikal jika konten terlalu panjang */
+}
+
+/* Gaya untuk label dan input */
+.register-form label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-weight: bold;
+}
+
+.register-form input[type="text"],
+.register-form select {
+  width: calc(98% - 20px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Gaya untuk tombol */
+.register-btn {
+  text-align: center;
+}
+
+.register-btn input[type="submit"] {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s;
+}
+
+.register-btn input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.button-cancel {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #af4c4c;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s;
+  text-decoration: none;
+}
+
+.button-cancel:hover {
+  background-color: #a11111;
+}
+
+/* Gaya untuk input tanggal */
+input[type="date"] {
+  width: 93%;
+  /* Lebar penuh untuk input */
+  padding: 10px;
+  /* Ruang dalam input */
+  border: 1px solid #ccc;
+  /* Batas input */
+  border-radius: 4px;
+  /* Sudut membulat */
+  font-size: 16px;
+  /* Ukuran font */
+  box-sizing: border-box;
+  /* Menghitung padding dan border dalam lebar */
+}
+
+/* Gaya untuk input saat fokus */
+input[type="date"]:focus {
+  border-color: #66afe9;
+  /* Warna batas saat fokus */
+  outline: none;
+  /* Menghilangkan outline default */
+  box-shadow: 0 0 5px rgba(102, 175, 233, 0.5);
+  /* Tambahkan bayangan */
+}

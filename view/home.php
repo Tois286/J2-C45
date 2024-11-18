@@ -1,22 +1,22 @@
 <div>
     <div class="card-home">
         <center>
-            <div class="h1-custom">PREDIKSI KELULUSAN MAHASISWA JURUSAN SISTEM</div>
-            <div class="h1-custom">INFORMASI UNIVERSITAS INSAN PEMBANGUNAN INDONESIA</div>
-            <div class="h1-custom">MENGGUNAKAN METODE KLASIFIKASI C4.5</div>
+            <div class="h1-custom">APLIKASI MONITORING DATA </div>
+            <div class="h1-custom">IMUNISASI POSYANDU BERBASIS WEB</div>
         </center>
         <div class="img">
             <center>
-                <img src="asset/unipi.png" alt="image" style="width: 20%; height: auto; border-radius: 20px;">
+                <img src="asset/posyandu1.png" alt="image" style="width: 19%; height: auto; border-radius: 20px;">
             </center>
         </div>
         <center>
-            <p class="h4-custom">Aplikasi ini akan menghasilkan informasi prediksi kelulusan mahasiswa jurusan Sistem</p>
-            <p class="h4-custom">Informasi Universitas Insan Pembangunan Indonesia. Data yang digunakan adalah </p>
-            <p class="h4-custom">data Jenis Kelamin, IP Semester 1, IP Semester 2, IP Semester 3, IP Semester 4 dan Status</p>
-            <p class="h4-custom">Kelulusan mahasiswa tahun lulus 2022 dan 2023.</p>
-            <p class="h4-custom"><br>Hasil Analisa Prediksi Kelulusan dikelompokkan menjadi dua yaitu</p>
-            <p class="h4-custom"><b>Terlambat</b> atau <b>Tepat Waktu</b></p>
+            <p class="h4-custom">Aplikasi ini memungkinkan penyimpanan data imunisasi dengan format yang terstruktur dan terorganisir,
+                sehingga mempermudah akses dan pencarian data.Data yang terstruktur membantu puskesmas
+                melacak riwayat imunisasi setiap pasien dengan cepat dan akurat.
+                Mengurangi pekerjaan administratif manual, seperti pengisian formulir dan pengarsipan kertas,
+                sehingga staf medis dapat fokus pada pelayanan kesehatan.
+                Mengotomatiskan proses seperti penjadwalan imunisasi,
+                pengingat (reminder) untuk pasien, dan pelaporan data.</p>
         </center>
     </div>
 </div>

@@ -104,34 +104,34 @@
     }
 </style>
 <?php
-// Contoh mendapatkan nama tabel dari parameter GET atau set default
-$table_name = isset($_GET['table']) ? $_GET['table'] : 'default_table_name';
+// Ambil ID dari URL
+$id_ortu = isset($_GET['id']) ? $_GET['id'] : '';
 ?>
 
 <body>
     <div class="container-register">
         <div class="box-register">
             <center>
-                <h1>Daftarkan</h1>
+                <h1>Buat Akun</h1>
             </center>
-            <form action="database/tambahUserPros.php?table=<?php echo $table_name; ?>" method="POST" class="register-form">
+            <form action="database/tambahUserPros.php?table=<?php echo htmlspecialchars($id_ortu); ?>" method="POST" class="register-form">
+                <label for="id">ID Orang Tua Wali :</label>
+                <input type="text" name="id" id="id" required placeholder="id" value="<?php echo htmlspecialchars($id_ortu); ?>">
+
                 <label for="nama">Nama :</label>
                 <input type="text" name="nama" id="nama" required placeholder="Nama">
 
-                <label for="username">username :</label>
+                <label for="username">Username :</label>
                 <input type="text" name="username" id="username" required placeholder="username">
 
-                <label for="password">password :</label>
+                <label for="password">Password :</label>
                 <input type="password" name="password" id="password" required placeholder="password">
 
                 <div class="register-btn">
-                    <input type="submit" value="Daftar" name="submit" class="button button1">
-                    <a href="../index.php" type="button" class="button-cancel">cancel</a>
+                    <input type="submit" value="Lanjutkan" name="submit" class="button button1">
                 </div>
             </form>
         </div>
-        <?php include 'footer.php' ?>
+        <?php include 'footer.php'; ?>
     </div>
 </body>
-
-</html>

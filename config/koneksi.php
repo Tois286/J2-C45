@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'dbmining';
+$dbname = 'posyandu';
 $username = 'root';
 $password = '';
 
